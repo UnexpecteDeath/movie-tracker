@@ -1,0 +1,212 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 812310;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--bg-color) 28%, transparent),
+            color-mix(in srgb, var(--bg-color) 58%, transparent)
+        ),
+        radial-gradient(
+            1200px 600px at 50% 0%,
+            color-mix(in srgb, var(--glass-bg) 40%, transparent),
+            transparent 70%
+        );
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    animation: overlayIn 220ms ease;
+    font-family:
+            var(--font-geist-sans),
+            system-ui,
+            -apple-system,
+            "Segoe UI",
+            Roboto,
+            "Helvetica Neue",
+            Arial;
+}
+
+.dialog {
+    width: min(100%, 640px);
+    max-height: calc(100vh - 48px);
+    overflow: hidden;
+}
+
+.surface {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    max-height: inherit;
+    height: 100%;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 95%, white 12%),
+            color-mix(in srgb, var(--glass-bg) 90%, transparent)
+        ),
+        var(--glass-bg);
+}
+
+.header {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 28px 28px 18px;
+}
+
+.heading {
+    min-width: 0;
+}
+
+.eyebrow {
+    margin: 0 0 10px;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--muted) 88%, transparent);
+}
+
+.title {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 0.96;
+    letter-spacing: -0.05em;
+    color: var(--text);
+    text-wrap: balance;
+}
+
+.description {
+    margin: 14px 0 0;
+    max-width: 46ch;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--muted);
+}
+
+.closeButton {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--glass-bg) 94%, var(--bg-color) 6%);
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition:
+        transform var(--ui-transition),
+        background var(--ui-transition),
+        border-color var(--ui-transition);
+}
+
+.closeButton:hover {
+    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--glass-bg) 98%, white 8%);
+    border-color: color-mix(in srgb, var(--glass-border) 100%, white 18%);
+}
+
+.closeButton:active {
+    transform: scale(0.98);
+}
+
+.closeButton:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
+    outline-offset: 2px;
+}
+
+.closeIcon {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.content {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0 28px 24px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.footer {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 0 28px 28px;
+}
+
+@keyframes overlayIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 640px) {
+    .overlay {
+        align-items: end;
+        padding: 12px 12px max(12px, env(safe-area-inset-bottom));
+    }
+
+    .dialog {
+        width: 100%;
+        max-height: calc(100vh - 12px - max(12px, env(safe-area-inset-bottom)));
+        animation: sheetIn 260ms cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    .surface {
+        border-bottom-left-radius: 24px;
+        border-bottom-right-radius: 24px;
+    }
+
+    .header {
+        padding: 22px 20px 14px;
+    }
+
+    .header::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        width: 48px;
+        height: 5px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--muted) 24%, transparent);
+        transform: translateX(-50%);
+    }
+
+    .title {
+        font-size: clamp(24px, 8vw, 34px);
+    }
+
+    .content {
+        padding: 0 20px 20px;
+    }
+
+    .footer {
+        padding: 0 20px 20px;
+        flex-wrap: wrap;
+    }
+}
+
+@keyframes sheetIn {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

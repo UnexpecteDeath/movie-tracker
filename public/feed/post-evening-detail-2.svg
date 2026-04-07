@@ -1,0 +1,15 @@
+<svg width="640" height="640" viewBox="0 0 640 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="640" rx="48" fill="url(#bg)"/>
+  <circle cx="468" cy="158" r="70" fill="#F8FAFF" fill-opacity="0.86"/>
+  <path d="M0 450C86 406 146 384 220 384C296 384 354 412 430 412C502 412 564 390 640 344V640H0V450Z" fill="#2F4366" fill-opacity="0.92"/>
+  <path d="M0 498C82 462 166 444 240 444C314 444 386 468 446 468C520 468 572 448 640 406V640H0V498Z" fill="#5D7198" fill-opacity="0.84"/>
+  <rect x="116" y="154" width="110" height="250" rx="55" fill="#C9D4F2" fill-opacity="0.18"/>
+  <rect x="244" y="210" width="86" height="194" rx="43" fill="#C9D4F2" fill-opacity="0.16"/>
+  <text x="106" y="552" fill="#FFFFFF" fill-opacity="0.94" font-size="52" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" letter-spacing="-1.5">night</text>
+  <defs>
+    <linearGradient id="bg" x1="64" y1="48" x2="576" y2="592" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#AABCE7"/>
+      <stop offset="1" stop-color="#6476A8"/>
+    </linearGradient>
+  </defs>
+</svg>

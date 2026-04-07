@@ -1,26 +1,37 @@
 {
-  "name": "movie-tracker",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "next": "16.1.6",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.6",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+    "name": "movie-tracker",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "eslint",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
+    },
+    "dependencies": {
+        "@hugeicons/core-free-icons": "^4.0.0",
+        "@hugeicons/react": "^1.1.6",
+        "@reduxjs/toolkit": "^2.11.2",
+        "next": "16.1.6",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
+        "react-hook-form": "^7.72.1",
+        "react-infinite-scroll-component": "^6.1.1",
+        "react-medium-image-zoom": "^5.4.2",
+        "react-redux": "^9.2.0"
+    },
+    "devDependencies": {
+        "@svgr/webpack": "^8.1.0",
+        "@tailwindcss/postcss": "^4",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "eslint": "^9",
+        "eslint-config-next": "16.1.6",
+        "prettier": "^3.8.1",
+        "tailwindcss": "^4",
+        "typescript": "^5"
+    }
 }

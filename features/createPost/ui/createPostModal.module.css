@@ -1,0 +1,111 @@
+.form {
+    display: grid;
+    gap: 18px;
+}
+
+.field {
+    display: grid;
+    gap: 10px;
+}
+
+.fieldLabel {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--text);
+}
+
+.fieldHint {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+.input,
+.textarea {
+    width: 100%;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--glass-bg) 96%, var(--bg-color) 4%);
+    color: var(--text);
+    font: inherit;
+    transition:
+        border-color var(--ui-transition),
+        box-shadow var(--ui-transition),
+        background var(--ui-transition);
+}
+
+.input {
+    min-height: 52px;
+    padding: 0 16px;
+}
+
+.textarea {
+    min-height: 140px;
+    padding: 14px 16px;
+    resize: vertical;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+    color: color-mix(in srgb, var(--muted) 82%, transparent);
+}
+
+.input:focus,
+.textarea:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--text) 14%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.submitButton {
+    min-height: 48px;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform var(--ui-transition),
+        opacity var(--ui-transition),
+        box-shadow var(--ui-transition),
+        background var(--ui-transition);
+}
+
+.submitButton {
+    width: 100%;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 14%);
+    background: var(--accent);
+    color: color-mix(in srgb, var(--bg-color) 6%, white 94%);
+    box-shadow:
+        var(--shadow),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 18%);
+}
+
+.submitButton:hover {
+    transform: translateY(-1px);
+}
+
+.submitButton:active {
+    transform: translateY(0);
+}
+
+.submitButton:disabled {
+    cursor: default;
+    opacity: 0.6;
+    transform: none;
+}
+
+.error {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #d84c6a;
+}
+
+.actions {
+    display: grid;
+    gap: 12px;
+}

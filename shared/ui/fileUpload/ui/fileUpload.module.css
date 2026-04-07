@@ -1,0 +1,173 @@
+.root {
+    display: grid;
+    gap: 14px;
+}
+
+.dropzone {
+    position: relative;
+    display: grid;
+    gap: 8px;
+    justify-items: start;
+    padding: 20px;
+    border: 1px dashed color-mix(in srgb, var(--glass-border) 100%, white 14%);
+    border-radius: 24px;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 96%, white 8%),
+            color-mix(in srgb, var(--glass-bg) 90%, transparent)
+        ),
+        var(--glass-bg);
+    transition:
+        border-color var(--ui-transition),
+        transform var(--ui-transition),
+        background var(--ui-transition);
+}
+
+.dropzoneActive {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--text) 14%, transparent);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 98%, white 10%),
+            color-mix(in srgb, var(--glass-bg) 92%, transparent)
+        ),
+        var(--glass-bg);
+}
+
+.icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    color: var(--text);
+    background: color-mix(in srgb, var(--glass-bg) 92%, var(--bg-color) 8%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%),
+        0 10px 22px color-mix(in srgb, var(--shadow) 40%, transparent);
+}
+
+.icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.title {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.hint {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--muted);
+}
+
+.input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.list {
+    display: grid;
+    gap: 10px;
+}
+
+.item {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 22px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
+    background: color-mix(in srgb, var(--glass-bg) 94%, var(--bg-color) 6%);
+}
+
+.preview {
+    position: relative;
+    width: 88px;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--glass-bg) 88%, var(--bg-color) 12%);
+}
+
+.preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.meta {
+    min-width: 0;
+}
+
+.name {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.size {
+    margin: 4px 0 0;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--muted);
+}
+
+.removeButton {
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--glass-bg) 92%, var(--bg-color) 8%);
+    color: var(--text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform var(--ui-transition),
+        opacity var(--ui-transition);
+}
+
+.removeButton:hover {
+    transform: translateY(-1px);
+}
+
+.error {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #d84c6a;
+}
+
+@media (max-width: 560px) {
+    .item {
+        grid-template-columns: 1fr;
+        justify-items: start;
+    }
+
+    .preview {
+        width: 100%;
+        max-width: 180px;
+    }
+
+    .removeButton {
+        width: 100%;
+    }
+}

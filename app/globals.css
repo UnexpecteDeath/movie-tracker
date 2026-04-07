@@ -1,26 +1,199 @@
-@import "tailwindcss";
+@import "react-medium-image-zoom/dist/styles.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body,
+#__next {
+    height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+:root {
+    --font-sans:
+        var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial;
+    --font-mono:
+        var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
+        "Roboto Mono", monospace;
+    --max-width: 1200px;
+    --container-padding: 24px;
+    --dock-height: 86px;
+    --dock-blur: 16px;
+    --ui-transition: 700ms cubic-bezier(0.2, 0.9, 0.2, 1);
+    --theme-light-opacity: 1;
+    --theme-dark-opacity: 0;
+}
+
+:root {
+    --bg-light: linear-gradient(135deg, #ffffff 0%, #f7fbff 40%, #eaf6ff 100%);
+    --bg-dark:
+        linear-gradient(135deg, #0f0f12 0%, #141418 50%, #20161c 100%),
+        radial-gradient(
+            800px 400px at 10% 10%,
+            rgba(255, 110, 180, 0.06),
+            transparent 20%
+        ),
+        radial-gradient(
+            600px 300px at 90% 90%,
+            rgba(255, 80, 160, 0.04),
+            transparent 10%
+        );
+    --bg: var(--bg-light);
+    --bg-color: #ffffff;
+    --accent: linear-gradient(90deg, #2ac7ff, #6ea8ff);
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(15, 25, 40, 0.06);
+    --glass-emboss: rgba(255, 255, 255, 0.5);
+    --text: #071023;
+    --muted: rgba(7, 16, 35, 0.55);
+    --shadow: 0 6px 18px rgba(13, 20, 30, 0.08);
+    --bg-blobs-light:
+        radial-gradient(
+            700px 400px at 10% 10%,
+            rgba(60, 180, 255, 0.25),
+            transparent 60%
+        ),
+        radial-gradient(
+            600px 350px at 85% 20%,
+            rgba(120, 170, 255, 0.18),
+            transparent 60%
+        ),
+        radial-gradient(
+            800px 500px at 50% 100%,
+            rgba(180, 220, 255, 0.25),
+            transparent 70%
+        );
+    --bg-blobs-dark:
+        radial-gradient(
+            800px 400px at 10% 10%,
+            rgba(255, 110, 180, 0.06),
+            transparent 20%
+        ),
+        radial-gradient(
+            600px 300px at 90% 90%,
+            rgba(255, 80, 160, 0.04),
+            transparent 10%
+        );
+    --bg-blobs: var(--bg-blobs-light);
+}
+
+[data-theme="dark"] {
+    --bg: var(--bg-dark);
+    --theme-light-opacity: 0;
+    --theme-dark-opacity: 1;
+    --bg-color: #0b0b0d;
+    --accent: linear-gradient(90deg, #ff7ab6, #ff4f9e);
+    --glass-bg: rgba(18, 18, 20, 0.36);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --text: #e9e6ea;
+    --muted: rgba(233, 230, 234, 0.6);
+    --glass-emboss: rgba(255, 255, 255, 0.03);
+    --shadow: 0 10px 30px rgba(2, 2, 4, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --bg: var(--bg-dark);
+        --bg-color: #0b0b0d;
+        --accent: linear-gradient(90deg, #ff7ab6, #ff4f9e);
+        --glass-bg: rgba(18, 18, 20, 0.36);
+        --glass-border: rgba(255, 255, 255, 0.06);
+        --glass-emboss: rgba(255, 255, 255, 0.03);
+        --text: #e9e6ea;
+        --muted: rgba(233, 230, 234, 0.6);
+        --shadow: 0 10px 30px rgba(2, 2, 4, 0.6);
+        --bg-blobs: var(--bg-blobs-dark);
+        --theme-light-opacity: 0;
+        --theme-dark-opacity: 1;
+    }
+}
+
+body,
+button,
+input,
+textarea,
+select,
+a,
+svg,
+*::before,
+*::after {
+    transition:
+        background-color var(--ui-transition),
+        border-color var(--ui-transition),
+        color var(--ui-transition),
+        fill var(--ui-transition),
+        stroke var(--ui-transition),
+        box-shadow var(--ui-transition);
+}
+
+.app-root {
+    position: relative;
+    min-height: 100vh;
+    max-height: 100vh;
+    width: 100%;
+    font-family:
+        var(--font-geist-sans),
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial;
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    isolation: isolate;
+    background-color: var(--bg-color);
+    transition: background-color var(--ui-transition),
+}
+
+.app-root::before,
+.app-root::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity var(--ui-transition);
+}
+
+.app-root::before {
+    background: var(--bg-blobs-light), var(--bg-light);
+    opacity: var(--theme-light-opacity);
+}
+
+.app-root::after {
+    background: var(--bg-blobs-dark), var(--bg-dark);
+    opacity: var(--theme-dark-opacity);
+}
+
+.app-root > * {
+    position: relative;
+    z-index: 1;
+}
+
+.container {
+    height: 100vh;
+    overflow: auto;
+}
+
+.movies {
+    display: flex;
+    gap: 20px;
+    padding: 50px 0;
+    flex-wrap: wrap;
+    justify-content: center;
 }

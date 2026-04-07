@@ -1,0 +1,59 @@
+.wrapper {
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 1440px;
+}
+
+.icon {
+    position: absolute;
+    left: 14px;
+    width: 18px;
+    height: 18px;
+    color: color-mix(in srgb, var(--text) 50%, transparent);
+    pointer-events: none;
+}
+
+.input {
+    width: 100%;
+    padding: 0 44px 0 44px;
+    height: 24px;
+    border-radius: 999px;
+    border: none;
+    background-color: transparent;
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+    transition:
+        border-color 0.2s,
+        background 0.2s;
+}
+
+.input::placeholder {
+    color: color-mix(in srgb, var(--text) 40%, transparent);
+}
+
+.clear {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    color: color-mix(in srgb, var(--text) 50%, transparent);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    line-height: 1;
+    transition: color 0.15s;
+}
+
+.clear:hover {
+    color: var(--text);
+}
