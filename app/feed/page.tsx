@@ -12,6 +12,17 @@ const POSTS_LIMIT = 20;
 const getErrorMessage = () =>
     "Не удалось загрузить посты. Проверь `NEXT_PUBLIC_MOKKY_URL` и доступность эндпоинта `/feed`.";
 
+const getPostSortValue = (post: PostItem) => {
+    const numericId = Number(post.id);
+
+    return Number.isFinite(numericId) ? numericId : 0;
+};
+
+const sortPostsNewestFirst = (posts: PostItem[]) =>
+    [...posts].sort((firstPost, secondPost) => {
+        return getPostSortValue(secondPost) - getPostSortValue(firstPost);
+    });
+
 export default function FeedPage() {
     const [posts, setPosts] = useState<PostItem[]>([]);
     const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
@@ -52,7 +63,7 @@ export default function FeedPage() {
                           ).unwrap();
 
                 if (!isCancelled) {
-                    setPosts(latestPageData.items);
+                    setPosts(sortPostsNewestFirst(latestPageData.items));
                     setNextPageToLoad(latestPage > 1 ? latestPage - 1 : null);
                     setHasMore(latestPage > 1);
                     setHasInitialized(true);
@@ -96,7 +107,9 @@ export default function FeedPage() {
         )
             .unwrap()
             .then((pageData) => {
-                setPosts((currentPosts) => [...currentPosts, ...pageData.items]);
+                setPosts((currentPosts) =>
+                    sortPostsNewestFirst([...currentPosts, ...pageData.items]),
+                );
                 setNextPageToLoad(pageToLoad > 1 ? pageToLoad - 1 : null);
                 setHasMore(pageToLoad > 1);
                 setIsLoadingMore(false);
@@ -108,7 +121,9 @@ export default function FeedPage() {
     };
 
     const handlePostCreated = (createdPost: PostItem) => {
-        setPosts((currentPosts) => [createdPost, ...currentPosts]);
+        setPosts((currentPosts) =>
+            sortPostsNewestFirst([createdPost, ...currentPosts]),
+        );
         setHasInitialized(true);
         setIsError(false);
     };
@@ -188,7 +203,10 @@ export default function FeedPage() {
                     </LiquidGlass>
                 ) : null}
 
-                {hasInitialized && !isLoadingInitial && !isError && posts.length === 0 ? (
+                {hasInitialized &&
+                !isLoadingInitial &&
+                !isError &&
+                posts.length === 0 ? (
                     <LiquidGlass
                         className={styles.statusCard}
                         radius="xl"
