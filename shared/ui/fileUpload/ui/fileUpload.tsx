@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import imageCompression from "browser-image-compression";
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { classNames } from "@/shared/lib";
 import styles from "./fileUpload.module.css";
@@ -31,8 +32,12 @@ const formatFileSize = (size: number) => {
     return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 };
 
+const IMAGE_MAX_SIZE = 1280;
+const IMAGE_QUALITY = 0.76;
+const COMPRESSED_IMAGE_TYPE = "image/jpeg";
+
 const readFileAsDataUrl = (file: File) =>
-    new Promise<UploadedImage>((resolve, reject) => {
+    new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
 
         reader.onload = () => {
@@ -41,18 +46,39 @@ const readFileAsDataUrl = (file: File) =>
                 return;
             }
 
-            resolve({
-                id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2, 9)}`,
-                name: file.name,
-                size: file.size,
-                type: file.type,
-                src: reader.result,
-            });
+            resolve(reader.result);
         };
 
         reader.onerror = () => reject(new Error("File read error"));
         reader.readAsDataURL(file);
     });
+
+const compressImage = async (file: File) => {
+    if (file.type === "image/svg+xml" || file.type === "image/gif") {
+        return file;
+    }
+
+    return imageCompression(file, {
+        maxSizeMB: 0.8,
+        maxWidthOrHeight: IMAGE_MAX_SIZE,
+        initialQuality: IMAGE_QUALITY,
+        useWebWorker: true,
+        fileType: COMPRESSED_IMAGE_TYPE,
+    });
+};
+
+const readImageFile = async (file: File): Promise<UploadedImage> => {
+    const optimizedImage = await compressImage(file).catch(() => file);
+    const src = await readFileAsDataUrl(optimizedImage);
+
+    return {
+        id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2, 9)}`,
+        name: file.name,
+        size: optimizedImage.size,
+        type: optimizedImage.type,
+        src,
+    };
+};
 
 export function FileUpload({
     value,
@@ -68,9 +94,7 @@ export function FileUpload({
     const [localError, setLocalError] = useState("");
 
     const handleFiles = async (filesList: FileList | null) => {
-        if (!filesList || filesList.length === 0) {
-            return;
-        }
+        if (!filesList || filesList.length === 0) return;
 
         const files = Array.from(filesList).filter((file) =>
             file.type.startsWith("image/"),
@@ -83,10 +107,16 @@ export function FileUpload({
 
         try {
             setLocalError("");
-            const uploadedFiles = await Promise.all(files.map(readFileAsDataUrl));
-            onChange(multiple ? [...value, ...uploadedFiles] : uploadedFiles.slice(0, 1));
+            const uploadedFiles = await Promise.all(files.map(readImageFile));
+            onChange(
+                multiple
+                    ? [...value, ...uploadedFiles]
+                    : uploadedFiles.slice(0, 1),
+            );
         } catch {
-            setLocalError("Не удалось прочитать файлы. Попробуй выбрать их снова.");
+            setLocalError(
+                "Не удалось прочитать файлы. Попробуй выбрать их снова.",
+            );
         }
     };
 

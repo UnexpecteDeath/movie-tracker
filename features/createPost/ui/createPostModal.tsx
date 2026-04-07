@@ -82,7 +82,9 @@ export function CreatePostModal({ isOpen, onClose, onCreated }: Props) {
                 images: normalizedImages.map((image, index) => ({
                     src: image.src,
                     alt: `Изображение поста ${index + 1}`,
-                    caption: image.name.replace(/\.[^.]+$/, "") || `Frame ${index + 1}`,
+                    caption:
+                        image.name.replace(/\.[^.]+$/, "") ||
+                        `Frame ${index + 1}`,
                     tint: buildImageTint(index),
                 })),
             }).unwrap();
@@ -113,7 +115,6 @@ export function CreatePostModal({ isOpen, onClose, onCreated }: Props) {
                         type="text"
                         placeholder="Например: Наш вечер с кино"
                         {...register("title", {
-                            required: "Заполни title.",
                             validate: (value) =>
                                 value.trim().length > 0 || "Заполни title.",
                         })}
@@ -129,7 +130,6 @@ export function CreatePostModal({ isOpen, onClose, onCreated }: Props) {
                         className={styles.textarea}
                         placeholder="Опиши момент, который хочешь сохранить в ленте."
                         {...register("text", {
-                            required: "Заполни text.",
                             validate: (value) =>
                                 value.trim().length > 0 || "Заполни text.",
                         })}
