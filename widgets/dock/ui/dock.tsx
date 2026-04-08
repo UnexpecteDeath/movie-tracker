@@ -2,17 +2,22 @@
 
 import Link from "next/link";
 import styles from "./dock.module.css";
-import movies from "./icons/movies.svg";
-import watched from "./icons/watched.svg";
-import watchlist from "./icons/watchlist.svg";
-import posts from "./icons/posts.svg";
-import home from "./icons/home.svg";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import Image from "next/image";
 import { classNames } from "@/shared/lib";
 import { usePathname } from "next/navigation";
 import { LiquidGlass } from "@/shared/ui/LiquidGlass";
 import { ThemeSwitcher } from "@/shared/ui/themeSwitcher";
+import {
+    Bookmark03Icon,
+    CheckmarkBadge03Icon,
+    ComputerVideoIcon,
+    FavouriteIcon,
+    LayoutGridIcon,
+    Search01Icon,
+    SearchIcon,
+} from "@hugeicons/core-free-icons";
 
 export default function Dock() {
     const pathname = usePathname();
@@ -20,32 +25,32 @@ export default function Dock() {
     const items = [
         {
             href: "/",
-            icon: home,
+            icon: FavouriteIcon,
             label: "Home",
             current: pathname === "/",
         },
         {
             href: "/movies",
-            icon: movies,
+            icon: ComputerVideoIcon,
             label: "All movies",
             current: pathname === "/movies",
         },
         {
             href: "/watched",
-            icon: watched,
+            icon: CheckmarkBadge03Icon,
             label: "Watched",
             current: pathname === "/watched",
         },
         {
             href: "/watchlist",
-            icon: watchlist,
+            icon: Bookmark03Icon,
             label: "Watch later",
             current: pathname === "/watchlist",
         },
         {
             href: "/feed",
-            icon: posts,
-            label: "Posts",
+            icon: LayoutGridIcon,
+            label: "Feed",
             current: pathname === "/feed",
         },
     ];
@@ -70,9 +75,8 @@ export default function Dock() {
                                 [],
                             )}
                         >
-                            <Image
-                                src={item.icon}
-                                alt={item.label}
+                            <HugeiconsIcon
+                                icon={item.icon}
                                 width={22}
                                 height={22}
                                 className={styles.icon}
@@ -86,7 +90,11 @@ export default function Dock() {
                         className={classNames(styles.item, {}, [styles.search])}
                         aria-label="Search"
                     >
-                        <span className={styles.searchIcon}>⌕</span>
+                        <HugeiconsIcon
+                            icon={Search01Icon}
+                            width={22}
+                            height={22}
+                        />
                         <span className={styles.tooltip}>Search</span>
                     </button>
                     <ThemeSwitcher />

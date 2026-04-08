@@ -18,6 +18,7 @@ export default function WatchlistPage() {
 
     const total_pages = watchlistMovies?.meta.total_pages ?? 0;
     const totalResults = watchlistMovies?.items.length ?? 0;
+    const total_items = watchlistMovies?.meta.total_items ?? 0;
 
     return (
         <div id="scrollable" className={`container ${styles.page}`}>
@@ -43,7 +44,7 @@ export default function WatchlistPage() {
                                     Фильмов
                                 </span>
                                 <strong className={styles.statValue}>
-                                    {totalResults}
+                                    {total_items}
                                 </strong>
                             </div>
                             <div className={styles.statCard}>
@@ -79,13 +80,15 @@ export default function WatchlistPage() {
                             Здесь появятся фильмы, которые ты хочешь посмотреть
                         </h2>
                         <p className={styles.emptyText}>
-                            Добавь первый фильм в `wishlist`, и список наполнится.
+                            Добавь первый фильм в `wishlist`, и список
+                            наполнится.
                         </p>
                     </div>
                 ) : (
                     <MoviesList
                         movies={
-                            watchlistMovies?.items.map(favoriteMovieToMovie) ?? []
+                            watchlistMovies?.items.map(favoriteMovieToMovie) ??
+                            []
                         }
                         totalPages={total_pages}
                         totalResults={totalResults}

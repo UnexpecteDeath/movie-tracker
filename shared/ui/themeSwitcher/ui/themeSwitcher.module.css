@@ -1,19 +1,112 @@
 .button {
+    position: relative;
+    overflow: hidden;
     width: 38px;
     height: 38px;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.06);
-    color: var(--text);
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition:
         background 0.2s,
-        color 0.2s;
+        color 0.2s,
+        transform 0.2s ease,
+        box-shadow 0.35s ease;
 }
 
 .button:hover {
     background: rgba(255, 255, 255, 0.12);
+}
+
+.button:active {
+    transform: scale(0.94);
+}
+
+.button::after {
+    content: "";
+    position: absolute;
+    inset: -35%;
+    border-radius: inherit;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.38) 0%,
+        rgba(255, 255, 255, 0.08) 42%,
+        transparent 72%
+    );
+    opacity: 0;
+    transform: scale(0.35);
+    pointer-events: none;
+}
+
+.button[data-theme="light"] {
+    box-shadow: 0 0 0 rgba(255, 205, 84, 0);
+}
+
+.button[data-theme="dark"] {
+    box-shadow: 0 0 0 rgba(118, 141, 255, 0);
+}
+
+.button[data-animating="true"]::after {
+    animation: ripple 0.52s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.button[data-animating="true"][data-theme="light"] {
+    box-shadow: 0 0 24px rgba(255, 205, 84, 0.34);
+}
+
+.button[data-animating="true"][data-theme="dark"] {
+    box-shadow: 0 0 24px rgba(118, 141, 255, 0.3);
+}
+
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    animation: icon-enter 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
+}
+
+@keyframes icon-enter {
+    0% {
+        opacity: 0;
+        transform: rotate(-120deg) scale(0.55);
+    }
+    60% {
+        opacity: 1;
+        transform: rotate(16deg) scale(1.08);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+    }
+}
+
+@keyframes ripple {
+    0% {
+        opacity: 0;
+        transform: scale(0.35);
+    }
+    30% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.2);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .button,
+    .icon {
+        animation: none;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .button::after {
+        animation: none;
+    }
 }

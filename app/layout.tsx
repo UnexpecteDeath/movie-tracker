@@ -1,11 +1,9 @@
-// app/layout.tsx (или app/layout.jsx / app/page layout)
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Dock } from "@/widgets/dock";
-import { StoreProvider } from "../shared/ui/providers/StoreProvider";
+import { StoreProvider } from "@/shared/ui/providers/StoreProvider";
 import { ThemeProvider } from "@/shared/ui/providers/ThemeProvider";
-import icon from "@/assets/icon.svg";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -20,9 +18,23 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     title: "Our Cinema",
     description: "Personal movie tracker",
+    manifest: "/manifest.webmanifest",
     icons: {
-        icon: icon.src,
+        icon: [
+            { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+            { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+        ],
+        apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
     },
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: "default",
+        title: "Our Cinema",
+    },
+};
+
+export const viewport: Viewport = {
+    themeColor: "#050816",
 };
 
 export default function RootLayout({

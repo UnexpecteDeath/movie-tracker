@@ -18,6 +18,7 @@ export default function WatchedPage() {
 
     const total_pages = watchedMovies?.meta.total_pages ?? 0;
     const totalResults = watchedMovies?.items.length ?? 0;
+    const total_items = watchedMovies?.meta.total_items ?? 0;
 
     return (
         <div id="scrollable" className={`container ${styles.page}`}>
@@ -43,7 +44,7 @@ export default function WatchedPage() {
                                     Фильмов
                                 </span>
                                 <strong className={styles.statValue}>
-                                    {totalResults}
+                                    {total_items}
                                 </strong>
                             </div>
                             <div className={styles.statCard}>
