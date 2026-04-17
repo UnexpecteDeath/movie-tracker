@@ -5,17 +5,14 @@ import styles from "./movieCard.module.css";
 import { LiquidGlass } from "@/shared/ui/LiquidGlass";
 import { classNames } from "@/shared/lib";
 import { Movie } from "../api/types";
-import {
-    useAddWatchedMutation,
-    useAddToWatchlistMutation,
-} from "../api/mokky";
+import { useAddWatchedMutation, useAddToWatchlistMutation } from "../api/mokky";
 
 type Props = {
     movie: Movie;
     className?: string;
     genres?: string[];
-    isWatchlist?: boolean;
-    isWatched?: boolean;
+    watchlist: Set<number>;
+    watched: Set<number>;
     isStatusesLoading?: boolean;
 };
 
@@ -25,10 +22,13 @@ export function MovieCard({
     movie,
     className,
     genres = ["Фантастика", "Триллер", "Боевик"],
-    isWatchlist = false,
-    isWatched = false,
+    watchlist,
+    watched,
     isStatusesLoading = false,
 }: Props) {
+    const isWatchlist = watchlist.has(movie.id);
+    const isWatched = watched.has(movie.id);
+
     const year = movie.release_date
         ? new Date(movie.release_date).getFullYear()
         : "—";
@@ -36,15 +36,14 @@ export function MovieCard({
         ? `${IMAGE_BASE_URL}${movie.poster_path}`
         : null;
 
-    const [addWatched, { isLoading: isAddingWatched }] = useAddWatchedMutation();
-    const [addToWatchlist, { isLoading: isAddingWatchlist }] = useAddToWatchlistMutation();
+    const [addWatched, { isLoading: isAddingWatched }] =
+        useAddWatchedMutation();
+    const [addToWatchlist, { isLoading: isAddingWatchlist }] =
+        useAddToWatchlistMutation();
 
     const isWatchlistDisabled =
         isAddingWatchlist || isStatusesLoading || isWatchlist;
-    const isWatchedDisabled =
-        isAddingWatched ||
-        isStatusesLoading ||
-        isWatched;
+    const isWatchedDisabled = isAddingWatched || isStatusesLoading || isWatched;
 
     const handleAddToWatchlist = async () => {
         await addToWatchlist(movie).unwrap();

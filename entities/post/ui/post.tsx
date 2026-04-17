@@ -1,8 +1,11 @@
-import type { CSSProperties } from "react";
-import Zoom from "react-medium-image-zoom";
+"use client";
+
+import { useState, type CSSProperties } from "react";
+import { PhotoSlider } from "@/shared";
 import { classNames } from "@/shared/lib";
 import type { PostItem } from "../api/types";
 import styles from "./post.module.css";
+import Image from "next/image";
 
 type Props = {
     post: PostItem;
@@ -18,6 +21,13 @@ const galleryClassByCount: Record<number, string> = {
 export function Post({ post }: Props) {
     const images = post.images ?? [];
     const galleryClass = galleryClassByCount[images.length];
+    const [isSliderOpen, setIsSliderOpen] = useState(false);
+    const [sliderIndex, setSliderIndex] = useState(0);
+
+    const openSlider = (index: number) => {
+        setSliderIndex(index);
+        setIsSliderOpen(true);
+    };
 
     return (
         <article className={styles.postCard}>
@@ -33,41 +43,57 @@ export function Post({ post }: Props) {
             <p className={styles.postText}>{post.text}</p>
 
             {images.length > 0 ? (
-                <div className={classNames(styles.gallery, {}, [galleryClass])}>
-                    {images.map((image, index) => (
-                        <figure
-                            key={image.src}
-                            className={classNames(
-                                styles.galleryItem,
-                                {
-                                    [styles.galleryLead]:
-                                        index === 0 && images.length === 3,
-                                },
-                                [],
-                            )}
-                            style={
-                                {
-                                    "--gallery-tint": image.tint,
-                                } as CSSProperties
-                            }
-                        >
-                            <Zoom
-                                zoomImg={{
-                                    src: image.src,
-                                    alt: image.alt,
-                                }}
-                                classDialog={styles.zoomDialog}
+                <>
+                    <div
+                        className={classNames(styles.gallery, {}, [
+                            galleryClass || "",
+                        ])}
+                    >
+                        {images.map((image, index) => (
+                            <figure
+                                key={image.src}
+                                className={classNames(
+                                    styles.galleryItem,
+                                    {
+                                        [styles.galleryLead]:
+                                            index === 0 && images.length === 3,
+                                    },
+                                    [],
+                                )}
+                                style={
+                                    {
+                                        "--gallery-tint": image.tint,
+                                        margin: 16,
+                                    } as CSSProperties
+                                }
                             >
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={image.src}
-                                    alt={image.alt}
-                                    className={styles.galleryImage}
-                                />
-                            </Zoom>
-                        </figure>
-                    ))}
-                </div>
+                                <button
+                                    type="button"
+                                    className={styles.galleryButton}
+                                    onClick={() => openSlider(index)}
+                                    aria-label={`Открыть фото ${index + 1}`}
+                                >
+                                    <Image
+                                        src={image.src}
+                                        alt={image.alt}
+                                        className={styles.galleryImage}
+                                        width={350}
+                                        height={350}
+                                    />
+                                </button>
+                            </figure>
+                        ))}
+                    </div>
+
+                    {isSliderOpen && (
+                        <PhotoSlider
+                            media={images.map((image) => image.src)}
+                            isOpen={isSliderOpen}
+                            onClose={() => setIsSliderOpen(false)}
+                            initialIndex={sliderIndex}
+                        />
+                    )}
+                </>
             ) : null}
 
             <div className={styles.postFooter}>

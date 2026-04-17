@@ -264,7 +264,9 @@
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s;
+    transition:
+        opacity 0.2s,
+        transform 0.15s;
 }
 
 .actionBtn:hover {
@@ -289,6 +291,94 @@
     background: rgba(255, 255, 255, 0.1);
     color: var(--muted);
     border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.skeleton {
+    pointer-events: none;
+}
+
+.skeletonPoster,
+.skeletonBadge,
+.skeletonTitle,
+.skeletonSubtitle,
+.skeletonGenre,
+.skeletonText,
+.skeletonTextShort,
+.skeletonAction {
+    display: block;
+    overflow: hidden;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.06) 0%,
+            rgba(255, 255, 255, 0.16) 45%,
+            rgba(255, 255, 255, 0.06) 90%
+        ),
+        rgba(255, 255, 255, 0.06);
+    background-size: 220% 100%;
+    animation: skeletonShimmer 1.35s ease-in-out infinite;
+}
+
+.skeletonPoster {
+    width: 100%;
+    height: 100%;
+}
+
+.skeletonBadge {
+    width: 74px;
+    height: 34px;
+    border-radius: 999px;
+}
+
+.skeletonTitle {
+    width: 78%;
+    height: 32px;
+    border-radius: 8px;
+}
+
+.skeletonSubtitle {
+    width: 46%;
+    height: 14px;
+    margin-top: 12px;
+    border-radius: 6px;
+}
+
+.skeletonGenre {
+    width: 82px;
+    height: 30px;
+    border-radius: 999px;
+}
+
+.skeletonTextBlock {
+    display: grid;
+    gap: 10px;
+}
+
+.skeletonText,
+.skeletonTextShort {
+    width: 100%;
+    height: 14px;
+    border-radius: 6px;
+}
+
+.skeletonTextShort {
+    width: 62%;
+}
+
+.skeletonAction {
+    flex: 1;
+    height: 38px;
+    border-radius: 999px;
+}
+
+@keyframes skeletonShimmer {
+    0% {
+        background-position: 120% 0;
+    }
+
+    100% {
+        background-position: -120% 0;
+    }
 }
 
 @media (max-width: 768px) {

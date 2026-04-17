@@ -23,11 +23,18 @@ type AddFavoriteArgs = {
 };
 
 const FAVORITES_ENDPOINT = "/favorities";
+const FAVORITE_STATUSES = ["watched", "wishlist"] as const;
 
 const mergeMokkyPages = (
     currentCache: MokkyListResponse<FavoriteMovie>,
     newItems: MokkyListResponse<FavoriteMovie>,
 ) => {
+    if (newItems.meta.current_page === 1) {
+        currentCache.items = newItems.items;
+        currentCache.meta = newItems.meta;
+        return;
+    }
+
     const uniqueItems = new Map(
         currentCache.items.map((movie) => [movie.movieId, movie]),
     );
@@ -110,7 +117,10 @@ export const favoritesApi = createApi({
                 currentArg?.status !== previousArg?.status,
             providesTags: ["Favorites"],
         }),
-        getFavoritesByIds: builder.query<FavoriteMovie[], FavoritesByIdsQueryArgs>({
+        getFavoritesByIds: builder.query<
+            FavoriteMovie[],
+            FavoritesByIdsQueryArgs
+        >({
             query: ({ ids, status }) => ({
                 url: FAVORITES_ENDPOINT,
                 params: buildMovieIdsSearchParams(ids, status),
@@ -131,8 +141,9 @@ export const favoritesApi = createApi({
                 }
 
                 const existingFavorites =
-                    (existingFavoriteResult.data as FavoriteMovie[] | undefined) ??
-                    [];
+                    (existingFavoriteResult.data as
+                        | FavoriteMovie[]
+                        | undefined) ?? [];
                 const existingFavorite = existingFavorites[0];
 
                 if (!existingFavorite) {
@@ -157,7 +168,7 @@ export const favoritesApi = createApi({
                     url: `${FAVORITES_ENDPOINT}/${existingFavorite.id}`,
                     method: "PATCH",
                     body: {
-                        status
+                        status,
                     },
                 });
 
@@ -166,6 +177,48 @@ export const favoritesApi = createApi({
                 }
 
                 return { data: updateResult.data as FavoriteMovie };
+            },
+            async onQueryStarted(
+                { movie, status },
+                { dispatch, queryFulfilled },
+            ) {
+                try {
+                    const { data: favoriteMovie } = await queryFulfilled;
+
+                    FAVORITE_STATUSES.forEach((favoriteStatus) => {
+                        dispatch(
+                            favoritesApi.util.updateQueryData(
+                                "getFavorites",
+                                { status: favoriteStatus },
+                                (draft) => {
+                                    const movieIndex = draft.items.findIndex(
+                                        (favorite) =>
+                                            favorite.movieId === movie.id,
+                                    );
+
+                                    if (favoriteStatus === status) {
+                                        if (movieIndex >= 0) {
+                                            draft.items[movieIndex] =
+                                                favoriteMovie;
+                                        }
+
+                                        return;
+                                    }
+
+                                    if (movieIndex >= 0) {
+                                        draft.items.splice(movieIndex, 1);
+                                        draft.meta.total_items = Math.max(
+                                            0,
+                                            draft.meta.total_items - 1,
+                                        );
+                                    }
+                                },
+                            ),
+                        );
+                    });
+                } catch {
+                    // Failed mutations are surfaced by the mutation result.
+                }
             },
             invalidatesTags: ["Favorites"],
         }),
@@ -216,7 +269,7 @@ export const useGetWatchedByIdsQuery = (
             status: "watched",
         },
         options,
-);
+    );
 
 export const useGetWatchlistByIdsQuery = (
     ids: number[],
