@@ -69,11 +69,7 @@ export default function WatchlistPage() {
             </section>
 
             <section className={styles.listSection}>
-                {isLoading ? (
-                    <div className={styles.placeholder}>
-                        Загружаем watchlist...
-                    </div>
-                ) : totalResults === 0 ? (
+                {watchlistMovies && totalResults === 0 ? (
                     <div className={styles.emptyState}>
                         <p className={styles.emptyEyebrow}>Пока пусто</p>
                         <h2 className={styles.emptyTitle}>
@@ -94,7 +90,9 @@ export default function WatchlistPage() {
                         totalResults={totalResults}
                         page={page}
                         setPage={setPage}
+                        isLoading={isLoading}
                         watchedIds={new Set()}
+                        skeletonCount={6}
                         watchlistIds={
                             new Set(
                                 watchlistMovies?.items.map(

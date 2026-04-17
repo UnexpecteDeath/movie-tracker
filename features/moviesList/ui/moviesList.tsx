@@ -1,4 +1,5 @@
 import { MovieCard } from "@/entities/movieCard/ui/movieCard";
+import { MovieSkeleton } from "@/entities/movieCard/ui/movieSkeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Movie } from "@/entities/movieCard/api/types";
 import { SetStateAction } from "react";
@@ -13,6 +14,8 @@ interface Props {
     watchedIds: Set<number>;
     watchlistIds: Set<number>;
     isStatusesLoading?: boolean;
+    isLoading?: boolean;
+    skeletonCount?: number;
     isSearching?: boolean;
     searchQuery?: string;
 }
@@ -26,12 +29,27 @@ export const MoviesList = ({
     watchedIds,
     watchlistIds,
     isStatusesLoading = false,
+    isLoading = false,
+    skeletonCount = 8,
     isSearching,
     searchQuery,
 }: Props) => {
     const fetchNext = () => {
         setPage((prev) => prev + 1);
     };
+
+    const renderSkeletons = (keyPrefix: string) =>
+        Array.from({ length: skeletonCount }, (_, index) => (
+            <MovieSkeleton key={`${keyPrefix}-${index}`} />
+        ));
+
+    if (isLoading) {
+        return (
+            <div className="movies" aria-busy="true">
+                {renderSkeletons("movie-skeleton")}
+            </div>
+        );
+    }
 
     return (
         <>
@@ -46,7 +64,11 @@ export const MoviesList = ({
                 dataLength={movies.length}
                 next={fetchNext}
                 hasMore={page < totalPages}
-                loader={<h4>Loading...</h4>}
+                loader={
+                    <div className="movies" aria-busy="true">
+                        {renderSkeletons("movie-loader-skeleton")}
+                    </div>
+                }
                 endMessage={
                     <p style={{ textAlign: "center" }}>
                         <b>Yay! You have seen it all</b>
@@ -59,8 +81,8 @@ export const MoviesList = ({
                         <MovieCard
                             key={`${movie.id}${movie.title}`}
                             movie={movie}
-                            isWatchlist={watchlistIds.has(movie.id)}
-                            isWatched={watchedIds.has(movie.id)}
+                            watchlist={watchlistIds}
+                            watched={watchedIds}
                             isStatusesLoading={isStatusesLoading}
                         />
                     ))}

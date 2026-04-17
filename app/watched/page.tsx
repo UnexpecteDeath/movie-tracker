@@ -69,11 +69,7 @@ export default function WatchedPage() {
             </section>
 
             <section className={styles.listSection}>
-                {isLoading ? (
-                    <div className={styles.placeholder}>
-                        Загружаем просмотренное...
-                    </div>
-                ) : totalResults === 0 ? (
+                {watchedMovies && totalResults === 0 ? (
                     <div className={styles.emptyState}>
                         <p className={styles.emptyEyebrow}>Пока пусто</p>
                         <h2 className={styles.emptyTitle}>
@@ -92,6 +88,8 @@ export default function WatchedPage() {
                         totalResults={totalResults}
                         page={page}
                         setPage={setPage}
+                        isLoading={isLoading}
+                        skeletonCount={6}
                         watchedIds={
                             new Set(
                                 watchedMovies?.items.map(

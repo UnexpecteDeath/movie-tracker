@@ -237,13 +237,6 @@ export default function FeedPage() {
                                 </p>
                             </div>
                         }
-                        endMessage={
-                            !isError ? (
-                                <p className={styles.feedEndMessage}>
-                                    Вы дошли до конца ленты.
-                                </p>
-                            ) : undefined
-                        }
                         scrollableTarget="scrollable"
                     >
                         <div className={styles.feedList}>

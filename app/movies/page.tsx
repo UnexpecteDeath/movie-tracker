@@ -49,31 +49,26 @@ export default function Page() {
         return () => clearTimeout(timer);
     }, [inputValue]);
 
-    const { data: popularData } = useGetPopularMoviesQuery(
-        { page },
-        { skip: !!searchQuery },
-    );
+    const { data: popularData, isLoading: isLoadingPopular } =
+        useGetPopularMoviesQuery({ page }, { skip: !!searchQuery });
 
-    const { data: searchData } = useSearchMoviesQuery(
-        { query: searchQuery, page: searchPage },
-        { skip: !searchQuery },
-    );
+    const { data: searchData, isLoading: isLoadingSearch } =
+        useSearchMoviesQuery(
+            { query: searchQuery, page: searchPage },
+            { skip: !searchQuery },
+        );
     const data = getUniqueMoviesResponse(
         isSearching ? searchData : popularData,
     );
     const movieIds = data?.results.map((movie) => movie.id) ?? [];
-    const {
-        data: watchedData,
-        isLoading: isLoadingWatched,
-    } = useGetWatchedByIdsQuery(movieIds, {
-        skip: movieIds.length === 0,
-    });
-    const {
-        data: watchlistData,
-        isLoading: isLoadingWatchlist,
-    } = useGetWatchlistByIdsQuery(movieIds, {
-        skip: movieIds.length === 0,
-    });
+    const { data: watchedData, isLoading: isLoadingWatched } =
+        useGetWatchedByIdsQuery(movieIds, {
+            skip: movieIds.length === 0,
+        });
+    const { data: watchlistData, isLoading: isLoadingWatchlist } =
+        useGetWatchlistByIdsQuery(movieIds, {
+            skip: movieIds.length === 0,
+        });
 
     const handleSearch = (query: string) => {
         setInputValue(query);
@@ -87,9 +82,13 @@ export default function Page() {
         watchlistData?.map((movie: FavoriteMovie) => movie.movieId) ?? [],
     );
     const isStatusesLoading = isLoadingWatched || isLoadingWatchlist;
+    const isMoviesLoading = isSearching ? isLoadingSearch : isLoadingPopular;
 
     return (
-        <div id="scrollable" className={classNames("container", {}, [styles.page])}>
+        <div
+            id="scrollable"
+            className={classNames("container", {}, [styles.page])}
+        >
             <SearchBar value={inputValue} onChange={handleSearch} />
             <MoviesList
                 movies={data?.results ?? []}
@@ -100,6 +99,8 @@ export default function Page() {
                 watchedIds={watchedIds}
                 watchlistIds={watchlistIds}
                 isStatusesLoading={isStatusesLoading}
+                isLoading={isMoviesLoading}
+                skeletonCount={6}
                 isSearching={isSearching}
                 searchQuery={searchQuery}
             />
