@@ -1,18 +1,11 @@
-export type PostImage = {
-    src: string;
-    alt: string;
-    caption: string;
-    tint: string;
-};
-
 export type PostItem = {
     id: number | string;
     title: string;
-    dateLabel: string;
+    date_label: string;
     category: string;
     text: string;
     footer: string;
-    images?: PostImage[];
+    images?: string[];
 };
 
 export type CreatePostRequest = Omit<PostItem, "id">;

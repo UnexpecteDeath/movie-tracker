@@ -4,6 +4,7 @@ import "./globals.css";
 import { Dock } from "@/widgets/dock";
 import { StoreProvider } from "@/shared/ui/providers/StoreProvider";
 import { ThemeProvider } from "@/shared/ui/providers/ThemeProvider";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -51,6 +52,11 @@ export default function RootLayout({
                     >
                         <main className="app-root">{children}</main>
                         <Dock />
+                        <Toaster
+                            expand={true}
+                            position="top-right"
+                            richColors
+                        />
                     </body>
                 </ThemeProvider>
             </StoreProvider>

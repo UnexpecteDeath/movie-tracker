@@ -157,7 +157,7 @@ svg,
     overflow-x: hidden;
     isolation: isolate;
     background-color: var(--bg-color);
-    transition: background-color var(--ui-transition),
+    transition: background-color var(--ui-transition);
 }
 
 .app-root::before,

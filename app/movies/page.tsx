@@ -4,15 +4,12 @@ import {
     useGetPopularMoviesQuery,
     useSearchMoviesQuery,
 } from "@/entities/movieCard/api";
-import {
-    useGetWatchedByIdsQuery,
-    useGetWatchlistByIdsQuery,
-} from "@/entities/movieCard/api/mokky";
+import { getMovies } from "@/entities/movieCard/api/supabase";
 import { MoviesList } from "@/features/moviesList";
 import { SearchBar } from "@/features/searchBar";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-    FavoriteMovie,
+    FavoriteStatus,
     TmdbListResponse,
 } from "@/entities/movieCard/api/types";
 import { classNames } from "@/shared/lib";
@@ -38,6 +35,9 @@ export default function Page() {
     const [searchQuery, setSearchQuery] = useState("");
     const [inputValue, setInputValue] = useState("");
     const [searchPage, setSearchPage] = useState(1);
+    const [watchedIds, setWatchedIds] = useState<Set<number>>(new Set());
+    const [watchlistIds, setWatchlistIds] = useState<Set<number>>(new Set());
+    const [isStatusesLoading, setIsStatusesLoading] = useState(false);
     const isSearching = !!searchQuery;
     const currentPage = isSearching ? searchPage : page;
     const setCurrentPage = isSearching ? setSearchPage : setPage;
@@ -57,31 +57,100 @@ export default function Page() {
             { query: searchQuery, page: searchPage },
             { skip: !searchQuery },
         );
-    const data = getUniqueMoviesResponse(
-        isSearching ? searchData : popularData,
+    const data = useMemo(
+        () => getUniqueMoviesResponse(isSearching ? searchData : popularData),
+        [isSearching, popularData, searchData],
     );
-    const movieIds = data?.results.map((movie) => movie.id) ?? [];
-    const { data: watchedData, isLoading: isLoadingWatched } =
-        useGetWatchedByIdsQuery(movieIds, {
-            skip: movieIds.length === 0,
+    const moviesId = useMemo(
+        () => new Set(data?.results.map((movie) => movie.id) ?? []),
+        [data],
+    );
+
+    useEffect(() => {
+        const ids = Array.from(moviesId);
+        let isActual = true;
+
+        if (!ids.length) {
+            setWatchedIds(new Set());
+            setWatchlistIds(new Set());
+            setIsStatusesLoading(false);
+            return;
+        }
+
+        const loadSavedStatuses = async () => {
+            setIsStatusesLoading(true);
+            setWatchedIds(new Set());
+            setWatchlistIds(new Set());
+
+            try {
+                const [watchedResponse, watchlistResponse] = await Promise.all([
+                    getMovies({
+                        ids,
+                        status: "watched",
+                        limit: ids.length,
+                    }),
+                    getMovies({
+                        ids,
+                        status: "wishlist",
+                        limit: ids.length,
+                    }),
+                ]);
+                if (watchedResponse.error || watchlistResponse.error) {
+                    return;
+                }
+
+                if (!isActual) {
+                    return;
+                }
+
+                setWatchedIds(
+                    new Set(
+                        watchedResponse.items.map((movie) => movie.movieid),
+                    ),
+                );
+                setWatchlistIds(
+                    new Set(
+                        watchlistResponse.items.map((movie) => movie.movieid),
+                    ),
+                );
+            } finally {
+                if (isActual) {
+                    setIsStatusesLoading(false);
+                }
+            }
+        };
+
+        void loadSavedStatuses();
+
+        return () => {
+            isActual = false;
+        };
+    }, [moviesId]);
+
+    const handleStatusChange = (movieId: number, status: FavoriteStatus) => {
+        if (status === "watched") {
+            setWatchedIds((currentIds) => new Set(currentIds).add(movieId));
+            setWatchlistIds((currentIds) => {
+                const nextIds = new Set(currentIds);
+                nextIds.delete(movieId);
+                return nextIds;
+            });
+            return;
+        }
+
+        setWatchlistIds((currentIds) => new Set(currentIds).add(movieId));
+        setWatchedIds((currentIds) => {
+            const nextIds = new Set(currentIds);
+            nextIds.delete(movieId);
+            return nextIds;
         });
-    const { data: watchlistData, isLoading: isLoadingWatchlist } =
-        useGetWatchlistByIdsQuery(movieIds, {
-            skip: movieIds.length === 0,
-        });
+    };
 
     const handleSearch = (query: string) => {
         setInputValue(query);
         setSearchPage(1);
     };
 
-    const watchedIds: Set<number> = new Set(
-        watchedData?.map((movie: FavoriteMovie) => movie.movieId) ?? [],
-    );
-    const watchlistIds: Set<number> = new Set(
-        watchlistData?.map((movie: FavoriteMovie) => movie.movieId) ?? [],
-    );
-    const isStatusesLoading = isLoadingWatched || isLoadingWatchlist;
     const isMoviesLoading = isSearching ? isLoadingSearch : isLoadingPopular;
 
     return (
@@ -103,6 +172,7 @@ export default function Page() {
                 skeletonCount={6}
                 isSearching={isSearching}
                 searchQuery={searchQuery}
+                onStatusChange={handleStatusChange}
             />
         </div>
     );

@@ -143,7 +143,9 @@ export function Modal({
                         {children}
                     </div>
 
-                    {footer ? <div className={styles.footer}>{footer}</div> : null}
+                    {footer ? (
+                        <div className={styles.footer}>{footer}</div>
+                    ) : null}
                 </LiquidGlass>
             </div>
         </div>,

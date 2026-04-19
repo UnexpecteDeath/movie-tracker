@@ -4,7 +4,6 @@ import Link from "next/link";
 import styles from "./dock.module.css";
 import { HugeiconsIcon } from "@hugeicons/react";
 
-import Image from "next/image";
 import { classNames } from "@/shared/lib";
 import { usePathname } from "next/navigation";
 import { LiquidGlass } from "@/shared/ui/LiquidGlass";
@@ -16,7 +15,6 @@ import {
     FavouriteIcon,
     LayoutGridIcon,
     Search01Icon,
-    SearchIcon,
 } from "@hugeicons/core-free-icons";
 
 export default function Dock() {

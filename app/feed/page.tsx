@@ -1,131 +1,95 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { LiquidGlass } from "@/shared/ui/LiquidGlass";
-import { Post, useLazyGetPostsQuery, type PostItem } from "@/entities/post";
+import { Post, type PostItem } from "@/entities/post";
 import { CreatePostModal } from "@/features/createPost";
+import { getPosts } from "@/entities/post/api/supabase";
 import styles from "./page.module.css";
 
 const POSTS_LIMIT = 20;
 
 const getErrorMessage = () =>
-    "Не удалось загрузить посты. Проверь `NEXT_PUBLIC_MOKKY_URL` и доступность эндпоинта `/feed`.";
+    "Не удалось загрузить посты. Проверь Supabase env-переменные и доступ к таблице `posts`.";
 
-const getPostSortValue = (post: PostItem) => {
-    const numericId = Number(post.id);
-
-    return Number.isFinite(numericId) ? numericId : 0;
+type Meta = {
+    total_items: number;
+    total_pages: number;
+    current_page: number;
+    per_page: number;
+    remaining_count: number;
 };
-
-const sortPostsNewestFirst = (posts: PostItem[]) =>
-    [...posts].sort((firstPost, secondPost) => {
-        return getPostSortValue(secondPost) - getPostSortValue(firstPost);
-    });
 
 export default function FeedPage() {
     const [posts, setPosts] = useState<PostItem[]>([]);
+    const [meta, setMeta] = useState<Meta | null>(null);
     const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
-    const [nextPageToLoad, setNextPageToLoad] = useState<number | null>(null);
-    const [hasMore, setHasMore] = useState(false);
-    const [isLoadingInitial, setIsLoadingInitial] = useState(true);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [isError, setIsError] = useState(false);
     const [hasInitialized, setHasInitialized] = useState(false);
-    const [getPosts] = useLazyGetPostsQuery();
+    const requestInFlightRef = useRef(false);
 
-    useEffect(() => {
-        let isCancelled = false;
+    const hasMore = meta ? meta.remaining_count > 0 : false;
 
-        const loadInitialPosts = async () => {
-            try {
-                setIsLoadingInitial(true);
-                setIsError(false);
-
-                const firstPageData = await getPosts(
-                    {
-                        page: 1,
-                        limit: POSTS_LIMIT,
-                    },
-                    true,
-                ).unwrap();
-                const totalPages = firstPageData.meta.total_pages;
-                const latestPage = totalPages > 0 ? totalPages : 1;
-                const latestPageData =
-                    latestPage === 1
-                        ? firstPageData
-                        : await getPosts(
-                              {
-                                  page: latestPage,
-                                  limit: POSTS_LIMIT,
-                              },
-                              true,
-                          ).unwrap();
-
-                if (!isCancelled) {
-                    setPosts(sortPostsNewestFirst(latestPageData.items));
-                    setNextPageToLoad(latestPage > 1 ? latestPage - 1 : null);
-                    setHasMore(latestPage > 1);
-                    setHasInitialized(true);
-                    setIsLoadingInitial(false);
-                }
-            } catch {
-                if (!isCancelled) {
-                    setPosts([]);
-                    setNextPageToLoad(null);
-                    setHasMore(false);
-                    setIsError(true);
-                    setHasInitialized(true);
-                    setIsLoadingInitial(false);
-                }
-            }
-        };
-
-        void loadInitialPosts();
-
-        return () => {
-            isCancelled = true;
-        };
-    }, [getPosts]);
-
-    const loadMorePosts = () => {
-        if (isLoadingMore || nextPageToLoad === null) {
+    const loadPosts = useCallback(async (pageToLoad: number) => {
+        if (requestInFlightRef.current) {
             return;
         }
 
-        const pageToLoad = nextPageToLoad;
-
-        setIsLoadingMore(true);
+        requestInFlightRef.current = true;
         setIsError(false);
 
-        void getPosts(
-            {
+        try {
+            const data = await getPosts({
                 page: pageToLoad,
                 limit: POSTS_LIMIT,
-            },
-            true,
-        )
-            .unwrap()
-            .then((pageData) => {
-                setPosts((currentPosts) =>
-                    sortPostsNewestFirst([...currentPosts, ...pageData.items]),
-                );
-                setNextPageToLoad(pageToLoad > 1 ? pageToLoad - 1 : null);
-                setHasMore(pageToLoad > 1);
-                setIsLoadingMore(false);
-            })
-            .catch(() => {
-                setIsError(true);
-                setIsLoadingMore(false);
             });
+
+            setMeta(data.meta);
+            setPosts((currentPosts) => {
+                if (pageToLoad === 1) {
+                    return data.items;
+                }
+
+                const currentIds = new Set(
+                    currentPosts.map((post) => String(post.id)),
+                );
+                const nextItems = data.items.filter(
+                    (post) => !currentIds.has(String(post.id)),
+                );
+
+                return [...currentPosts, ...nextItems];
+            });
+        } catch {
+            setIsError(true);
+        } finally {
+            setHasInitialized(true);
+            requestInFlightRef.current = false;
+        }
+    }, []);
+
+    useEffect(() => {
+        void loadPosts(1);
+    }, [loadPosts]);
+
+    const loadMorePosts = () => {
+        if (!hasMore || requestInFlightRef.current) return;
+
+        void loadPosts((meta?.current_page ?? 1) + 1);
     };
 
     const handlePostCreated = (createdPost: PostItem) => {
-        setPosts((currentPosts) =>
-            sortPostsNewestFirst([createdPost, ...currentPosts]),
-        );
+        setPosts((currentPosts) => [createdPost, ...currentPosts]);
         setHasInitialized(true);
         setIsError(false);
+        setMeta((currentMeta) =>
+            currentMeta
+                ? {
+                      ...currentMeta,
+                      total_items: currentMeta.total_items + 1,
+                  }
+                : currentMeta,
+        );
     };
 
     return (
@@ -167,7 +131,7 @@ export default function FeedPage() {
             </section>
 
             <section className={styles.feedSection}>
-                {isLoadingInitial ? (
+                {posts.length <= 0 && !hasInitialized ? (
                     <LiquidGlass
                         className={styles.statusCard}
                         radius="xl"
@@ -179,7 +143,7 @@ export default function FeedPage() {
                                 Загружаем ваши посты
                             </h2>
                             <p className={styles.statusText}>
-                                Достаём записи с `/feed` и собираем ленту.
+                                Достаём записи из Supabase и собираем ленту.
                             </p>
                         </div>
                     </LiquidGlass>
@@ -203,10 +167,7 @@ export default function FeedPage() {
                     </LiquidGlass>
                 ) : null}
 
-                {hasInitialized &&
-                !isLoadingInitial &&
-                !isError &&
-                posts.length === 0 ? (
+                {hasInitialized && !isError && posts.length === 0 ? (
                     <LiquidGlass
                         className={styles.statusCard}
                         radius="xl"
@@ -218,7 +179,7 @@ export default function FeedPage() {
                                 В ленте пока нет постов
                             </h2>
                             <p className={styles.statusText}>
-                                После первого `POST /feed` записи появятся здесь
+                                После первой записи в `posts` она появится здесь
                                 автоматически.
                             </p>
                         </div>

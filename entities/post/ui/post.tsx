@@ -37,7 +37,7 @@ export function Post({ post }: Props) {
                     <p className={styles.postMetaLabel}>{post.category}</p>
                     <h2 className={styles.postTitle}>{post.title}</h2>
                 </div>
-                <time className={styles.postDate}>{post.dateLabel}</time>
+                <time className={styles.postDate}>{post.date_label}</time>
             </div>
 
             <p className={styles.postText}>{post.text}</p>
@@ -51,7 +51,7 @@ export function Post({ post }: Props) {
                     >
                         {images.map((image, index) => (
                             <figure
-                                key={image.src}
+                                key={image}
                                 className={classNames(
                                     styles.galleryItem,
                                     {
@@ -62,7 +62,6 @@ export function Post({ post }: Props) {
                                 )}
                                 style={
                                     {
-                                        "--gallery-tint": image.tint,
                                         margin: 16,
                                     } as CSSProperties
                                 }
@@ -74,8 +73,8 @@ export function Post({ post }: Props) {
                                     aria-label={`Открыть фото ${index + 1}`}
                                 >
                                     <Image
-                                        src={image.src}
-                                        alt={image.alt}
+                                        src={image}
+                                        alt="post image"
                                         className={styles.galleryImage}
                                         width={350}
                                         height={350}
@@ -87,7 +86,7 @@ export function Post({ post }: Props) {
 
                     {isSliderOpen && (
                         <PhotoSlider
-                            media={images.map((image) => image.src)}
+                            media={images}
                             isOpen={isSliderOpen}
                             onClose={() => setIsSliderOpen(false)}
                             initialIndex={sliderIndex}

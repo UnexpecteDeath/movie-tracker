@@ -1,8 +1,4 @@
-import {
-    forwardRef,
-    type HTMLAttributes,
-    type ReactNode,
-} from "react";
+import { forwardRef, type HTMLAttributes, type ReactNode } from "react";
 import { classNames } from "@/shared/lib";
 import styles from "./LiquidGlass.module.css";
 

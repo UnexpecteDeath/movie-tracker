@@ -108,8 +108,7 @@
     border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 14%);
     border-radius: 999px;
     background:
-        var(--accent),
-        color-mix(in srgb, var(--glass-bg) 92%, transparent);
+        var(--accent), color-mix(in srgb, var(--glass-bg) 92%, transparent);
     box-shadow:
         var(--shadow),
         inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 20%);
