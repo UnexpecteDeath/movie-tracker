@@ -3,7 +3,7 @@
     left: 50%;
     bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
-    z-index: 100;
+    z-index: 10000000000000;
     pointer-events: none;
     width: 100%;
     display: flex;
@@ -33,17 +33,17 @@
     align-items: center;
     justify-content: center;
     font-family:
-            var(--font-geist-sans),
-            system-ui,
-            -apple-system,
-            "Segoe UI",
-            Roboto,
-            "Helvetica Neue",
-            Arial;
+        var(--font-geist-sans),
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial;
     border: none;
     border-radius: 16px;
     background: transparent;
-    color: white;
+    color: var(--text);
 
     cursor: pointer;
     text-decoration: none;
@@ -143,10 +143,6 @@
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
-}
-
-.search {
-    color: white;
 }
 
 /* tablet */

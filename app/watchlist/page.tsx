@@ -1,24 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import { MoviesList } from "@/features/moviesList";
-import { useGetWatchlistQuery } from "@/entities/movieCard/api/mokky";
+import { MoviesList, useMoviesList } from "@/features/moviesList";
 import { LiquidGlass } from "@/shared/ui/LiquidGlass";
-import { favoriteMovieToMovie, MokkyMovie } from "@/entities/movieCard/api/types";
 import styles from "../watched/page.module.css";
 
-const PAGE_SIZE = 20;
-
 export default function WatchlistPage() {
-    const [page, setPage] = useState(1);
-    const { data: watchlistMovies, isLoading } = useGetWatchlistQuery({
+    const {
+        error,
+        isInitialLoading,
+        movies,
+        onStatusChange,
         page,
-        page_size: PAGE_SIZE,
+        pageSize,
+        setPage,
+        shouldShowEmptyState,
+        shouldShowMoviesList,
+        totalItems,
+        totalPages,
+        totalResults,
+        watchedIds,
+        watchlistIds,
+    } = useMoviesList({
+        status: "wishlist",
     });
-
-    const total_pages = watchlistMovies?.meta.total_pages ?? 0;
-    const totalResults = watchlistMovies?.items.length ?? 0;
-    const total_items = watchlistMovies?.meta.total_items ?? 0;
 
     return (
         <div id="scrollable" className={`container ${styles.page}`}>
@@ -44,7 +48,7 @@ export default function WatchlistPage() {
                                     Фильмов
                                 </span>
                                 <strong className={styles.statValue}>
-                                    {total_items}
+                                    {totalItems}
                                 </strong>
                             </div>
                             <div className={styles.statCard}>
@@ -52,7 +56,7 @@ export default function WatchlistPage() {
                                     Всего на странице
                                 </span>
                                 <strong className={styles.statValue}>
-                                    {PAGE_SIZE}
+                                    {pageSize}
                                 </strong>
                             </div>
                             <div className={styles.statCard}>
@@ -60,7 +64,7 @@ export default function WatchlistPage() {
                                     Страниц
                                 </span>
                                 <strong className={styles.statValue}>
-                                    {total_pages}
+                                    {totalPages}
                                 </strong>
                             </div>
                         </div>
@@ -69,7 +73,17 @@ export default function WatchlistPage() {
             </section>
 
             <section className={styles.listSection}>
-                {watchlistMovies && totalResults === 0 ? (
+                {error ? (
+                    <div className={styles.emptyState} role="alert">
+                        <p className={styles.emptyEyebrow}>Ошибка загрузки</p>
+                        <h2 className={styles.emptyTitle}>
+                            Не получилось открыть фильмы для будущего
+                        </h2>
+                        <p className={styles.emptyText}>{error}</p>
+                    </div>
+                ) : null}
+
+                {shouldShowEmptyState ? (
                     <div className={styles.emptyState}>
                         <p className={styles.emptyEyebrow}>Пока пусто</p>
                         <h2 className={styles.emptyTitle}>
@@ -80,28 +94,22 @@ export default function WatchlistPage() {
                             наполнится.
                         </p>
                     </div>
-                ) : (
+                ) : null}
+
+                {shouldShowMoviesList ? (
                     <MoviesList
-                        movies={
-                            watchlistMovies?.items.map(favoriteMovieToMovie) ??
-                            []
-                        }
-                        totalPages={total_pages}
+                        movies={movies}
+                        totalPages={totalPages}
                         totalResults={totalResults}
                         page={page}
                         setPage={setPage}
-                        isLoading={isLoading}
-                        watchedIds={new Set()}
+                        isLoading={isInitialLoading}
                         skeletonCount={6}
-                        watchlistIds={
-                            new Set(
-                                watchlistMovies?.items.map(
-                                    (movie: MokkyMovie) => movie.movieId,
-                                ) ?? [],
-                            )
-                        }
+                        watchedIds={watchedIds}
+                        watchlistIds={watchlistIds}
+                        onStatusChange={onStatusChange}
                     />
-                )}
+                ) : null}
             </section>
         </div>
     );

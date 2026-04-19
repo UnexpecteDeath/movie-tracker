@@ -1,8 +1,8 @@
 import { MovieCard } from "@/entities/movieCard/ui/movieCard";
 import { MovieSkeleton } from "@/entities/movieCard/ui/movieSkeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Movie } from "@/entities/movieCard/api/types";
-import { SetStateAction } from "react";
+import type { FavoriteStatus, Movie } from "@/entities/movieCard/api/types";
+import type { CSSProperties, SetStateAction } from "react";
 import styles from "./moviesList.module.css";
 
 interface Props {
@@ -18,6 +18,7 @@ interface Props {
     skeletonCount?: number;
     isSearching?: boolean;
     searchQuery?: string;
+    onStatusChange?: (movieId: number, status: FavoriteStatus) => void;
 }
 
 export const MoviesList = ({
@@ -33,6 +34,7 @@ export const MoviesList = ({
     skeletonCount = 8,
     isSearching,
     searchQuery,
+    onStatusChange,
 }: Props) => {
     const fetchNext = () => {
         setPage((prev) => prev + 1);
@@ -40,12 +42,14 @@ export const MoviesList = ({
 
     const renderSkeletons = (keyPrefix: string) =>
         Array.from({ length: skeletonCount }, (_, index) => (
-            <MovieSkeleton key={`${keyPrefix}-${index}`} />
+            <div className={styles.movieItem} key={`${keyPrefix}-${index}`}>
+                <MovieSkeleton />
+            </div>
         ));
 
     if (isLoading) {
         return (
-            <div className="movies" aria-busy="true">
+            <div className={`movies ${styles.movieGrid}`} aria-busy="true">
                 {renderSkeletons("movie-skeleton")}
             </div>
         );
@@ -65,7 +69,10 @@ export const MoviesList = ({
                 next={fetchNext}
                 hasMore={page < totalPages}
                 loader={
-                    <div className="movies" aria-busy="true">
+                    <div
+                        className={`movies ${styles.movieGrid}`}
+                        aria-busy="true"
+                    >
                         {renderSkeletons("movie-loader-skeleton")}
                     </div>
                 }
@@ -76,15 +83,25 @@ export const MoviesList = ({
                 }
                 scrollableTarget="scrollable"
             >
-                <div className="movies">
-                    {movies.map((movie: Movie) => (
-                        <MovieCard
+                <div className={`movies ${styles.movieGrid}`}>
+                    {movies.map((movie: Movie, index) => (
+                        <div
+                            className={styles.movieItem}
                             key={`${movie.id}${movie.title}`}
-                            movie={movie}
-                            watchlist={watchlistIds}
-                            watched={watchedIds}
-                            isStatusesLoading={isStatusesLoading}
-                        />
+                            style={
+                                {
+                                    "--movie-delay": `${Math.min(index, 8) * 45}ms`,
+                                } as CSSProperties
+                            }
+                        >
+                            <MovieCard
+                                movie={movie}
+                                watchlist={watchlistIds}
+                                watched={watchedIds}
+                                isStatusesLoading={isStatusesLoading}
+                                onStatusChange={onStatusChange}
+                            />
+                        </div>
                     ))}
                 </div>
             </InfiniteScroll>

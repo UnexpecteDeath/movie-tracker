@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FileUpload, Modal, type UploadedImage } from "@/shared";
-import { useAddPostMutation, type PostItem } from "@/entities/post";
+import type { PostItem } from "@/entities/post";
+import { addPost } from "@/entities/post/api/supabase";
 import styles from "./createPostModal.module.css";
 
 type Props = {
@@ -27,19 +29,8 @@ const buildDateLabel = () =>
         year: "numeric",
     }).format(new Date());
 
-const buildImageTint = (index: number) => {
-    const tints = [
-        "linear-gradient(180deg, rgba(13, 16, 25, 0.04), rgba(13, 16, 25, 0.32))",
-        "linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(18, 20, 28, 0.24))",
-        "linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(18, 20, 28, 0.28))",
-        "linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(20, 18, 26, 0.24))",
-    ];
-
-    return tints[index % tints.length];
-};
-
 export function CreatePostModal({ isOpen, onClose, onCreated }: Props) {
-    const [addPost, { isLoading }] = useAddPostMutation();
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const {
         control,
         register,
@@ -62,15 +53,17 @@ export function CreatePostModal({ isOpen, onClose, onCreated }: Props) {
 
     const handleClose = () => {
         resetForm();
+        setIsSubmitting(false);
         onClose();
     };
 
     const onSubmit = async ({ title, text, images }: CreatePostFormValues) => {
         const normalizedTitle = title.trim();
         const normalizedText = text.trim();
-        const normalizedImages = images.filter((image) => image.src);
+        const imageFiles = images.map((image) => image.file);
 
         clearErrors("root");
+        setIsSubmitting(true);
 
         try {
             const createdPost = await addPost({
@@ -78,16 +71,9 @@ export function CreatePostModal({ isOpen, onClose, onCreated }: Props) {
                 text: normalizedText,
                 category: STATIC_CATEGORY,
                 footer: STATIC_FOOTER,
-                dateLabel: buildDateLabel(),
-                images: normalizedImages.map((image, index) => ({
-                    src: image.src,
-                    alt: `Изображение поста ${index + 1}`,
-                    caption:
-                        image.name.replace(/\.[^.]+$/, "") ||
-                        `Frame ${index + 1}`,
-                    tint: buildImageTint(index),
-                })),
-            }).unwrap();
+                date_label: buildDateLabel(),
+                images: imageFiles,
+            });
 
             onCreated?.(createdPost);
             handleClose();
@@ -96,6 +82,8 @@ export function CreatePostModal({ isOpen, onClose, onCreated }: Props) {
                 message:
                     "Не удалось создать пост. Попробуй отправить форму ещё раз.",
             });
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -178,9 +166,9 @@ export function CreatePostModal({ isOpen, onClose, onCreated }: Props) {
                     <button
                         type="submit"
                         className={styles.submitButton}
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                     >
-                        {isLoading ? "Сохраняем..." : "Создать пост"}
+                        {isSubmitting ? "Сохраняем..." : "Создать пост"}
                     </button>
                 </div>
             </form>

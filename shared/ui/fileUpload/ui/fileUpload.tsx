@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import imageCompression from "browser-image-compression";
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { classNames } from "@/shared/lib";
 import styles from "./fileUpload.module.css";
@@ -12,6 +11,7 @@ export type UploadedImage = {
     size: number;
     type: string;
     src: string;
+    file: File;
 };
 
 type Props = {
@@ -32,10 +32,6 @@ const formatFileSize = (size: number) => {
     return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 };
 
-const IMAGE_MAX_SIZE = 1280;
-const IMAGE_QUALITY = 0.76;
-const COMPRESSED_IMAGE_TYPE = "image/jpeg";
-
 const readFileAsDataUrl = (file: File) =>
     new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
@@ -53,30 +49,16 @@ const readFileAsDataUrl = (file: File) =>
         reader.readAsDataURL(file);
     });
 
-const compressImage = async (file: File) => {
-    if (file.type === "image/svg+xml" || file.type === "image/gif") {
-        return file;
-    }
-
-    return imageCompression(file, {
-        maxSizeMB: 0.8,
-        maxWidthOrHeight: IMAGE_MAX_SIZE,
-        initialQuality: IMAGE_QUALITY,
-        useWebWorker: true,
-        fileType: COMPRESSED_IMAGE_TYPE,
-    });
-};
-
 const readImageFile = async (file: File): Promise<UploadedImage> => {
-    const optimizedImage = await compressImage(file).catch(() => file);
-    const src = await readFileAsDataUrl(optimizedImage);
+    const src = await readFileAsDataUrl(file);
 
     return {
         id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2, 9)}`,
         name: file.name,
-        size: optimizedImage.size,
-        type: optimizedImage.type,
+        size: file.size,
+        type: file.type,
         src,
+        file,
     };
 };
 

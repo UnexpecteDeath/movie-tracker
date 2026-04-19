@@ -16,8 +16,8 @@ export type Movie = {
 };
 
 export type MokkyMovie = Movie & {
-    movieId: number;
-}
+    movieid: number;
+};
 
 export type TmdbListResponse = {
     page: number;
@@ -30,22 +30,24 @@ export type FavoriteStatus = "watched" | "wishlist";
 
 export type FavoriteMovie = Omit<Movie, "id"> & {
     id: number;
-    movieId: number;
+    movieid: number;
     status: FavoriteStatus;
 };
 
 export const favoriteMovieToMovie = (movie: FavoriteMovie): Movie => ({
     ...movie,
-    id: movie.movieId,
+    id: movie.movieid,
 });
 
+export type Meta = {
+    total_items: number;
+    total_pages: number;
+    current_page: number;
+    per_page: number;
+    remaining_count: number;
+};
+
 export type MokkyListResponse<T = Movie> = {
-    meta: {
-        total_items: number;
-        total_pages: number;
-        current_page: number;
-        per_page: number;
-        remaining_count: number;
-    };
+    meta: Meta;
     items: T[];
 };
