@@ -4,6 +4,7 @@ import "./globals.css";
 import { Dock } from "@/widgets/dock";
 import { StoreProvider } from "@/shared/ui/providers/StoreProvider";
 import { ThemeProvider } from "@/shared/ui/providers/ThemeProvider";
+import { AuthProvider } from "@/shared/ui/providers/AuthProvider";
 import { Toaster } from "sonner";
 
 const geistSans = Geist({
@@ -50,8 +51,10 @@ export default function RootLayout({
                     <body
                         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
                     >
-                        <main className="app-root">{children}</main>
-                        <Dock />
+                        <AuthProvider>
+                            <main className="app-root">{children}</main>
+                            <Dock />
+                        </AuthProvider>
                         <Toaster
                             expand={true}
                             position="top-right"
