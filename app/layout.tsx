@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "./styles/globals.css";
 import { Dock } from "@/widgets/dock";
 import { StoreProvider } from "@/shared/ui/providers/StoreProvider";
 import { ThemeProvider } from "@/shared/ui/providers/ThemeProvider";
 import { AuthProvider } from "@/shared/ui/providers/AuthProvider";
 import { Toaster } from "sonner";
+import { StreackProvider } from "@/shared/ui/providers/StreackProvider";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -52,8 +53,10 @@ export default function RootLayout({
                         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
                     >
                         <AuthProvider>
-                            <main className="app-root">{children}</main>
-                            <Dock />
+                            <StreackProvider>
+                                <main className="app-root">{children}</main>
+                                <Dock />
+                            </StreackProvider>
                         </AuthProvider>
                         <Toaster
                             expand={true}

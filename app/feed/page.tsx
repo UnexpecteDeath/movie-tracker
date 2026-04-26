@@ -106,14 +106,9 @@ export default function FeedPage() {
                     <div className={styles.heroCard}>
                         <div className={styles.heroContent}>
                             <p className={styles.eyebrow}>Our private feed</p>
-                            <h1 className={styles.title}>
-                                Небольшая лента о нас
-                            </h1>
+                            <h1 className={styles.title}>Feed</h1>
                             <p className={styles.description}>
-                                Локальные посты, фотографии и маленькие заметки
-                                о наших вечерах. Стартуем с одной карточки, но
-                                layout уже готов к постам без изображений и к
-                                галерее из нескольких кадров.
+                                Небольшая история о нас и нашей жизни ❤️
                             </p>
                         </div>
 

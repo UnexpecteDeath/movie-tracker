@@ -7,6 +7,9 @@ import type {
     FavoriteStatus,
     Meta,
 } from "@/entities/movieCard/api/types";
+import { supabase } from "@/shared/api/supabaseClient";
+import { useAuth } from "@/features/auth/useAuth";
+import { toast } from "sonner";
 
 type UseMoviesListArgs = {
     pageSize?: number;
@@ -28,7 +31,7 @@ export const useMoviesList = ({
     const [meta, setMeta] = useState<Meta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
+    const { getUser } = useAuth();
     const loadMovies = useCallback(async () => {
         setIsLoading(true);
         setError(null);
@@ -69,8 +72,31 @@ export const useMoviesList = ({
         void loadMovies();
     }, [loadMovies]);
 
+    const addBonusForMovie = async () => {
+        const user = await getUser();
+        try {
+            const { data, error } = await supabase.rpc("give_movie_bonus", {
+                user_id: user?.id,
+            });
+            if (error) {
+                toast.error("Ошибка, бонусы не были начислены");
+                return;
+            }
+            const message = `${data.status}: ${data.text}`;
+
+            if (data.status === "success") {
+                toast.success(message);
+            }
+        } catch (error: unknown) {
+            const err = error as Error;
+            const messageError =
+                "message" in err ? err.message : "Бонусы не были начислены";
+            toast.error("decline:" + messageError);
+        }
+    };
+
     const handleStatusChange = useCallback(
-        (movieId: number, nextStatus: FavoriteStatus) => {
+        async (movieId: number, nextStatus: FavoriteStatus) => {
             if (nextStatus === status) {
                 setMoviesList((currentMovies) =>
                     currentMovies.map((movie) =>
@@ -80,6 +106,9 @@ export const useMoviesList = ({
                     ),
                 );
                 return;
+            }
+            if (nextStatus === "watched") {
+                void addBonusForMovie();
             }
 
             setMoviesList((currentMovies) =>
@@ -94,7 +123,7 @@ export const useMoviesList = ({
                     : currentMeta,
             );
         },
-        [status],
+        [status, addBonusForMovie],
     );
 
     const totalPages = meta?.total_pages ?? 0;

@@ -42,6 +42,20 @@
     box-shadow:
         inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 22%),
         0 12px 24px color-mix(in srgb, var(--shadow) 45%, transparent);
+    overflow: hidden;
+}
+
+.avatarImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.postMeta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .postMetaLabel {
@@ -51,6 +65,15 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: color-mix(in srgb, var(--muted) 88%, transparent);
+}
+
+.postAuthor {
+    margin: 0 0 4px;
+    font-size: 16px;
+    line-height: 1.2;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--text) 58%, transparent);
 }
 
 .postTitle {
@@ -83,26 +106,14 @@
 /* GALLERY */
 
 .gallery {
-    --gallery-gap: 12px;
-    margin-top: 22px;
     display: grid;
-    gap: var(--gallery-gap);
+    gap: 12px;
     width: 100%;
     min-width: 0;
     padding: 12px;
     border-radius: 38px;
     overflow: hidden;
     align-items: stretch;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 96%, white 8%),
-            color-mix(in srgb, var(--glass-bg) 86%, transparent)
-        ),
-        color-mix(in srgb, var(--glass-bg) 82%, var(--bg-color) 18%);
-    box-shadow:
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%),
-        0 16px 36px color-mix(in srgb, var(--shadow) 45%, transparent);
 }
 
 .galleryOne {
@@ -121,16 +132,6 @@
 
 .galleryFour {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.galleryItem {
-    min-width: 0;
-    min-height: clamp(180px, 24vw, 340px);
-    overflow: hidden;
-    isolation: isolate;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .galleryOne .galleryItem {
@@ -255,28 +256,6 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     pointer-events: none;
-}
-
-.postFooter {
-    margin-top: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.footerChip {
-    display: inline-flex;
-    align-items: center;
-    min-height: 34px;
-    padding: 0 14px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    background: color-mix(in srgb, var(--glass-bg) 92%, var(--bg-color) 8%);
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
 }
 
 .footerText {

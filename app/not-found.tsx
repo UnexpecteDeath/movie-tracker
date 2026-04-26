@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "./not-found.module.css";
+import styles from "./styles/not-found.module.css";
 import { LiquidGlass } from "@/shared/ui/LiquidGlass";
 import { classNames } from "@/shared/lib";
 

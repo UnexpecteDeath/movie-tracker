@@ -1,0 +1,316 @@
+.page {
+    position: relative;
+    min-height: 100dvh;
+    padding: 24px 16px calc(var(--dock-height) + 24px);
+    overflow: hidden;
+}
+
+.glowPrimary,
+.glowSecondary {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(88px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.glowPrimary {
+    top: 8%;
+    left: max(16px, 7vw);
+    width: 280px;
+    height: 280px;
+    background: color-mix(in srgb, var(--text) 10%, transparent);
+    opacity: 0.78;
+}
+
+.glowSecondary {
+    right: max(14px, 8vw);
+    bottom: 12%;
+    width: 240px;
+    height: 240px;
+    background: color-mix(in srgb, var(--glass-emboss) 76%, transparent);
+    opacity: 0.92;
+}
+
+.shell {
+    position: relative;
+    z-index: 1;
+    width: min(960px, 100%);
+    margin: 0 auto;
+    display: grid;
+    gap: 24px;
+}
+
+.surface {
+    overflow: hidden;
+}
+
+.surfaceInner {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.tabs {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 8px;
+    width: fit-content;
+    max-width: 100%;
+    padding: 6px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 92%, white 10%),
+            color-mix(in srgb, var(--glass-bg) 82%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 16%, transparent);
+    box-shadow:
+        0 14px 30px color-mix(in srgb, var(--shadow) 38%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%);
+}
+
+.tabButton {
+    min-height: 42px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: color-mix(in srgb, var(--text) 72%, transparent);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+        transform 180ms ease,
+        background-color 180ms ease,
+        color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.tabButton:hover {
+    transform: translateY(-1px);
+}
+
+.tabButton:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
+    outline-offset: 2px;
+}
+
+.tabButtonActive {
+    background: var(--accent);
+    color: color-mix(in srgb, var(--bg-color) 6%, white 94%);
+    box-shadow:
+        0 12px 26px color-mix(in srgb, var(--shadow) 56%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.panelHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.panelEyebrow {
+    margin: 0 0 8px;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--text) 52%, transparent);
+}
+
+.panelTitle {
+    margin: 0;
+    font-size: clamp(26px, 4vw, 34px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.panelDescription {
+    margin: 10px 0 0;
+    max-width: 38ch;
+    font-size: 15px;
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--text) 70%, transparent);
+}
+
+.counter {
+    flex: 0 0 auto;
+    min-width: 52px;
+    height: 52px;
+    padding: 0 14px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 96%, white 8%),
+            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 18%, transparent);
+    box-shadow:
+        0 14px 28px color-mix(in srgb, var(--shadow) 42%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%);
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 12px;
+}
+
+.stateCard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 20px;
+    border-radius: 22px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 94%, white 10%),
+            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 18%, transparent);
+    box-shadow:
+        0 18px 36px color-mix(in srgb, var(--shadow) 34%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%);
+}
+
+.stateEyebrow {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--text) 52%, transparent);
+}
+
+.stateTitle {
+    margin: 0;
+    font-size: clamp(22px, 3vw, 28px);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+}
+
+.stateText {
+    margin: 0;
+    max-width: 48ch;
+    font-size: 15px;
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--text) 72%, transparent);
+}
+
+.tileSkeleton {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+
+.tileSkeletonInner {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--glass-bg) 72%, white 4%) 0%,
+        color-mix(in srgb, white 28%, var(--glass-bg)) 48%,
+        color-mix(in srgb, var(--glass-bg) 70%, transparent) 100%
+    );
+    background-size: 220% 100%;
+    animation: skeletonShift 1.8s ease-in-out infinite;
+}
+
+.tileSkeletonInner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid color-mix(in srgb, white 16%, transparent);
+}
+
+@keyframes skeletonShift {
+    0% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .page {
+        padding: 18px 12px calc(var(--dock-height) + 18px);
+    }
+
+    .shell {
+        gap: 18px;
+    }
+
+    .surfaceInner {
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .panelHeader {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .counter {
+        min-width: 48px;
+        height: 48px;
+        border-radius: 16px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .surfaceInner {
+        padding: 14px;
+    }
+
+    .tabs {
+        width: 100%;
+    }
+
+    .tabButton {
+        min-height: 40px;
+        padding: 0 12px;
+        font-size: 13px;
+    }
+
+    .panelTitle {
+        font-size: 24px;
+    }
+
+    .panelDescription {
+        font-size: 14px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+    }
+}

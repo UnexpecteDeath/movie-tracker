@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { LiquidGlass } from "@/shared";
-import { supabase } from "@/shared/api/supabaseClient";
 import styles from "./page.module.css";
+import { useAuth } from "@/features/auth/useAuth";
 
 type SignInFormValues = {
     email: string;
@@ -15,6 +15,8 @@ type SignInFormValues = {
 export default function SignInPage() {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { signIn } = useAuth();
+
     const {
         register,
         handleSubmit,
@@ -32,10 +34,7 @@ export default function SignInPage() {
         clearErrors("root");
         setIsSubmitting(true);
 
-        const { error } = await supabase.auth.signInWithPassword({
-            email: email.trim(),
-            password,
-        });
+        const error = await signIn({ email, password });
 
         setIsSubmitting(false);
 

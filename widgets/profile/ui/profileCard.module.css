@@ -1,0 +1,579 @@
+.card {
+    width: 100%;
+    max-width: 760px;
+    align-self: center;
+    overflow: hidden;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 272px);
+    align-items: stretch;
+    gap: 16px;
+    text-align: left;
+    height: 100%;
+    min-height: 0;
+}
+
+.cardPanel {
+    height: min(100%, 680px);
+    max-height: 100%;
+    padding: clamp(22px, 3vh, 30px);
+    overflow: hidden;
+    scrollbar-width: none;
+}
+
+.cardPanel::-webkit-scrollbar {
+    display: none;
+}
+
+.profileMain {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.identityBlock {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.detailsStack {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.avatarWrap {
+    position: relative;
+    display: block;
+    width: 118px;
+    height: 118px;
+    padding: 5px;
+    border: 0;
+    border-radius: 50%;
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--text) 14%, transparent),
+            color-mix(in srgb, var(--glass-bg) 80%, white 8%)
+        ),
+        color-mix(in srgb, var(--bg-color) 18%, transparent);
+    box-shadow:
+        0 18px 36px rgba(0, 0, 0, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    cursor: pointer;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.avatarWrapStatic {
+    cursor: default;
+    pointer-events: none;
+}
+
+.avatarWrap:hover,
+.avatarWrap:focus-within {
+    transform: translateY(-1px);
+    box-shadow:
+        0 22px 42px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.avatarWrapStatic:hover,
+.avatarWrapStatic:focus-within {
+    transform: none;
+    box-shadow:
+        0 18px 36px rgba(0, 0, 0, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.avatarInput {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.avatar,
+.avatarFallback {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+}
+
+.avatar {
+    object-fit: cover;
+}
+
+.avatarFallback {
+    background: var(--accent);
+    color: white;
+    font-size: 46px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.avatarOverlay {
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, 0.48);
+    color: white;
+    font-size: 48px;
+    line-height: 1;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+}
+
+.avatarWrap:hover .avatarOverlay,
+.avatarWrap:focus-within .avatarOverlay {
+    opacity: 1;
+}
+
+.profileInfo {
+    min-width: 0;
+    width: 100%;
+}
+
+.name {
+    margin: 0;
+    font-size: clamp(26px, 4vw, 36px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    overflow-wrap: anywhere;
+}
+
+.email {
+    margin: 10px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+}
+
+.meta {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
+    border-radius: 14px;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 92%, white 10%),
+            color-mix(in srgb, var(--glass-bg) 82%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 20%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%),
+        0 10px 26px color-mix(in srgb, var(--shadow) 34%, transparent);
+}
+
+.metaLabel,
+.metaValue {
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.metaLabel {
+    color: var(--muted);
+}
+
+.metaValue {
+    font-weight: 700;
+    color: var(--text);
+    text-align: right;
+}
+
+.statsGrid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.statCard {
+    --stat-glow-opacity: 0.14;
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 14%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 96%, white 10%),
+            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 24%, transparent);
+    color: var(--text);
+    box-shadow:
+        0 16px 34px color-mix(in srgb, var(--shadow) 52%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 18%);
+}
+
+.statCard::before {
+    content: "";
+    position: absolute;
+    inset: auto -16% -34% auto;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: var(--stat-glow-opacity);
+    pointer-events: none;
+    filter: blur(26px);
+    z-index: 0;
+}
+
+.statCard::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.14),
+        transparent 46%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+.statCardStreak {
+    --stat-glow-opacity: 0.22;
+}
+
+.statCardBalance {
+    --stat-glow-opacity: 0.12;
+}
+
+.statCardBody {
+    position: relative;
+    z-index: 1;
+    min-height: 80px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.statIcon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.statIcon img {
+    object-fit: cover;
+    width: 35px;
+    height: 35px;
+}
+
+.statValue {
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1;
+    font-weight: 850;
+    letter-spacing: -0.05em;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.dailyBonusButton {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    min-height: 68px;
+    padding: 18px 20px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 16%);
+    border-radius: 18px;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 98%, white 10%),
+            color-mix(in srgb, var(--glass-bg) 88%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 22%, transparent);
+    color: var(--text);
+    font: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow:
+        0 18px 42px color-mix(in srgb, var(--shadow) 60%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 18%);
+    -webkit-tap-highlight-color: transparent;
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        background-color 180ms ease,
+        box-shadow 180ms ease,
+        opacity 180ms ease,
+        filter 180ms ease;
+}
+
+.dailyBonusButton::before {
+    content: "";
+    position: absolute;
+    inset: auto -12% -26% auto;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.22;
+    filter: blur(24px);
+    pointer-events: none;
+}
+
+.dailyBonusButton::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0.14),
+        transparent 46%
+    );
+    pointer-events: none;
+}
+
+.dailyBonusLabel,
+.dailyBonusHint {
+    position: relative;
+    z-index: 1;
+}
+
+.dailyBonusLabel {
+    max-width: 17ch;
+    font-size: 16px;
+    line-height: 1.22;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.dailyBonusHint {
+    font-size: 13px;
+    line-height: 1.35;
+    color: color-mix(in srgb, var(--text) 70%, transparent);
+}
+
+.dailyBonusButton:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--text) 16%, var(--glass-border));
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 100%, white 12%),
+            color-mix(in srgb, var(--glass-bg) 92%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 24%, transparent);
+    box-shadow:
+        0 22px 46px color-mix(in srgb, var(--shadow) 66%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 18%);
+    filter: saturate(1.04);
+}
+
+.dailyBonusButton:active {
+    transform: scale(0.99);
+}
+
+.dailyBonusButton:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
+    outline-offset: 4px;
+}
+
+.dailyBonusButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.74;
+    transform: none;
+    filter: none;
+}
+
+.signOutButton {
+    width: 100%;
+    min-height: 50px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--glass-bg) 84%, transparent);
+    color: var(--text);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 750;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow:
+        0 14px 28px color-mix(in srgb, var(--shadow) 48%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%);
+    -webkit-tap-highlight-color: transparent;
+    transition:
+        transform 180ms ease,
+        background-color 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        opacity 180ms ease;
+}
+
+button.signOutButton:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--text) 18%, var(--glass-border));
+    background: color-mix(in srgb, var(--glass-bg) 88%, white 4%);
+    box-shadow:
+        0 18px 34px color-mix(in srgb, var(--shadow) 56%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%);
+}
+
+button.signOutButton:active {
+    transform: scale(0.99);
+}
+
+button.signOutButton:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
+    outline-offset: 3px;
+}
+
+button.signOutButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.68;
+    transform: none;
+}
+
+@media (max-width: 900px) {
+    .card {
+        max-width: none;
+    }
+
+    .cardPanel {
+        padding: 24px;
+        height: auto;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .content {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .profileMain {
+        gap: 16px;
+    }
+
+    .identityBlock {
+        align-items: center;
+    }
+
+    .profileInfo {
+        text-align: center;
+    }
+}
+
+@media (max-width: 520px) {
+    .cardPanel {
+        padding: 20px 18px;
+    }
+
+    .content {
+        gap: 12px;
+    }
+
+    .statsGrid {
+        gap: 8px;
+    }
+
+    .avatarWrap {
+        width: 104px;
+        height: 104px;
+    }
+
+    .avatarFallback {
+        font-size: 40px;
+    }
+
+    .name {
+        font-size: 30px;
+    }
+
+    .statCard {
+        min-width: 0;
+    }
+
+    .statCardBody {
+        min-height: 68px;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .statIcon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+    }
+
+    .statValue {
+        font-size: 24px;
+    }
+
+    .meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        text-align: left;
+    }
+
+    .metaValue {
+        text-align: left;
+    }
+
+    .dailyBonusButton {
+        min-height: 64px;
+        padding: 16px 16px 16px 18px;
+    }
+
+    .dailyBonusLabel {
+        font-size: 15px;
+    }
+
+    .signOutButton {
+        min-height: 52px;
+    }
+}

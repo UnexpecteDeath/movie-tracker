@@ -2,10 +2,9 @@ export type PostItem = {
     id: number | string;
     title: string;
     date_label: string;
-    category: string;
     text: string;
-    footer: string;
     images?: string[];
+    author_id: string | null;
 };
 
 export type CreatePostRequest = Omit<PostItem, "id">;
