@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { LiquidGlass } from "@/shared/ui/LiquidGlass";
 import { classNames } from "@/shared/lib";
-import styles from "./error.module.css";
+import styles from "./styles/error.module.css";
 
 type ErrorPageProps = {
     error: Error & { digest?: string };

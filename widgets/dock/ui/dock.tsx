@@ -13,6 +13,7 @@ import {
     CheckmarkBadge03Icon,
     ComputerVideoIcon,
     FavouriteIcon,
+    GiftIcon,
     LayoutGridIcon,
     PlaySquareIcon,
     Search01Icon,
@@ -63,6 +64,12 @@ export default function Dock() {
                 icon: PlaySquareIcon,
                 label: "movie picker",
                 current: pathname === "/movie-picker",
+            },
+            {
+                href: "/shop",
+                icon: GiftIcon,
+                label: "Shop",
+                current: pathname === "/shop",
             },
             {
                 href: "/profile",

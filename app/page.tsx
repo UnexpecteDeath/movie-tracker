@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import styles from "./page.module.css";
+import styles from "./styles/page.module.css";
 
 const text =
     "Здесь будут жить наши любимые фильмы, то, что мы давно хотим посмотреть, и маленькие воспоминания о вечерах, которые были вместе.";

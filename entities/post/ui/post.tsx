@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { PhotoSlider } from "@/shared";
 import { classNames } from "@/shared/lib";
 import type { PostItem } from "../api/types";
 import styles from "./post.module.css";
 import Image from "next/image";
+import { useAuth } from "@/features/auth/useAuth";
+import type { Profile } from "@/features/auth/types";
+import Link from "next/link";
 
 type Props = {
     post: PostItem;
@@ -23,6 +26,51 @@ export function Post({ post }: Props) {
     const galleryClass = galleryClassByCount[images.length];
     const [isSliderOpen, setIsSliderOpen] = useState(false);
     const [sliderIndex, setSliderIndex] = useState(0);
+    const [authorProfile, setAuthorProfile] = useState<{
+        profile: Profile | null;
+    } | null>(null);
+    const { getProfileByUuid } = useAuth();
+
+    useEffect(() => {
+        let isMounted = true;
+
+        if (!post.author_id) {
+            return () => {
+                isMounted = false;
+            };
+        }
+
+        getProfileByUuid(post.author_id)
+            .then((authorProfile) => {
+                if (!isMounted || !authorProfile) {
+                    return;
+                }
+
+                setAuthorProfile({
+                    profile: authorProfile,
+                });
+            })
+            .catch(() => {
+                if (!isMounted) {
+                    return;
+                }
+
+                setAuthorProfile({
+                    profile: null,
+                });
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [getProfileByUuid, post.author_id]);
+
+    const resolvedAuthorProfile =
+        !!post.author_id && authorProfile?.profile
+            ? authorProfile.profile
+            : null;
+    const authorName = resolvedAuthorProfile?.nickname || "unknown";
+    const authorAvatarUrl = resolvedAuthorProfile?.avatarUrl || null;
 
     const openSlider = (index: number) => {
         setSliderIndex(index);
@@ -32,9 +80,34 @@ export function Post({ post }: Props) {
     return (
         <article className={styles.postCard}>
             <div className={styles.postHeader}>
-                <div className={styles.avatar}>♡</div>
+                <div className={styles.avatar}>
+                    {authorAvatarUrl ? (
+                        <Link href={`/profile/${post.author_id}`}>
+                            <Image
+                                src={authorAvatarUrl}
+                                alt={authorName}
+                                className={styles.avatarImage}
+                                width={52}
+                                height={52}
+                            />
+                        </Link>
+                    ) : (
+                        authorName.slice(0, 1).toUpperCase()
+                    )}
+                </div>
                 <div>
-                    <p className={styles.postMetaLabel}>{post.category}</p>
+                    <div className={styles.postMeta}>
+                        {post.author_id ? (
+                            <Link
+                                href={`/profile/${post.author_id}`}
+                                className={styles.postAuthor}
+                            >
+                                {authorName}
+                            </Link>
+                        ) : (
+                            <p className={styles.postAuthor}>@{authorName}</p>
+                        )}
+                    </div>
                     <h2 className={styles.postTitle}>{post.title}</h2>
                 </div>
                 <time className={styles.postDate}>{post.date_label}</time>
@@ -94,11 +167,6 @@ export function Post({ post }: Props) {
                     )}
                 </>
             ) : null}
-
-            <div className={styles.postFooter}>
-                <span className={styles.footerChip}>Only us</span>
-                <p className={styles.footerText}>{post.footer}</p>
-            </div>
         </article>
     );
 }

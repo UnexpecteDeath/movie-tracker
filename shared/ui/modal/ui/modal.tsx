@@ -48,9 +48,7 @@ export function Modal({
     const dialogRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!isOpen) {
-            return;
-        }
+        if (!isOpen) return;
 
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape" && closeOnEscape) {
@@ -67,7 +65,7 @@ export function Modal({
             document.body.style.overflow = previousOverflow;
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [closeOnEscape, isOpen, onClose]);
+    }, [isOpen, closeOnEscape, onClose]);
 
     if (!isOpen || typeof document === "undefined") {
         return null;

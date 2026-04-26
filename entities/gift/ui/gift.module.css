@@ -1,0 +1,659 @@
+.tileButton {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.tileButtonDisabled {
+    cursor: default;
+}
+
+.tileButton:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
+    outline-offset: 4px;
+    border-radius: 24px;
+}
+
+.tile {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 96%, white 8%),
+            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 20%, transparent);
+    box-shadow:
+        0 16px 34px color-mix(in srgb, var(--shadow) 42%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%);
+}
+
+.tile::before {
+    content: "";
+    position: absolute;
+    inset: auto -18% -26% auto;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.18;
+    filter: blur(22px);
+    pointer-events: none;
+}
+
+.tileInner {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 14px;
+}
+
+.assetImage,
+.assetFallback {
+    width: 36px;
+    height: 36px;
+    display: block;
+}
+
+.assetImage {
+    object-fit: contain;
+}
+
+.assetFallback {
+    color: var(--text);
+    opacity: 0.94;
+}
+
+.detailsContent {
+    flex: 1 1 auto;
+    min-height: 0;
+    position: relative;
+}
+
+.detailsDialog {
+    width: min(100%, 520px);
+    height: min(720px, calc(100dvh - 48px));
+}
+
+.detailsDialogContent {
+    display: flex;
+    min-height: 0;
+}
+
+.scene {
+    display: none;
+    flex: 1 1 auto;
+    min-height: 0;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.sceneVisible {
+    display: flex;
+}
+
+.preview {
+    position: relative;
+    overflow: hidden;
+    min-height: 180px;
+    border-radius: 24px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 98%, white 12%),
+            color-mix(in srgb, var(--glass-bg) 88%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 20%, transparent);
+    box-shadow:
+        0 20px 40px color-mix(in srgb, var(--shadow) 42%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 18%);
+}
+
+.preview::before {
+    content: "";
+    position: absolute;
+    inset: auto -8% -12% auto;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.24;
+    filter: blur(26px);
+    pointer-events: none;
+}
+
+.previewInner {
+    position: relative;
+    z-index: 1;
+    min-height: 180px;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.previewImage,
+.previewFallback {
+    width: 84px;
+    height: 84px;
+    display: block;
+}
+
+.previewImage {
+    object-fit: contain;
+}
+
+.previewFallback {
+    color: var(--text);
+    opacity: 0.94;
+}
+
+.metaGrid {
+    display: grid;
+    gap: 10px;
+}
+
+.metaRow {
+    display: grid;
+    grid-template-columns: 130px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 92%, white 8%),
+            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 16%, transparent);
+    box-shadow:
+        0 12px 24px color-mix(in srgb, var(--shadow) 28%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%);
+}
+
+.metaLabel {
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--text) 54%, transparent);
+}
+
+.metaValue {
+    min-width: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.priceValue {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.priceGif {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+.giftButton {
+    width: 100%;
+    min-height: 52px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 14%);
+    border-radius: 18px;
+    background: var(--accent);
+    color: color-mix(in srgb, var(--bg-color) 6%, white 94%);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow:
+        0 18px 34px color-mix(in srgb, var(--shadow) 44%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    -webkit-tap-highlight-color: transparent;
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        opacity 180ms ease;
+}
+
+.giftButton:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        0 22px 40px color-mix(in srgb, var(--shadow) 52%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.giftButton:active {
+    transform: scale(0.99);
+}
+
+.giftButton:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
+    outline-offset: 3px;
+}
+
+.giftButton:disabled,
+.secondaryButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.secondaryButton {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    border-radius: 16px;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 92%, white 8%),
+            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 16%, transparent);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        background 180ms ease;
+}
+
+.secondaryButton:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--glass-border) 100%, white 18%);
+}
+
+.secondaryButton:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
+    outline-offset: 3px;
+}
+
+.recipientsBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.recipientsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.recipientsEyebrow {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--text) 52%, transparent);
+}
+
+.recipientsCount {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 12px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    background: color-mix(in srgb, var(--glass-bg) 86%, transparent);
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.recipientsState {
+    padding: 16px;
+    border-radius: 18px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 92%, white 8%),
+            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 16%, transparent);
+    font-size: 14px;
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--text) 72%, transparent);
+}
+
+.recipientList {
+    display: grid;
+    gap: 10px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.recipientItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 14px;
+    font: inherit;
+    text-align: left;
+    border-radius: 18px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 92%, white 8%),
+            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 16%, transparent);
+    box-shadow:
+        0 12px 24px color-mix(in srgb, var(--shadow) 24%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%);
+    cursor: pointer;
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.recipientItem:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--glass-border) 100%, white 18%);
+    box-shadow:
+        0 16px 28px color-mix(in srgb, var(--shadow) 28%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%);
+}
+
+.recipientItem:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
+    outline-offset: 3px;
+}
+
+.recipientAvatar {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--text) 14%, transparent),
+            color-mix(in srgb, var(--glass-bg) 80%, white 8%)
+        ),
+        color-mix(in srgb, var(--bg-color) 18%, transparent);
+}
+
+.recipientAvatarImage,
+.recipientAvatarFallback {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+}
+
+.recipientAvatarImage {
+    object-fit: cover;
+}
+
+.recipientAvatarFallback {
+    font-size: 16px;
+    font-weight: 800;
+    color: white;
+    background: var(--accent);
+}
+
+.recipientText {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.recipientName {
+    font-size: 15px;
+    line-height: 1.3;
+    font-weight: 700;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.confirmBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.selectedRecipientCard,
+.confirmGiftCard {
+    border-radius: 20px;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 94%, white 8%),
+            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 16%, transparent);
+    box-shadow:
+        0 14px 26px color-mix(in srgb, var(--shadow) 24%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%);
+}
+
+.selectedRecipientCard {
+    padding: 14px 16px;
+}
+
+.selectedRecipientLabel,
+.messageLabel {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--text) 52%, transparent);
+}
+
+.selectedRecipientContent {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.selectedRecipientName {
+    font-size: 16px;
+    line-height: 1.2;
+    color: var(--text);
+}
+
+.confirmGiftCard {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+}
+
+.confirmGiftPreview {
+    width: 82px;
+    height: 82px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 98%, white 10%),
+            color-mix(in srgb, var(--glass-bg) 86%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 18%, transparent);
+}
+
+.confirmGiftMeta {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.confirmGiftName {
+    font-size: 16px;
+    line-height: 1.25;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.confirmGiftPrice {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    line-height: 1;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.messageField {
+    display: block;
+}
+
+.messageInput {
+    width: 100%;
+    min-height: 104px;
+    resize: none;
+    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    border-radius: 18px;
+    padding: 14px 16px;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--glass-bg) 92%, white 8%),
+            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 16%, transparent);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow:
+        0 12px 24px color-mix(in srgb, var(--shadow) 20%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%);
+}
+
+.messageInput::placeholder {
+    color: color-mix(in srgb, var(--text) 42%, transparent);
+}
+
+.messageInput:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
+    outline-offset: 3px;
+}
+
+.confirmActions {
+    margin-top: auto;
+    display: grid;
+    gap: 10px;
+}
+
+.recipientId {
+    font-size: 12px;
+    line-height: 1.35;
+    color: color-mix(in srgb, var(--text) 56%, transparent);
+    overflow-wrap: anywhere;
+}
+
+.statusActive,
+.statusInactive {
+    font-weight: 700;
+}
+
+.statusActive {
+    color: color-mix(in srgb, #24c97a 82%, var(--text));
+}
+
+.statusInactive {
+    color: color-mix(in srgb, #ff7368 82%, var(--text));
+}
+
+@media (max-width: 640px) {
+    .detailsDialog {
+        width: 100%;
+        height: calc(100dvh - 12px - max(12px, env(safe-area-inset-bottom)));
+    }
+
+    .preview,
+    .previewInner {
+        min-height: 160px;
+    }
+
+    .previewImage,
+    .previewFallback {
+        width: 72px;
+        height: 72px;
+    }
+
+    .metaRow {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 12px 14px;
+    }
+
+    .giftButton {
+        min-height: 50px;
+        border-radius: 16px;
+    }
+
+    .secondaryButton {
+        min-height: 46px;
+    }
+
+    .recipientItem {
+        padding: 11px 12px;
+    }
+
+    .confirmGiftCard {
+        align-items: flex-start;
+    }
+
+    .confirmGiftPreview {
+        width: 72px;
+        height: 72px;
+    }
+
+    .messageInput {
+        min-height: 96px;
+    }
+}

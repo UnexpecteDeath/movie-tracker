@@ -76,10 +76,9 @@ export async function addPost(body: CreatePostWithImages): Promise<PostItem> {
             .insert({
                 title: body.title,
                 date_label: body.date_label,
-                category: body.category,
                 text: body.text,
-                footer: body.footer,
                 images: uploadedImages,
+                author_id: body.author_id,
             })
             .select()
             .single();

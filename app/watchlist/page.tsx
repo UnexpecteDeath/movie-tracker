@@ -37,7 +37,7 @@ export default function WatchlistPage() {
                 >
                     <div className={styles.heroCard}>
                         <p className={styles.eyebrow}>Wishlist Library</p>
-                        <h1 className={styles.title}>Фильмы для будущего</h1>
+                        <h1 className={styles.title}>Фильмы на будущее</h1>
                         <p className={styles.description}>
                             Фильмы, которые ждут своего вечера.
                         </p>

@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { type Session } from "@supabase/supabase-js";
 import { supabase } from "@/shared/api/supabaseClient";
+import { PageLoader } from "@/shared/ui/pageLoader";
 
 const PUBLIC_ROUTES = ["/sign-in"];
 
@@ -51,9 +52,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         router.replace("/sign-in");
     }, [isLoading, isPublicRoute, router, session]);
 
-    if (isLoading && !isPublicRoute) return null;
+    if (isLoading && !isPublicRoute) {
+        return <PageLoader mode="fullscreen" label="Проверяем сессию" />;
+    }
 
-    if (!session && !isPublicRoute) return null;
+    if (!session && !isPublicRoute) {
+        return <PageLoader mode="fullscreen" label="Перенаправляем" />;
+    }
 
     return children;
 }
