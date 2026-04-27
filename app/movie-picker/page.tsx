@@ -50,11 +50,16 @@ export default function MoviePickerPage() {
     };
 
     return (
-        <div id="scrollable" className={`container ${styles.page}`}>
+        <div
+            id="scrollable"
+            className={`${styles.page} ${movie ? styles.pageWithMovie : ""}`}
+        >
             <div className={styles.glowPrimary} />
             <div className={styles.glowSecondary} />
 
-            <section className={styles.layout}>
+            <section
+                className={`${styles.layout} ${movie ? styles.layoutWithMovie : ""}`}
+            >
                 <LiquidGlass
                     className={styles.heroPanel}
                     radius="xl"
@@ -87,9 +92,14 @@ export default function MoviePickerPage() {
                     </div>
                 </LiquidGlass>
 
-                <section className={styles.resultSection} aria-live="polite">
+                <section
+                    className={`${styles.resultSection} ${movie ? styles.resultSectionWithMovie : ""}`}
+                    aria-live="polite"
+                >
                     {movie ? (
-                        <div className={styles.movieContainer}>
+                        <div
+                            className={`${styles.movieContainer} ${styles.movieContainerWithMovie}`}
+                        >
                             <MovieCard
                                 movie={movie}
                                 className={styles.movieCard}

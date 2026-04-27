@@ -70,7 +70,6 @@ export default function SignInPage() {
                     className={styles.card}
                     radius="xl"
                     padding="none"
-                    shadow
                 >
                     <form
                         className={styles.form}

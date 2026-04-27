@@ -45,7 +45,6 @@ export function PageLoader({
                 className={styles.card}
                 radius="xl"
                 padding="lg"
-                shadow
             >
                 <div className={styles.orbit} aria-hidden="true">
                     <span className={styles.ring} />

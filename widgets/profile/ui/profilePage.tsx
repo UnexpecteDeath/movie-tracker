@@ -54,7 +54,6 @@ export function ProfilePage({ profileId }: Props) {
                         className={styles.statusCard}
                         radius="xl"
                         padding="none"
-                        shadow
                     >
                         <div className={styles.statusContent}>
                             <p className={styles.statusEyebrow}>

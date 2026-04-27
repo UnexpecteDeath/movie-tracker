@@ -24,6 +24,10 @@
     align-items: center;
 }
 
+.postHeading {
+    min-width: 0;
+}
+
 .avatar {
     width: 52px;
     height: 52px;
@@ -370,11 +374,12 @@
     }
 
     .postHeader {
-        grid-template-columns: 1fr;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: start;
     }
 
     .postDate {
-        grid-column: 1;
+        grid-column: 1 / -1;
     }
 
     .galleryFour {

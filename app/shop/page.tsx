@@ -104,7 +104,6 @@ export default function ShopPage() {
                     className={styles.surface}
                     radius="xl"
                     padding="none"
-                    shadow
                 >
                     <div className={styles.surfaceInner}>
                         <div
@@ -147,9 +146,6 @@ export default function ShopPage() {
                                     {activeCopy.description}
                                 </p>
                             </div>
-                            <span className={styles.counter}>
-                                {activeItems.length}
-                            </span>
                         </div>
 
                         {error ? (

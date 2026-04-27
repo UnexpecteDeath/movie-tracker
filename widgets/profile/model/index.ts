@@ -54,6 +54,7 @@ const toGiftItem = (giftRow: RelationValue<Partial<GiftItem>>): GiftItem => {
             typeof gift?.created_at === "string" && gift.created_at.trim()
                 ? gift.created_at
                 : EMPTY_DATE,
+        rarity: gift?.rarity ?? "common",
     };
 };
 

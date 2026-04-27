@@ -17,22 +17,80 @@
     border-radius: 24px;
 }
 
+.tile,
+.preview,
+.confirmGiftPreview,
+.rarityBadge {
+    --rarity-core: #9bb0d5;
+    --rarity-core-soft: #e9effb;
+    --rarity-border: color-mix(in srgb, var(--glass-border) 100%, white 12%);
+    --rarity-shell-top: color-mix(in srgb, var(--glass-bg) 96%, white 8%);
+    --rarity-shell-bottom: color-mix(in srgb, var(--glass-bg) 84%, transparent);
+    --rarity-badge-text: var(--text);
+}
+
+.rarityCommon {
+    --rarity-core: #78d9ff;
+    --rarity-core-soft: #d9f7ff;
+    --rarity-border: color-mix(in srgb, #89ddff 52%, var(--glass-border));
+    --rarity-shell-top: color-mix(in srgb, var(--glass-bg) 80%, #ddf8ff 20%);
+    --rarity-shell-bottom: color-mix(in srgb, var(--glass-bg) 78%, #4ca4d9 22%);
+}
+
+.rarityRare {
+    --rarity-core: #3d72ff;
+    --rarity-core-soft: #94bcff;
+    --rarity-border: color-mix(in srgb, #4f80ff 60%, var(--glass-border));
+    --rarity-shell-top: color-mix(in srgb, var(--glass-bg) 76%, #dce7ff 24%);
+    --rarity-shell-bottom: color-mix(in srgb, var(--glass-bg) 72%, #0b2f9d 28%);
+    --rarity-badge-text: color-mix(in srgb, #e6edff 80%, var(--text));
+}
+
+.rarityEpic {
+    --rarity-core: #bb68ff;
+    --rarity-core-soft: #ff9ed9;
+    --rarity-border: color-mix(in srgb, #cb77ff 58%, var(--glass-border));
+    --rarity-shell-top: color-mix(in srgb, var(--glass-bg) 76%, #ffe1f6 24%);
+    --rarity-shell-bottom: color-mix(in srgb, var(--glass-bg) 72%, #7628d1 28%);
+    --rarity-badge-text: color-mix(in srgb, #ffe9f7 72%, var(--text));
+}
+
+.rarityMystical {
+    --rarity-core: #ff3b30;
+    --rarity-core-soft: #ff9b96;
+    --rarity-border: color-mix(in srgb, #a10d12 68%, var(--glass-border));
+    --rarity-shell-top: color-mix(in srgb, var(--glass-bg) 68%, #4c0609 32%);
+    --rarity-shell-bottom: color-mix(in srgb, var(--glass-bg) 60%, #180103 40%);
+    --rarity-badge-text: color-mix(in srgb, #ffe3e1 84%, var(--text));
+}
+
 .tile {
     position: relative;
     width: 100%;
     overflow: hidden;
     aspect-ratio: 1 / 1;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
+    border: 1px solid var(--rarity-border);
     background:
+        radial-gradient(
+            circle at 16% 14%,
+            color-mix(in srgb, var(--rarity-core-soft) 26%, transparent),
+            transparent 42%
+        ),
         linear-gradient(
             180deg,
-            color-mix(in srgb, var(--glass-bg) 96%, white 8%),
-            color-mix(in srgb, var(--glass-bg) 84%, transparent)
+            var(--rarity-shell-top),
+            var(--rarity-shell-bottom)
         ),
         color-mix(in srgb, var(--bg-color) 20%, transparent);
     box-shadow:
         0 16px 34px color-mix(in srgb, var(--shadow) 42%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%);
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%),
+        inset 0 0 0 1px color-mix(in srgb, var(--rarity-core) 10%, transparent);
+    transition:
+        transform 220ms ease,
+        border-color 220ms ease,
+        box-shadow 220ms ease,
+        filter 220ms ease;
 }
 
 .tile::before {
@@ -42,13 +100,32 @@
     width: 72px;
     height: 72px;
     border-radius: 50%;
-    background: var(--accent);
-    opacity: 0.18;
+    background: var(--rarity-core);
+    opacity: 0.3;
     filter: blur(22px);
     pointer-events: none;
+    animation: rarityPulse 6s ease-in-out infinite;
+}
+
+.tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 44%),
+        radial-gradient(
+            circle at 82% 18%,
+            color-mix(in srgb, var(--rarity-core-soft) 22%, transparent),
+            transparent 36%
+        );
+    pointer-events: none;
+    opacity: 0.9;
+    animation: raritySheen 11s linear infinite;
 }
 
 .tileInner {
+    position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     display: grid;
@@ -56,11 +133,28 @@
     padding: 14px;
 }
 
+.tileButton:hover .tile,
+.tileButton:focus-visible .tile {
+    transform: translateY(-1px) scale(1.025);
+    box-shadow:
+        0 18px 36px color-mix(in srgb, var(--shadow) 50%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 16%),
+        inset 0 0 0 1px color-mix(in srgb, var(--rarity-core) 14%, transparent);
+    filter: saturate(1.05);
+}
+
+.tileButton:active .tile {
+    transform: scale(0.98);
+}
+
 .assetImage,
 .assetFallback {
     width: 36px;
     height: 36px;
     display: block;
+    transition:
+        transform 220ms ease,
+        filter 220ms ease;
 }
 
 .assetImage {
@@ -70,6 +164,72 @@
 .assetFallback {
     color: var(--text);
     opacity: 0.94;
+}
+
+.tileButton:hover .assetImage,
+.tileButton:hover .assetFallback,
+.tileButton:focus-visible .assetImage,
+.tileButton:focus-visible .assetFallback {
+    transform: scale(1.06);
+    filter: drop-shadow(
+        0 6px 12px color-mix(in srgb, var(--rarity-core) 26%, transparent)
+    );
+}
+
+.rarityBadge {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    max-width: 100%;
+    min-height: 24px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--rarity-border) 90%, white 10%);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--rarity-shell-top) 96%, white 10%),
+            color-mix(in srgb, var(--rarity-shell-bottom) 92%, transparent)
+        ),
+        color-mix(in srgb, var(--bg-color) 18%, transparent);
+    box-shadow:
+        0 10px 18px color-mix(in srgb, var(--rarity-core) 18%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rarity-badge-text);
+    white-space: nowrap;
+}
+
+.rarityBadgeCompact {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    min-height: 20px;
+    padding: 0 7px;
+    font-size: 7px;
+    line-height: 1;
+}
+
+.rarityBadgeOverlay {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    min-height: 28px;
+    padding: 0 12px;
+    font-size: 10px;
+    line-height: 1;
+}
+
+.rarityBadgeInline {
+    min-height: 28px;
+    padding: 0 12px;
+    font-size: 10px;
+    line-height: 1;
 }
 
 .detailsContent {
@@ -105,17 +265,23 @@
     overflow: hidden;
     min-height: 180px;
     border-radius: 24px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
+    border: 1px solid var(--rarity-border);
     background:
+        radial-gradient(
+            circle at 18% 18%,
+            color-mix(in srgb, var(--rarity-core-soft) 20%, transparent),
+            transparent 42%
+        ),
         linear-gradient(
             180deg,
-            color-mix(in srgb, var(--glass-bg) 98%, white 12%),
-            color-mix(in srgb, var(--glass-bg) 88%, transparent)
+            color-mix(in srgb, var(--rarity-shell-top) 98%, white 10%),
+            color-mix(in srgb, var(--rarity-shell-bottom) 94%, transparent)
         ),
         color-mix(in srgb, var(--bg-color) 20%, transparent);
     box-shadow:
         0 20px 40px color-mix(in srgb, var(--shadow) 42%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 18%);
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 18%),
+        inset 0 0 0 1px color-mix(in srgb, var(--rarity-core) 10%, transparent);
 }
 
 .preview::before {
@@ -125,10 +291,11 @@
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: var(--accent);
-    opacity: 0.24;
+    background: var(--rarity-core);
+    opacity: 0.28;
     filter: blur(26px);
     pointer-events: none;
+    animation: rarityPulse 7.2s ease-in-out infinite;
 }
 
 .previewInner {
@@ -507,19 +674,48 @@
 }
 
 .confirmGiftPreview {
+    position: relative;
+    overflow: hidden;
     width: 82px;
     height: 82px;
     flex: 0 0 auto;
     display: grid;
     place-items: center;
     border-radius: 18px;
+    border: 1px solid var(--rarity-border);
     background:
+        radial-gradient(
+            circle at 80% 18%,
+            color-mix(in srgb, var(--rarity-core-soft) 22%, transparent),
+            transparent 44%
+        ),
         linear-gradient(
             180deg,
-            color-mix(in srgb, var(--glass-bg) 98%, white 10%),
-            color-mix(in srgb, var(--glass-bg) 86%, transparent)
+            color-mix(in srgb, var(--rarity-shell-top) 98%, white 10%),
+            color-mix(in srgb, var(--rarity-shell-bottom) 92%, transparent)
         ),
         color-mix(in srgb, var(--bg-color) 18%, transparent);
+    box-shadow:
+        0 12px 24px color-mix(in srgb, var(--rarity-core) 16%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%);
+}
+
+.confirmGiftPreview::before {
+    content: "";
+    position: absolute;
+    inset: auto -16% -24% auto;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: var(--rarity-core);
+    opacity: 0.24;
+    filter: blur(18px);
+    pointer-events: none;
+}
+
+.confirmGiftPreview > * {
+    position: relative;
+    z-index: 1;
 }
 
 .confirmGiftMeta {
@@ -608,6 +804,33 @@
     color: color-mix(in srgb, #ff7368 82%, var(--text));
 }
 
+@keyframes rarityPulse {
+    0%,
+    100% {
+        transform: scale(1) translate3d(0, 0, 0);
+        opacity: 0.22;
+    }
+
+    50% {
+        transform: scale(1.1) translate3d(-4px, -3px, 0);
+        opacity: 0.34;
+    }
+}
+
+@keyframes raritySheen {
+    0% {
+        transform: translate3d(-4%, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(4%, -2%, 0);
+    }
+
+    100% {
+        transform: translate3d(-4%, 0, 0);
+    }
+}
+
 @media (max-width: 640px) {
     .detailsDialog {
         width: 100%;
@@ -623,6 +846,14 @@
     .previewFallback {
         width: 72px;
         height: 72px;
+    }
+
+    .rarityBadgeOverlay {
+        top: 12px;
+        right: 12px;
+        min-height: 24px;
+        padding: 0 10px;
+        font-size: 9px;
     }
 
     .metaRow {
@@ -655,5 +886,19 @@
 
     .messageInput {
         min-height: 96px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tile::before,
+    .tile::after,
+    .preview::before {
+        animation: none;
+    }
+
+    .tile,
+    .assetImage,
+    .assetFallback {
+        transition: none;
     }
 }

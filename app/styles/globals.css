@@ -36,7 +36,7 @@ body {
 
 :root {
     --bg-light: linear-gradient(135deg, #ffffff 0%, #f7fbff 40%, #eaf6ff 100%);
-    --bg-dark:
+    xf:
         linear-gradient(135deg, #0f0f12 0%, #141418 50%, #20161c 100%),
         radial-gradient(
             800px 400px at 10% 10%,

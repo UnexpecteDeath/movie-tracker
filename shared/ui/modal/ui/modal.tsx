@@ -13,6 +13,13 @@ import { classNames } from "@/shared/lib";
 import { LiquidGlass } from "@/shared/ui/LiquidGlass";
 import styles from "./modal.module.css";
 
+export type ModalAnimation =
+    | "none"
+    | "scaleOut"
+    | "liftFade"
+    | "swirlIn"
+    | "bloom";
+
 type Props = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
     isOpen: boolean;
     onClose: () => void;
@@ -26,6 +33,15 @@ type Props = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
     closeOnOverlay?: boolean;
     closeOnEscape?: boolean;
     hideCloseButton?: boolean;
+    animation?: ModalAnimation;
+};
+
+const animationClassByKey: Record<ModalAnimation, string> = {
+    none: "",
+    scaleOut: styles.animationScaleOut,
+    liftFade: styles.animationLiftFade,
+    swirlIn: styles.animationSwirlIn,
+    bloom: styles.animationBloom,
 };
 
 export function Modal({
@@ -41,6 +57,7 @@ export function Modal({
     closeOnOverlay = true,
     closeOnEscape = true,
     hideCloseButton = false,
+    animation = "none",
     ...props
 }: Props) {
     const titleId = useId();
@@ -81,10 +98,25 @@ export function Modal({
         event.stopPropagation();
     };
 
+    const animationClassName = animationClassByKey[animation];
+
     return createPortal(
-        <div className={styles.overlay} onClick={handleOverlayClick}>
+        <div
+            className={classNames(
+                styles.overlay,
+                {
+                    [styles.overlayAnimated]: animation !== "none",
+                },
+                [],
+            )}
+            onClick={handleOverlayClick}
+        >
             <div
-                className={classNames(styles.dialog, {}, [className || ""])}
+                className={classNames(
+                    styles.dialog,
+                    {},
+                    [className || "", animationClassName],
+                )}
                 onClick={handleDialogClick}
             >
                 <LiquidGlass

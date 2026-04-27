@@ -6,6 +6,7 @@ import { LiquidGlass } from "@/shared/ui/LiquidGlass";
 import { classNames } from "@/shared/lib";
 import type { GiftItem } from "../api/types";
 import styles from "./gift.module.css";
+import { getGiftRarityClassName } from "./giftRarity";
 
 type Props = {
     gift: GiftItem;
@@ -20,6 +21,8 @@ const getGiftLabel = (type: GiftItem["type"]) =>
     type === "wish" ? "Желание" : "Подарок";
 
 export function Gift({ gift, className, onClick }: Props) {
+    const rarityClassName = styles[getGiftRarityClassName(gift.rarity)];
+
     const handleClick = () => {
         onClick?.(gift);
     };
@@ -46,10 +49,10 @@ export function Gift({ gift, className, onClick }: Props) {
             type="button"
             className={classNames(styles.tileButton, {}, [className || ""])}
             onClick={handleClick}
-            aria-label={`${getGiftLabel(gift.type)}: ${gift.name}`}
+            aria-label={`${getGiftLabel(gift.type).toLowerCase()}: ${gift.name}`}
         >
             <LiquidGlass
-                className={styles.tile}
+                className={classNames(styles.tile, {}, [rarityClassName])}
                 radius="lg"
                 padding="none"
                 interactive

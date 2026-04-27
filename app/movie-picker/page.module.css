@@ -1,9 +1,19 @@
 .page {
+    align-self: stretch;
     position: relative;
     width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    padding: 28px 18px calc(var(--dock-height) + 24px);
+    min-height: 100dvh;
+    height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: max(28px, env(safe-area-inset-top, 0px)) 18px
+        calc(var(--dock-height) + 24px + env(safe-area-inset-bottom, 0px));
+    -webkit-overflow-scrolling: touch;
+}
+
+.pageWithMovie {
+    height: auto;
+    min-height: 100dvh;
 }
 
 .glowPrimary,
@@ -141,6 +151,10 @@
     animation: movieReveal 360ms ease forwards;
 }
 
+.movieContainerWithMovie {
+    width: min(390px, 100%);
+}
+
 .emptyState {
     width: min(390px, 100%);
     height: min(520px, 100%);
@@ -184,9 +198,8 @@
 @media (max-width: 860px) {
     .page {
         height: auto;
-        min-height: 100vh;
-        overflow: auto;
-        padding: 18px 12px calc(var(--dock-height) + 18px);
+        padding: max(18px, env(safe-area-inset-top, 0px)) 12px
+            calc(var(--dock-height) + 18px + env(safe-area-inset-bottom, 0px));
     }
 
     .layout {
@@ -247,6 +260,11 @@
 @media (max-width: 420px) {
     .heroContent {
         padding: 18px;
+    }
+
+    .page {
+        padding: max(18px, env(safe-area-inset-top, 0px)) 10px
+            calc(var(--dock-height) + 16px + env(safe-area-inset-bottom, 0px));
     }
 
     .description {
@@ -367,6 +385,17 @@
         -webkit-backdrop-filter: blur(22px) saturate(140%);
     }
 
+    .layoutWithMovie {
+        height: auto;
+        min-height: 0;
+        align-items: start;
+    }
+
+    .resultSectionWithMovie {
+        overflow: visible;
+        align-items: start;
+    }
+
     .resultSection::before {
         content: "";
         position: absolute;
@@ -409,6 +438,19 @@
     .movieContainer::-webkit-scrollbar-thumb {
         border-radius: 999px;
         background: color-mix(in srgb, var(--text) 22%, transparent);
+    }
+
+    .movieContainerWithMovie {
+        height: auto;
+        max-height: none;
+        align-items: flex-start;
+        overflow: visible;
+        padding: 0;
+        scrollbar-width: auto;
+    }
+
+    .movieContainerWithMovie::-webkit-scrollbar {
+        width: 0;
     }
 
     .emptyState {

@@ -171,6 +171,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
     gap: 12px;
+    overflow: scroll;
+    max-height: 332px;
 }
 
 .stateCard {
@@ -283,6 +285,7 @@
     .grid {
         grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
         gap: 10px;
+        max-height: 286px;
     }
 }
 

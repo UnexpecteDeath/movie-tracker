@@ -95,14 +95,14 @@ export function Post({ post }: Props) {
                         authorName.slice(0, 1).toUpperCase()
                     )}
                 </div>
-                <div>
+                <div className={styles.postHeading}>
                     <div className={styles.postMeta}>
                         {post.author_id ? (
                             <Link
                                 href={`/profile/${post.author_id}`}
                                 className={styles.postAuthor}
                             >
-                                {authorName}
+                                @{authorName}
                             </Link>
                         ) : (
                             <p className={styles.postAuthor}>@{authorName}</p>

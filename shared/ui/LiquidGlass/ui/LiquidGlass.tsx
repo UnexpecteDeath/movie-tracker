@@ -10,7 +10,6 @@ type Props = HTMLAttributes<HTMLDivElement> & {
     className?: string;
     radius?: LiquidGlassRadius;
     padding?: LiquidGlassPadding;
-    shadow?: boolean;
     interactive?: boolean;
 };
 
@@ -21,7 +20,6 @@ export const LiquidGlass = forwardRef<HTMLDivElement, Props>(
             className,
             radius = "lg",
             padding = "md",
-            shadow = true,
             interactive = false,
             ...props
         },
@@ -43,7 +41,6 @@ export const LiquidGlass = forwardRef<HTMLDivElement, Props>(
                         [styles.paddingSm]: padding === "sm",
                         [styles.paddingMd]: padding === "md",
                         [styles.paddingLg]: padding === "lg",
-                        [styles.shadow]: shadow,
                         [styles.interactive]: interactive,
                     },
                     [className || ""],

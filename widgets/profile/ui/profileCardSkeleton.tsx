@@ -1,36 +1,92 @@
 import { LiquidGlass } from "@/shared";
-import styles from "./profileCardSkeleton.module.css";
+import giftStyles from "@/entities/gift/ui/gift.module.css";
+import profileStyles from "./profileCard.module.css";
+import showcaseStyles from "./profileGiftsShowcase.module.css";
+import skeletonStyles from "./profileCardSkeleton.module.css";
 
 type Props = {
     showPrivateFields: boolean;
 };
 
+type ProfileStatCardSkeletonProps = {
+    toneClassName: string;
+};
+
+function ProfileStatCardSkeleton({
+    toneClassName,
+}: ProfileStatCardSkeletonProps) {
+    return (
+        <LiquidGlass
+            className={`${profileStyles.statCard} ${toneClassName}`}
+            radius="lg"
+            padding="none"
+        >
+            <div className={profileStyles.statCardBody}>
+                <span className={profileStyles.statIcon} aria-hidden="true">
+                    <span
+                        className={`${skeletonStyles.skeleton} ${skeletonStyles.skeletonStatIcon}`}
+                    />
+                </span>
+                <span
+                    className={`${skeletonStyles.skeleton} ${skeletonStyles.skeletonStatValue}`}
+                    aria-hidden="true"
+                />
+            </div>
+        </LiquidGlass>
+    );
+}
+
 export function ProfileCardSkeleton({ showPrivateFields }: Props) {
     return (
-        <LiquidGlass className={styles.card} radius="xl" padding="none" shadow>
-            <div className={`${styles.content} ${styles.cardPanel}`}>
-                <div className={styles.profileMain}>
-                    <div className={styles.identityBlock}>
-                        <div
-                            className={`${styles.avatarWrap} ${styles.avatarWrapLoading}`}
-                        >
-                            <span
-                                className={`${styles.skeleton} ${styles.skeletonAvatar}`}
-                                aria-hidden="true"
-                            />
-                        </div>
-
-                        <div className={styles.profileInfo}>
-                            <h2 className={styles.name}>
+        <LiquidGlass
+            className={profileStyles.card}
+            radius="xl"
+            padding="none"
+            aria-hidden="true"
+        >
+            <div
+                className={`${profileStyles.content} ${profileStyles.cardPanel}`}
+            >
+                <div className={profileStyles.profileMain}>
+                    <div className={profileStyles.identityBlock}>
+                        {showPrivateFields ? (
+                            <label
+                                className={`${profileStyles.avatarWrap} ${skeletonStyles.avatarWrapLoading}`}
+                                aria-label="Загрузка аватарки"
+                            >
+                                <input
+                                    className={profileStyles.avatarInput}
+                                    type="file"
+                                    tabIndex={-1}
+                                    disabled
+                                />
                                 <span
-                                    className={`${styles.skeleton} ${styles.skeletonName}`}
+                                    className={`${skeletonStyles.skeleton} ${skeletonStyles.skeletonAvatar}`}
+                                    aria-hidden="true"
+                                />
+                            </label>
+                        ) : (
+                            <div
+                                className={`${profileStyles.avatarWrap} ${profileStyles.avatarWrapStatic} ${skeletonStyles.avatarWrapLoading}`}
+                            >
+                                <span
+                                    className={`${skeletonStyles.skeleton} ${skeletonStyles.skeletonAvatar}`}
+                                    aria-hidden="true"
+                                />
+                            </div>
+                        )}
+
+                        <div className={profileStyles.profileInfo}>
+                            <h2 className={profileStyles.name}>
+                                <span
+                                    className={`${skeletonStyles.skeleton} ${skeletonStyles.inlineSkeleton} ${skeletonStyles.skeletonName}`}
                                     aria-hidden="true"
                                 />
                             </h2>
                             {showPrivateFields ? (
-                                <p className={styles.email}>
+                                <p className={profileStyles.email}>
                                     <span
-                                        className={`${styles.skeleton} ${styles.skeletonEmail}`}
+                                        className={`${skeletonStyles.skeleton} ${skeletonStyles.inlineSkeleton} ${skeletonStyles.skeletonEmail}`}
                                         aria-hidden="true"
                                     />
                                 </p>
@@ -38,110 +94,107 @@ export function ProfileCardSkeleton({ showPrivateFields }: Props) {
                         </div>
                     </div>
 
-                    <div className={styles.detailsStack}>
-                        <div className={styles.meta}>
-                            <span className={styles.metaLabel}>
+                    <div className={profileStyles.detailsStack}>
+                        <div className={profileStyles.meta}>
+                            <span className={profileStyles.metaLabel}>
                                 <span
-                                    className={`${styles.skeleton} ${styles.skeletonMetaLabel}`}
+                                    className={`${skeletonStyles.skeleton} ${skeletonStyles.inlineSkeleton} ${skeletonStyles.skeletonMetaLabel}`}
                                     aria-hidden="true"
                                 />
                             </span>
-                            <span className={styles.metaValue}>
+                            <span className={profileStyles.metaValue}>
                                 <span
-                                    className={`${styles.skeleton} ${styles.skeletonMetaValue}`}
+                                    className={`${skeletonStyles.skeleton} ${skeletonStyles.inlineSkeleton} ${skeletonStyles.skeletonMetaValue}`}
                                     aria-hidden="true"
                                 />
                             </span>
                         </div>
 
-                        <div className={styles.statsGrid}>
-                            <LiquidGlass
-                                className={`${styles.statCard} ${styles.statCardSkeleton} ${styles.statCardStreak}`}
-                                radius="lg"
-                                padding="none"
-                            >
-                                <div className={styles.statCardBody}>
-                                    <span
-                                        className={styles.statIconSkeleton}
-                                        aria-hidden="true"
-                                    />
-                                    <span
-                                        className={`${styles.skeleton} ${styles.skeletonStatValueCompact}`}
-                                        aria-hidden="true"
-                                    />
-                                </div>
-                            </LiquidGlass>
-
-                            <LiquidGlass
-                                className={`${styles.statCard} ${styles.statCardSkeleton} ${styles.statCardBalance}`}
-                                radius="lg"
-                                padding="none"
-                            >
-                                <div className={styles.statCardBody}>
-                                    <span
-                                        className={styles.statIconSkeleton}
-                                        aria-hidden="true"
-                                    />
-                                    <span
-                                        className={`${styles.skeleton} ${styles.skeletonStatValueCompact}`}
-                                        aria-hidden="true"
-                                    />
-                                </div>
-                            </LiquidGlass>
+                        <div className={profileStyles.statsGrid}>
+                            <ProfileStatCardSkeleton
+                                toneClassName={profileStyles.statCardStreak}
+                            />
+                            <ProfileStatCardSkeleton
+                                toneClassName={profileStyles.statCardBalance}
+                            />
                         </div>
                     </div>
 
                     {showPrivateFields ? (
-                        <div className={styles.actions}>
+                        <div className={profileStyles.actions}>
                             <div
-                                className={styles.dailyBonusButton}
+                                className={profileStyles.dailyBonusButton}
                                 aria-hidden="true"
                             >
-                                <span
-                                    className={`${styles.skeleton} ${styles.skeletonButtonLabel}`}
-                                />
+                                <span className={profileStyles.dailyBonusLabel}>
+                                    <span
+                                        className={`${skeletonStyles.skeleton} ${skeletonStyles.inlineSkeleton} ${skeletonStyles.skeletonButtonLabel}`}
+                                    />
+                                </span>
+                                <span className={profileStyles.dailyBonusHint}>
+                                    <span
+                                        className={`${skeletonStyles.skeleton} ${skeletonStyles.inlineSkeleton} ${skeletonStyles.skeletonButtonHint}`}
+                                    />
+                                </span>
                             </div>
+
                             <div
-                                className={styles.signOutButton}
+                                className={profileStyles.signOutButton}
                                 aria-hidden="true"
                             >
                                 <span
-                                    className={`${styles.skeleton} ${styles.skeletonButtonLabel}`}
+                                    className={`${skeletonStyles.skeleton} ${skeletonStyles.inlineSkeleton} ${skeletonStyles.skeletonSignOutLabel}`}
                                 />
                             </div>
                         </div>
                     ) : null}
                 </div>
 
-                <aside className={styles.giftsColumn} aria-hidden="true">
-                    <div className={styles.giftsPanel}>
-                        <div className={styles.giftsHeader}>
-                            <div className={styles.giftsHeading}>
-                                <span
-                                    className={`${styles.skeleton} ${styles.skeletonGiftEyebrow}`}
-                                />
-                                <span
-                                    className={`${styles.skeleton} ${styles.skeletonGiftTitle}`}
-                                />
+                <aside
+                    className={showcaseStyles.giftsColumn}
+                    aria-label="Подарки профиля"
+                    aria-hidden="true"
+                >
+                    <div className={showcaseStyles.giftsPanel}>
+                        <div className={showcaseStyles.giftsHeader}>
+                            <div className={showcaseStyles.giftsHeading}>
+                                <p className={showcaseStyles.giftsEyebrow}>
+                                    <span
+                                        className={`${skeletonStyles.skeleton} ${skeletonStyles.inlineSkeleton} ${skeletonStyles.skeletonGiftEyebrow}`}
+                                    />
+                                </p>
+                                <h3 className={showcaseStyles.giftsTitle}>
+                                    <span
+                                        className={`${skeletonStyles.skeleton} ${skeletonStyles.inlineSkeleton} ${skeletonStyles.skeletonGiftTitle}`}
+                                    />
+                                </h3>
                             </div>
-                            <span
-                                className={`${styles.skeleton} ${styles.skeletonGiftCount}`}
-                            />
                         </div>
 
-                        <div className={styles.giftsScroll}>
-                            <div className={styles.giftsGrid}>
+                        <div className={showcaseStyles.giftsScroll}>
+                            <div className={showcaseStyles.giftsGrid}>
                                 {Array.from({ length: 6 }).map((_, index) => (
-                                    <LiquidGlass
+                                    <button
                                         key={index}
-                                        className={styles.giftTileSkeleton}
-                                        radius="lg"
-                                        padding="none"
+                                        type="button"
+                                        className={`${giftStyles.tileButton} ${giftStyles.tileButtonDisabled} ${showcaseStyles.giftTile} ${skeletonStyles.giftTileButton}`}
+                                        tabIndex={-1}
                                     >
-                                        <span
-                                            className={`${styles.skeleton} ${styles.giftTileSkeletonInner}`}
-                                        />
-                                    </LiquidGlass>
+                                        <LiquidGlass
+                                            className={giftStyles.tile}
+                                            radius="lg"
+                                            padding="none"
+                                        >
+                                            <div
+                                                className={giftStyles.tileInner}
+                                            >
+                                                <span
+                                                    className={`${skeletonStyles.skeleton} ${skeletonStyles.skeletonGiftAsset}`}
+                                                    aria-hidden="true"
+                                                />
+                                            </div>
+                                        </LiquidGlass>
+                                    </button>
                                 ))}
                             </div>
                         </div>
