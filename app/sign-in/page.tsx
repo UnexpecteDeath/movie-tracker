@@ -66,11 +66,7 @@ export default function SignInPage() {
                     </p>
                 </div>
 
-                <LiquidGlass
-                    className={styles.card}
-                    radius="xl"
-                    padding="none"
-                >
+                <LiquidGlass className={styles.card} radius="xl" padding="none">
                     <form
                         className={styles.form}
                         onSubmit={handleSubmit(onSubmit)}
