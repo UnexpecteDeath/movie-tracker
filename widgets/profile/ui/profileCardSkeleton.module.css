@@ -1,331 +1,15 @@
-.card {
-    width: 100%;
-    max-width: 760px;
-    align-self: center;
-    overflow: hidden;
-}
-
-.content {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(240px, 272px);
-    align-items: stretch;
-    gap: 16px;
-    text-align: left;
-    height: 100%;
-    min-height: 0;
-}
-
-.cardPanel {
-    height: min(100%, 680px);
-    max-height: 100%;
-    padding: clamp(22px, 3vh, 30px);
-    overflow: hidden;
-    scrollbar-width: none;
-}
-
-.cardPanel::-webkit-scrollbar {
-    display: none;
-}
-
-.profileMain {
-    min-width: 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.identityBlock {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-}
-
-.detailsStack {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.avatarWrap {
-    position: relative;
-    display: block;
-    width: 118px;
-    height: 118px;
-    padding: 5px;
-    border: 0;
-    border-radius: 50%;
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--text) 14%, transparent),
-            color-mix(in srgb, var(--glass-bg) 80%, white 8%)
-        ),
-        color-mix(in srgb, var(--bg-color) 18%, transparent);
-    box-shadow:
-        0 18px 36px rgba(0, 0, 0, 0.16),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18);
-    overflow: hidden;
+.avatarWrapLoading,
+.giftTileButton {
+    pointer-events: none;
 }
 
 .avatarWrapLoading {
     cursor: default;
-    pointer-events: none;
 }
 
-.profileInfo {
-    min-width: 0;
-    width: 100%;
-}
-
-.name {
-    margin: 0;
-    font-size: clamp(26px, 4vw, 36px);
-    line-height: 1;
-    letter-spacing: -0.04em;
-    overflow-wrap: anywhere;
-}
-
-.email {
-    margin: 10px 0 0;
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--muted);
-    overflow-wrap: anywhere;
-}
-
-.meta {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    padding: 14px 16px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
-    border-radius: 14px;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 92%, white 10%),
-            color-mix(in srgb, var(--glass-bg) 82%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 20%, transparent);
-    box-shadow:
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%),
-        0 10px 26px color-mix(in srgb, var(--shadow) 34%, transparent);
-}
-
-.metaLabel,
-.metaValue {
-    font-size: 14px;
-    line-height: 1.35;
-}
-
-.metaLabel {
-    color: var(--muted);
-}
-
-.metaValue {
-    font-weight: 700;
-    color: var(--text);
-    text-align: right;
-}
-
-.statsGrid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-}
-
-.statCard {
-    --stat-glow-opacity: 0.14;
-    position: relative;
-    min-width: 0;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 14%);
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 96%, white 10%),
-            color-mix(in srgb, var(--glass-bg) 84%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 24%, transparent);
-    color: var(--text);
-    box-shadow:
-        0 16px 34px color-mix(in srgb, var(--shadow) 52%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 18%);
-}
-
-.statCard::before {
-    content: "";
-    position: absolute;
-    inset: auto -16% -34% auto;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: var(--accent);
-    opacity: var(--stat-glow-opacity);
-    pointer-events: none;
-    filter: blur(26px);
-    z-index: 0;
-}
-
-.statCard::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.14),
-        transparent 46%
-    );
-    pointer-events: none;
-    z-index: 0;
-}
-
-.statCardStreak {
-    --stat-glow-opacity: 0.22;
-}
-
-.statCardBalance {
-    --stat-glow-opacity: 0.12;
-}
-
-.statCardSkeleton {
-    --stat-glow-opacity: 0;
-}
-
-.statCardBody {
-    position: relative;
-    z-index: 1;
-    min-height: 80px;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.statIconSkeleton {
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    background: color-mix(in srgb, var(--glass-bg) 52%, transparent);
-}
-
-.actions {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: auto;
-}
-
-.dailyBonusButton {
-    position: relative;
-    width: 100%;
-    min-height: 68px;
-    padding: 18px 20px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 16%);
-    border-radius: 18px;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 98%, white 10%),
-            color-mix(in srgb, var(--glass-bg) 88%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 22%, transparent);
-    box-shadow:
-        0 18px 42px color-mix(in srgb, var(--shadow) 60%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 18%);
-}
-
-.signOutButton {
-    width: 100%;
-    min-height: 50px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
-    border-radius: 14px;
-    background: color-mix(in srgb, var(--glass-bg) 84%, transparent);
-    display: grid;
-    place-items: center;
-    box-shadow:
-        0 14px 28px color-mix(in srgb, var(--shadow) 48%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%);
-}
-
-.giftsColumn {
-    min-width: 0;
-    min-height: 0;
-}
-
-.giftsPanel {
-    height: 100%;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
-    border-radius: 22px;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 94%, white 10%),
-            color-mix(in srgb, var(--glass-bg) 84%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 22%, transparent);
-    box-shadow:
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%),
-        0 18px 40px color-mix(in srgb, var(--shadow) 46%, transparent);
-}
-
-.giftsHeader {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.giftsHeading {
-    min-width: 0;
-}
-
-.giftsScroll {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: auto;
-    padding-right: 4px;
-    scrollbar-width: none;
-}
-
-.giftsScroll::-webkit-scrollbar {
-    display: none;
-}
-
-.giftsGrid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    align-content: start;
-}
-
-.giftTileSkeleton {
-    aspect-ratio: 1 / 1;
-    border-radius: 24px;
-}
-
-.giftTileSkeletonInner {
-    width: 100%;
-    height: 100%;
-    display: block;
-    border-radius: inherit;
+.inlineSkeleton {
+    display: inline-block;
+    vertical-align: top;
 }
 
 .skeleton {
@@ -360,13 +44,11 @@
 .skeletonName {
     width: min(6.6em, 100%);
     height: 1em;
-    margin: 0 auto;
 }
 
 .skeletonEmail {
     width: min(16em, 100%);
     height: 1em;
-    margin: 0 auto;
 }
 
 .skeletonMetaLabel {
@@ -380,17 +62,31 @@
     height: 1em;
 }
 
-.skeletonStatValueCompact {
+.skeletonStatIcon {
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+}
+
+.skeletonStatValue {
     width: 4.2em;
     height: 1.3em;
     border-radius: 14px;
 }
 
 .skeletonButtonLabel {
+    width: min(11.5em, 100%);
+    height: 1em;
+}
+
+.skeletonButtonHint {
+    width: min(10.5em, 100%);
+    height: 0.9em;
+}
+
+.skeletonSignOutLabel {
     width: 4.4em;
     height: 1em;
-    margin: 0 auto;
-    border-radius: 999px;
 }
 
 .skeletonGiftEyebrow {
@@ -400,14 +96,14 @@
 
 .skeletonGiftTitle {
     width: 7.2em;
-    height: 1.2em;
+    height: 1em;
     border-radius: 12px;
 }
 
-.skeletonGiftCount {
-    width: 38px;
-    height: 38px;
-    border-radius: 999px;
+.skeletonGiftAsset {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
 }
 
 @keyframes skeletonShift {
@@ -420,110 +116,9 @@
     }
 }
 
-@media (max-width: 900px) {
-    .card {
-        max-width: none;
-    }
-
-    .cardPanel {
-        padding: 24px;
-        height: auto;
-        max-height: none;
-        overflow: visible;
-    }
-
-    .content {
-        grid-template-columns: 1fr;
-        height: auto;
-    }
-
-    .profileMain {
-        gap: 16px;
-    }
-
-    .identityBlock {
-        align-items: center;
-    }
-
-    .profileInfo {
-        text-align: center;
-    }
-
-    .giftsPanel {
-        height: auto;
-        min-height: 220px;
-    }
-
-    .giftsScroll {
-        overflow: visible;
-        padding-right: 0;
-    }
-}
-
 @media (max-width: 520px) {
-    .cardPanel {
-        padding: 20px 18px;
-    }
-
-    .content {
-        gap: 12px;
-    }
-
-    .statsGrid {
-        gap: 8px;
-    }
-
-    .giftsPanel {
-        padding: 14px;
-        border-radius: 20px;
-    }
-
-    .giftsGrid {
-        gap: 8px;
-    }
-
-    .giftTileSkeleton {
-        border-radius: 20px;
-    }
-
-    .avatarWrap {
-        width: 104px;
-        height: 104px;
-    }
-
-    .name {
-        font-size: 30px;
-    }
-
-    .statCardBody {
-        min-height: 68px;
-        padding: 12px;
-        gap: 10px;
-    }
-
-    .statIconSkeleton {
-        width: 34px;
-        height: 34px;
-        border-radius: 10px;
-    }
-
-    .meta {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 8px;
-        text-align: left;
-    }
-
-    .metaValue {
-        text-align: left;
-    }
-
-    .dailyBonusButton {
-        min-height: 64px;
-        padding: 16px 16px 16px 18px;
-    }
-
-    .signOutButton {
-        min-height: 52px;
+    .skeletonStatIcon {
+        width: 32px;
+        height: 32px;
     }
 }

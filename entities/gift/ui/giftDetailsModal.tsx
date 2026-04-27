@@ -12,6 +12,8 @@ import { getAvailableGiftRecipients } from "../api/supabase";
 import type { GiftItem, GiftRecipient } from "../api/types";
 import popcornGif from "../assets/popcorn.gif";
 import styles from "./gift.module.css";
+import { getGiftRarityClassName, getGiftRarityLabel } from "./giftRarity";
+import { ModalAnimation } from "@/shared/ui/modal";
 
 type Props = {
     gift: GiftItem | null;
@@ -190,6 +192,8 @@ export function GiftDetailsModal({
             className={styles.previewFallback}
         />
     );
+    const rarityLabel = getGiftRarityLabel(gift.rarity);
+    const rarityToneClassName = styles[getGiftRarityClassName(gift.rarity)];
 
     const dialogEyebrow =
         step === "details"
@@ -210,6 +214,19 @@ export function GiftDetailsModal({
               ? "Показываем только доступных пользователей."
               : "Проверьте подарок и отправьте сообщение.";
     const detailsRows: GiftMetaItem[] = [
+        {
+            label: "Редкость",
+            value: (
+                <span
+                    className={classNames(styles.rarityBadge, {}, [
+                        styles.rarityBadgeInline,
+                        rarityToneClassName,
+                    ])}
+                >
+                    {rarityLabel}
+                </span>
+            ),
+        },
         {
             label: "Цена",
             value: (
@@ -233,6 +250,13 @@ export function GiftDetailsModal({
         ...extraMeta,
     ];
 
+    const giftAnimations = {
+        common: "bloom",
+        rare: "scaleOut",
+        epic: "liftFade",
+        mystical: "swirlIn",
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -242,6 +266,7 @@ export function GiftDetailsModal({
             description={dialogDescription}
             className={styles.detailsDialog}
             contentClassName={styles.detailsDialogContent}
+            animation={giftAnimations[gift.rarity] as ModalAnimation}
         >
             <div className={styles.detailsContent}>
                 <div
@@ -251,7 +276,23 @@ export function GiftDetailsModal({
                 >
                     {step === "details" ? (
                         <>
-                            <div className={styles.preview}>
+                            <div
+                                className={classNames(styles.preview, {}, [
+                                    rarityToneClassName,
+                                ])}
+                            >
+                                <span
+                                    className={classNames(
+                                        styles.rarityBadge,
+                                        {},
+                                        [
+                                            styles.rarityBadgeOverlay,
+                                            rarityToneClassName,
+                                        ],
+                                    )}
+                                >
+                                    {rarityLabel}
+                                </span>
                                 <div className={styles.previewInner}>
                                     {preview}
                                 </div>
@@ -436,13 +477,31 @@ export function GiftDetailsModal({
                             </div>
 
                             <div className={styles.confirmGiftCard}>
-                                <div className={styles.confirmGiftPreview}>
+                                <div
+                                    className={classNames(
+                                        styles.confirmGiftPreview,
+                                        {},
+                                        [rarityToneClassName],
+                                    )}
+                                >
                                     {preview}
                                 </div>
                                 <div className={styles.confirmGiftMeta}>
                                     <strong className={styles.confirmGiftName}>
                                         {gift.name}
                                     </strong>
+                                    <span
+                                        className={classNames(
+                                            styles.rarityBadge,
+                                            {},
+                                            [
+                                                styles.rarityBadgeInline,
+                                                rarityToneClassName,
+                                            ],
+                                        )}
+                                    >
+                                        {rarityLabel}
+                                    </span>
                                     <span className={styles.confirmGiftPrice}>
                                         <Image
                                             src={popcornGif}

@@ -5,6 +5,7 @@ export type GiftItem = {
     name: string;
     description: string;
     price: number;
+    rarity: "common" | "rare" | "epic" | "mystical";
     type: GiftType;
     asset_url: string | null;
     duration_days: number | null;

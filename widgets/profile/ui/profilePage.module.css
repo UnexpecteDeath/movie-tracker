@@ -1,12 +1,30 @@
 .page {
     position: relative;
+    align-self: stretch;
     width: 100%;
-    height: 100dvh;
-    padding: 24px 18px calc(var(--dock-height) + 24px);
+    min-height: 100dvh;
+    padding:
+        max(24px, env(safe-area-inset-top, 0px))
+        18px
+        calc(var(--dock-height) + 24px + env(safe-area-inset-bottom, 0px));
     display: flex;
     justify-content: center;
+    align-items: flex-start;
+    overflow-x: hidden;
+    overflow-y: auto;
     font-family: var(--font-sans);
     color: var(--text);
+}
+
+.shell {
+    width: min(780px, 100%);
+    min-height: calc(100dvh - var(--dock-height) - 48px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(22px, 3vw, 40px);
+    min-width: 0;
+    height: auto;
 }
 
 .glow {
@@ -33,16 +51,6 @@
     filter: blur(92px);
     pointer-events: none;
     animation: float 11s ease-in-out infinite reverse;
-}
-
-.shell {
-    width: min(1280px, 100%);
-    height: 100%;
-    min-height: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(22px, 3vw, 40px);
 }
 
 .copy {
@@ -136,18 +144,24 @@
 
 @media (max-width: 900px) {
     .page {
-        height: auto;
-        min-height: 100dvh;
-        overflow: auto;
-        align-items: flex-start;
-        padding: 18px 12px calc(var(--dock-height) + 18px);
+        padding:
+            max(18px, env(safe-area-inset-top, 0px))
+            12px
+            calc(
+                var(--dock-height) + 18px + env(safe-area-inset-bottom, 0px)
+            );
+        -webkit-overflow-scrolling: touch;
     }
 
     .shell {
-        width: min(100%, 640px);
+        width: 100%;
+        max-width: 640px;
+        min-height: auto;
         height: auto;
-        min-height: 100%;
+        align-items: stretch;
+        justify-content: flex-start;
         gap: 16px;
+        min-width: 0;
     }
 
     .copy {
@@ -201,10 +215,17 @@
 
 @media (max-width: 520px) {
     .page {
-        padding: 16px 12px calc(var(--dock-height) + 14px);
+        padding:
+            max(12px, env(safe-area-inset-top, 0px))
+            10px
+            calc(
+                var(--dock-height) + 14px + env(safe-area-inset-bottom, 0px)
+            );
     }
 
     .shell {
+        width: 100%;
+        max-width: 100%;
         gap: 12px;
     }
 

@@ -68,7 +68,7 @@ export function ProfileCard({
     );
 
     return (
-        <LiquidGlass className={styles.card} radius="xl" padding="none" shadow>
+        <LiquidGlass className={styles.card} radius="xl" padding="none">
             <div className={`${styles.content} ${styles.cardPanel}`}>
                 <div className={styles.profileMain}>
                     <div className={styles.identityBlock}>

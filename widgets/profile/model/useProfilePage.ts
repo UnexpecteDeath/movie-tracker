@@ -42,7 +42,8 @@ const getReceivedGifts = async (
                     duration_days,
                     created_at,
                     asset_url,
-                    is_active
+                    is_active,
+                    rarity
                 ),
                 sender:sender_id (
                     nickname

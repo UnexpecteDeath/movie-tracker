@@ -1,26 +1,30 @@
 .card {
     width: 100%;
     max-width: 760px;
-    align-self: center;
-    overflow: hidden;
+    align-self: flex-start;
+    overflow: visible;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .content {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(240px, 272px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 272px);
     align-items: stretch;
     gap: 16px;
     text-align: left;
-    height: 100%;
-    min-height: 0;
+    width: 100%;
+    min-width: 0;
+    height: auto;
 }
 
 .cardPanel {
-    height: min(100%, 680px);
-    max-height: 100%;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    max-height: none;
     padding: clamp(22px, 3vh, 30px);
-    overflow: hidden;
-    scrollbar-width: none;
+    overflow: visible;
 }
 
 .cardPanel::-webkit-scrollbar {
@@ -479,7 +483,16 @@ button.signOutButton:disabled {
 
 @media (max-width: 900px) {
     .card {
-        max-width: none;
+        max-width: 100%;
+        overflow: visible;
+    }
+
+    .content {
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        height: auto;
+        min-width: 0;
+        overflow: visible;
     }
 
     .cardPanel {
@@ -489,12 +502,9 @@ button.signOutButton:disabled {
         overflow: visible;
     }
 
-    .content {
-        grid-template-columns: 1fr;
-        height: auto;
-    }
-
     .profileMain {
+        min-width: 0;
+        min-height: auto;
         gap: 16px;
     }
 
@@ -504,12 +514,13 @@ button.signOutButton:disabled {
 
     .profileInfo {
         text-align: center;
+        min-width: 0;
     }
 }
 
 @media (max-width: 520px) {
     .cardPanel {
-        padding: 20px 18px;
+        padding: 18px 14px;
     }
 
     .content {
@@ -517,63 +528,19 @@ button.signOutButton:disabled {
     }
 
     .statsGrid {
+        grid-template-columns: minmax(0, 1fr);
         gap: 8px;
-    }
-
-    .avatarWrap {
-        width: 104px;
-        height: 104px;
-    }
-
-    .avatarFallback {
-        font-size: 40px;
-    }
-
-    .name {
-        font-size: 30px;
-    }
-
-    .statCard {
-        min-width: 0;
-    }
-
-    .statCardBody {
-        min-height: 68px;
-        padding: 12px;
-        gap: 10px;
-    }
-
-    .statIcon {
-        width: 34px;
-        height: 34px;
-        border-radius: 10px;
-    }
-
-    .statValue {
-        font-size: 24px;
     }
 
     .meta {
+        min-width: 0;
         align-items: flex-start;
         flex-direction: column;
-        gap: 8px;
-        text-align: left;
     }
 
     .metaValue {
+        max-width: 100%;
         text-align: left;
-    }
-
-    .dailyBonusButton {
-        min-height: 64px;
-        padding: 16px 16px 16px 18px;
-    }
-
-    .dailyBonusLabel {
-        font-size: 15px;
-    }
-
-    .signOutButton {
-        min-height: 52px;
+        overflow-wrap: anywhere;
     }
 }
