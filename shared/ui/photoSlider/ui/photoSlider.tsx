@@ -75,10 +75,6 @@ export const PhotoSlider = ({
         };
     }, [hasManyMedia, isOpen, media.length, setNext, setPrev]);
 
-    if (media.length === 0 || !activeMedia) {
-        return null;
-    }
-
     return (
         <Modal
             isOpen={isOpen}
@@ -127,7 +123,6 @@ export const PhotoSlider = ({
                             height={1000}
                             className={styles.image}
                             priority
-                            unoptimized
                         />
                     </div>
 
@@ -176,7 +171,6 @@ export const PhotoSlider = ({
                                     width={120}
                                     height={90}
                                     className={styles.thumbnailImage}
-                                    unoptimized
                                 />
                             </button>
                         ))}

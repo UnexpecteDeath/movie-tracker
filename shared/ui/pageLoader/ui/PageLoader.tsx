@@ -41,11 +41,7 @@ export function PageLoader({
             <div className={styles.glowPrimary} />
             <div className={styles.glowSecondary} />
 
-            <LiquidGlass
-                className={styles.card}
-                radius="xl"
-                padding="lg"
-            >
+            <LiquidGlass className={styles.card} radius="xl" padding="lg">
                 <div className={styles.orbit} aria-hidden="true">
                     <span className={styles.ring} />
                     <span className={styles.ring} />

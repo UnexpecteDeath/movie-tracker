@@ -37,30 +37,6 @@
     transform-origin: center center;
 }
 
-.animationScaleOut {
-    animation-name: modalScaleOut;
-    animation-duration: 420ms;
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.animationLiftFade {
-    animation-name: modalLiftFade;
-    animation-duration: 380ms;
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.animationSwirlIn {
-    animation-name: modalSwirlIn;
-    animation-duration: 520ms;
-    animation-timing-function: cubic-bezier(0.2, 1, 0.24, 1);
-}
-
-.animationBloom {
-    animation-name: modalBloom;
-    animation-duration: 480ms;
-    animation-timing-function: cubic-bezier(0.2, 0.95, 0.25, 1);
-}
-
 .surface {
     display: flex;
     flex-direction: column;
@@ -174,62 +150,6 @@
     }
 }
 
-@keyframes modalScaleOut {
-    0% {
-        transform: translateY(22px) scale(0.82);
-    }
-
-    58% {
-        transform: translateY(-4px) scale(1.035);
-    }
-
-    100% {
-        transform: translateY(0) scale(1);
-    }
-}
-
-@keyframes modalLiftFade {
-    0% {
-        transform: translateY(36px) scale(0.98) rotateX(8deg);
-    }
-
-    70% {
-        transform: translateY(-2px) scale(1) rotateX(0deg);
-    }
-
-    100% {
-        transform: translateY(0) scale(1);
-    }
-}
-
-@keyframes modalSwirlIn {
-    0% {
-        transform: translateY(28px) rotate(-4.5deg) scale(0.9);
-    }
-
-    48% {
-        transform: translateY(-2px) rotate(1.2deg) scale(1.016);
-    }
-
-    100% {
-        transform: translateY(0) rotate(0deg) scale(1);
-    }
-}
-
-@keyframes modalBloom {
-    0% {
-        transform: scale(0.86);
-    }
-
-    44% {
-        transform: scale(1.042);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
 @media (max-width: 640px) {
     .overlay {
         align-items: end;
@@ -240,22 +160,6 @@
         width: 100%;
         max-height: calc(100vh - 12px - max(12px, env(safe-area-inset-bottom)));
         transform-origin: center bottom;
-    }
-
-    .animationScaleOut {
-        animation-name: modalScaleOutMobile;
-    }
-
-    .animationLiftFade {
-        animation-name: modalLiftFadeMobile;
-    }
-
-    .animationSwirlIn {
-        animation-name: modalSwirlInMobile;
-    }
-
-    .animationBloom {
-        animation-name: modalBloomMobile;
     }
 
     .surface {
@@ -290,63 +194,5 @@
     .footer {
         padding: 0 20px 20px;
         flex-wrap: wrap;
-    }
-}
-
-@keyframes modalScaleOutMobile {
-    0% {
-        transform: translateY(34px) scale(0.94);
-    }
-
-    62% {
-        transform: translateY(-2px) scale(1.018);
-    }
-
-    100% {
-        transform: translateY(0) scale(1);
-    }
-}
-
-@keyframes modalLiftFadeMobile {
-    0% {
-        transform: translateY(42px) scale(0.98);
-    }
-
-    100% {
-        transform: translateY(0) scale(1);
-    }
-}
-
-@keyframes modalSwirlInMobile {
-    0% {
-        transform: translateY(36px) rotate(-2.2deg) scale(0.96);
-    }
-
-    52% {
-        transform: translateY(-1px) rotate(0.5deg) scale(1.01);
-    }
-
-    100% {
-        transform: translateY(0) rotate(0deg) scale(1);
-    }
-}
-
-@keyframes modalBloomMobile {
-    0% {
-        transform: translateY(28px) scale(0.94);
-    }
-
-    100% {
-        transform: translateY(0) scale(1);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .overlayAnimated,
-    .animationScaleOut,
-    .animationLiftFade,
-    .animationSwirlIn,
-    .animationBloom {
-        animation: none;
     }
 }

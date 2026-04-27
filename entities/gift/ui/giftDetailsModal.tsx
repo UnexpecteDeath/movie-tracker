@@ -250,13 +250,6 @@ export function GiftDetailsModal({
         ...extraMeta,
     ];
 
-    // const giftAnimations = {
-    //     common: "bloom",
-    //     rare: "scaleOut",
-    //     epic: "liftFade",
-    //     mystical: "swirlIn",
-    // };
-
     return (
         <Modal
             isOpen={isOpen}
@@ -266,7 +259,6 @@ export function GiftDetailsModal({
             description={dialogDescription}
             className={styles.detailsDialog}
             contentClassName={styles.detailsDialogContent}
-            animation={"none"}
         >
             <div className={styles.detailsContent}>
                 <div

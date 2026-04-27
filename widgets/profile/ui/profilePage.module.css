@@ -3,9 +3,7 @@
     align-self: stretch;
     width: 100%;
     min-height: 100dvh;
-    padding:
-        max(24px, env(safe-area-inset-top, 0px))
-        18px
+    padding: max(24px, env(safe-area-inset-top, 0px)) 18px
         calc(var(--dock-height) + 24px + env(safe-area-inset-bottom, 0px));
     display: flex;
     justify-content: center;
@@ -144,12 +142,8 @@
 
 @media (max-width: 900px) {
     .page {
-        padding:
-            max(18px, env(safe-area-inset-top, 0px))
-            12px
-            calc(
-                var(--dock-height) + 18px + env(safe-area-inset-bottom, 0px)
-            );
+        padding: max(18px, env(safe-area-inset-top, 0px)) 12px
+            calc(var(--dock-height) + 18px + env(safe-area-inset-bottom, 0px));
         -webkit-overflow-scrolling: touch;
     }
 
@@ -215,12 +209,8 @@
 
 @media (max-width: 520px) {
     .page {
-        padding:
-            max(12px, env(safe-area-inset-top, 0px))
-            10px
-            calc(
-                var(--dock-height) + 14px + env(safe-area-inset-bottom, 0px)
-            );
+        padding: max(12px, env(safe-area-inset-top, 0px)) 10px
+            calc(var(--dock-height) + 14px + env(safe-area-inset-bottom, 0px));
     }
 
     .shell {
