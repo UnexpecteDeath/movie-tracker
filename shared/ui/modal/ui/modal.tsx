@@ -64,19 +64,12 @@ export function Modal({
             }
         };
 
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
         window.addEventListener("keydown", handleKeyDown);
 
         return () => {
-            document.body.style.overflow = previousOverflow;
             window.removeEventListener("keydown", handleKeyDown);
         };
     }, [isOpen, closeOnEscape, onClose]);
-
-    if (!isOpen || typeof document === "undefined") {
-        return null;
-    }
 
     const handleOverlayClick = () => {
         if (closeOnOverlay) {
@@ -87,6 +80,8 @@ export function Modal({
     const handleDialogClick = (event: MouseEvent<HTMLDivElement>) => {
         event.stopPropagation();
     };
+
+    if (!isOpen) return null;
 
     return createPortal(
         <div
