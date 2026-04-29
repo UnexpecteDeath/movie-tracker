@@ -13,7 +13,6 @@ import type { GiftItem, GiftRecipient } from "../api/types";
 import popcornGif from "../assets/popcorn.gif";
 import styles from "./gift.module.css";
 import { getGiftRarityClassName, getGiftRarityLabel } from "./giftRarity";
-import { ModalAnimation } from "@/shared/ui/modal";
 
 type Props = {
     gift: GiftItem | null;

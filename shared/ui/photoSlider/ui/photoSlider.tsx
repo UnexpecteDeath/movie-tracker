@@ -36,6 +36,7 @@ export const PhotoSlider = ({
     const [activeIndex, setActiveIndex] = useState(() =>
         clampIndex(initialIndex, media.length),
     );
+    const [startX, setStartX] = useState(0);
 
     const safeActiveIndex = clampIndex(activeIndex, media.length);
     const activeMedia = media[safeActiveIndex];
@@ -114,7 +115,23 @@ export const PhotoSlider = ({
                         </button>
                     )}
 
-                    <div className={styles.imageFrame}>
+                    <div
+                        className={styles.imageFrame}
+                        onTouchStart={(e) => {
+                            setStartX(e.touches[0].clientX);
+                        }}
+                        onTouchEnd={(e) => {
+                            const endX = e.changedTouches[0].clientX;
+                            if (endX - startX > 50) {
+                                setPrev();
+                            }
+
+                            if (startX - endX > 50) {
+                                setNext();
+                            }
+                            setStartX(0);
+                        }}
+                    >
                         <Image
                             key={activeMedia}
                             src={activeMedia}
