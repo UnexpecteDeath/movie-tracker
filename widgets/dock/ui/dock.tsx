@@ -8,6 +8,7 @@ import { classNames } from "@/shared/lib";
 import { usePathname } from "next/navigation";
 import { LiquidGlass } from "@/shared/ui/LiquidGlass";
 import { ThemeSwitcher } from "@/shared/ui/themeSwitcher";
+import { supabase } from "@/shared/api/supabaseClient";
 import {
     Bookmark03Icon,
     CheckmarkBadge03Icon,
@@ -22,15 +23,78 @@ import {
     UserIcon,
 } from "@hugeicons/core-free-icons";
 import { Modal } from "@/shared";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+type AdminProfileRow = {
+    is_admin: boolean | null;
+};
+
+const getCurrentUserIsAdmin = async () => {
+    const {
+        data: { user },
+        error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+        return false;
+    }
+
+    if (user.app_metadata?.is_admin || user.user_metadata?.is_admin) {
+        return true;
+    }
+
+    const { data, error } = await supabase
+        .from("profiles")
+        .select("is_admin")
+        .eq("id", user.id)
+        .maybeSingle();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return Boolean((data as AdminProfileRow | null)?.is_admin);
+};
 
 export default function Dock() {
     const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
     const [searchValue, setSearchValue] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false);
 
-    const items = useMemo(
-        () => [
+    useEffect(() => {
+        let isMounted = true;
+
+        const loadIsAdmin = async () => {
+            try {
+                const nextIsAdmin = await getCurrentUserIsAdmin();
+
+                if (isMounted) {
+                    setIsAdmin(nextIsAdmin);
+                }
+            } catch (error) {
+                console.error(error);
+
+                if (isMounted) {
+                    setIsAdmin(false);
+                }
+            }
+        };
+
+        void loadIsAdmin();
+
+        const { data } = supabase.auth.onAuthStateChange(() => {
+            void loadIsAdmin();
+        });
+
+        return () => {
+            isMounted = false;
+            data.subscription.unsubscribe();
+        };
+    }, []);
+
+    const items = useMemo(() => {
+        const nextItems = [
             {
                 href: "/",
                 icon: FavouriteIcon,
@@ -68,12 +132,6 @@ export default function Dock() {
                 current: pathname === "/settings",
             },
             {
-                href: "/send-notifications",
-                icon: Notification01Icon,
-                label: "Отправка уведомлений",
-                current: pathname === "/send-notifications",
-            },
-            {
                 href: "/movie-picker",
                 icon: PlaySquareIcon,
                 label: "movie picker",
@@ -91,9 +149,19 @@ export default function Dock() {
                 label: "Profile",
                 current: pathname === "/profile",
             },
-        ],
-        [pathname],
-    );
+        ];
+
+        if (isAdmin) {
+            nextItems.push({
+                href: "/send-notifications",
+                icon: Notification01Icon,
+                label: "Отправка уведомлений",
+                current: pathname === "/send-notifications",
+            });
+        }
+
+        return nextItems;
+    }, [isAdmin, pathname]);
 
     const filteredItems = useMemo(() => {
         const normalizedSearch = searchValue.trim().toLowerCase();
@@ -124,7 +192,7 @@ export default function Dock() {
                 padding="md"
             >
                 <nav className={styles.nav} aria-label="Dock navigation">
-                    {items.slice(0, 5).map((item) => (
+                    {items.slice(0, isAdmin ? 7 : 6).map((item) => (
                         <Link
                             key={item.href}
                             href={item.href}
