@@ -15,8 +15,10 @@ import {
     FavouriteIcon,
     GiftIcon,
     LayoutGridIcon,
+    Notification01Icon,
     PlaySquareIcon,
     Search01Icon,
+    Settings01Icon,
     UserIcon,
 } from "@hugeicons/core-free-icons";
 import { Modal } from "@/shared";
@@ -58,6 +60,18 @@ export default function Dock() {
                 icon: LayoutGridIcon,
                 label: "Feed",
                 current: pathname === "/feed",
+            },
+            {
+                href: "/settings",
+                icon: Settings01Icon,
+                label: "Настройки",
+                current: pathname === "/settings",
+            },
+            {
+                href: "/send-notifications",
+                icon: Notification01Icon,
+                label: "Отправка уведомлений",
+                current: pathname === "/send-notifications",
             },
             {
                 href: "/movie-picker",
