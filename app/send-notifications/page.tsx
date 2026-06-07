@@ -51,7 +51,7 @@ export default function SendNotificationsPage() {
     const [loadError, setLoadError] = useState<string | null>(null);
 
     const canSend = useMemo(
-        () => title.trim().length > 0 && body.trim().length > 0,
+        () => title.trim().length > 0 || body.trim().length > 0,
         [body, title],
     );
 
@@ -150,7 +150,7 @@ export default function SendNotificationsPage() {
     }, [loadSubscribedUsers]);
 
     const sendNotification = async (userId?: string) => {
-        if (!title.trim() || !body.trim()) {
+        if (!canSend) {
             toast.error("Заполни title и body");
             return;
         }
