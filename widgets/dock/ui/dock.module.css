@@ -381,27 +381,36 @@
     }
 
     .dock {
-        gap: 6px;
         width: 100%;
         max-width: 360px;
         padding: 7px;
         border-radius: 18px;
     }
 
+    .nav {
+        gap: 4px;
+    }
+
     .item {
-        width: 40px;
-        height: 40px;
-        min-width: 40px;
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
         border-radius: 13px;
     }
 
+    .nav > button:last-child {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+    }
+
     .icon {
-        width: 18px;
-        height: 18px;
+        width: 17px;
+        height: 17px;
     }
 
     .searchIcon {
-        font-size: 18px;
+        font-size: 17px;
     }
 
     .tooltip {
@@ -460,26 +469,35 @@
     }
 
     .dock {
-        gap: 4px;
         padding: 6px;
         border-radius: 16px;
         max-width: 100%;
     }
 
+    .nav {
+        gap: 3px;
+    }
+
     .item {
-        width: 36px;
-        height: 36px;
-        min-width: 36px;
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
         border-radius: 12px;
     }
 
+    .nav > button:last-child {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+    }
+
     .icon {
-        width: 17px;
-        height: 17px;
+        width: 15px;
+        height: 15px;
     }
 
     .searchIcon {
-        font-size: 17px;
+        font-size: 15px;
     }
 
     .active::before {
