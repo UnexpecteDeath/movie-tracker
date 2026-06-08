@@ -192,7 +192,7 @@ export default function Dock() {
                 padding="md"
             >
                 <nav className={styles.nav} aria-label="Dock navigation">
-                    {items.slice(0, isAdmin ? 7 : 6).map((item) => (
+                    {items.slice(0, 5).map((item) => (
                         <Link
                             key={item.href}
                             href={item.href}
