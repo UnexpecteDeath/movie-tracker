@@ -48,6 +48,7 @@
     cursor: pointer;
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 
     transition:
         transform 180ms ease,
@@ -427,6 +428,8 @@
     .searchField {
         min-height: 52px;
         padding: 0 14px;
+        background: var(--bg-color);
+        box-shadow: none;
     }
 
     .searchResults {
@@ -437,6 +440,14 @@
         min-height: 64px;
         gap: 12px;
         padding: 10px 12px;
+        background: color-mix(in srgb, var(--bg-color) 94%, var(--text) 6%);
+        box-shadow: none;
+        transition: none;
+        touch-action: manipulation;
+    }
+
+    .searchResult::after {
+        display: none;
     }
 
     .searchResultIcon {
