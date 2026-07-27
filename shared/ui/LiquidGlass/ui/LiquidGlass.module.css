@@ -75,3 +75,22 @@
 .interactive:active {
     transform: scale(0.99);
 }
+
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+    .liquidGlass[data-mobile-optimized] {
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 55%),
+            var(--bg-color);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        transition: transform 160ms ease;
+    }
+
+    .liquidGlass[data-mobile-optimized].interactive:hover {
+        transform: none;
+    }
+
+    .liquidGlass[data-mobile-optimized].interactive:active {
+        transform: scale(0.99);
+    }
+}

@@ -11,6 +11,7 @@ type Props = HTMLAttributes<HTMLDivElement> & {
     radius?: LiquidGlassRadius;
     padding?: LiquidGlassPadding;
     interactive?: boolean;
+    optimizeForMobile?: boolean;
 };
 
 export const LiquidGlass = forwardRef<HTMLDivElement, Props>(
@@ -21,6 +22,7 @@ export const LiquidGlass = forwardRef<HTMLDivElement, Props>(
             radius = "lg",
             padding = "md",
             interactive = false,
+            optimizeForMobile = true,
             ...props
         },
         ref,
@@ -46,6 +48,7 @@ export const LiquidGlass = forwardRef<HTMLDivElement, Props>(
                     [className || ""],
                 )}
                 {...props}
+                data-mobile-optimized={optimizeForMobile ? "" : undefined}
             >
                 <div className={styles.innerHighlight} />
                 {children}
