@@ -19,6 +19,10 @@ interface Props {
     initialIndex?: number;
 }
 
+const MAIN_IMAGE_SIZES = "(max-width: 760px) 90vw, 1000px";
+const THUMBNAIL_SIZES =
+    "(max-width: 420px) 56px, (max-width: 760px) 62px, 76px";
+
 const clampIndex = (index: number, length: number) => {
     if (length <= 0) {
         return 0;
@@ -133,13 +137,14 @@ export const PhotoSlider = ({
                         }}
                     >
                         <Image
-                            key={activeMedia}
                             src={activeMedia}
                             alt={`Фото ${safeActiveIndex + 1}`}
                             width={1400}
                             height={1000}
                             className={styles.image}
-                            priority
+                            sizes={MAIN_IMAGE_SIZES}
+                            loading="eager"
+                            fetchPriority="high"
                         />
                     </div>
 
@@ -188,6 +193,9 @@ export const PhotoSlider = ({
                                     width={120}
                                     height={90}
                                     className={styles.thumbnailImage}
+                                    sizes={THUMBNAIL_SIZES}
+                                    loading="lazy"
+                                    fetchPriority="low"
                                 />
                             </button>
                         ))}

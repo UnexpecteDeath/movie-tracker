@@ -280,6 +280,18 @@
 }
 
 @media (max-width: 760px) {
+    .counter,
+    .closeButton,
+    .arrowButton,
+    .thumbnailButton,
+    .mediaContainer {
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 55%),
+            var(--bg-color);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+
     .modal.modal {
         width: calc(100dvw - 20px);
         max-height: calc(100dvh - 20px);
@@ -308,6 +320,14 @@
     .image {
         max-height: calc(100dvh - 250px);
         border-radius: 20px;
+        box-shadow:
+            0 12px 32px rgba(0, 0, 0, 0.16),
+            0 0 0 1px color-mix(in srgb, var(--glass-border) 100%, white 10%);
+    }
+
+    .imageFrame,
+    .image {
+        animation: none;
     }
 
     .arrowButton {
