@@ -23,7 +23,13 @@ import {
     UserIcon,
 } from "@hugeicons/core-free-icons";
 import { Modal } from "@/shared";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+    type PointerEvent,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
 
 type AdminProfileRow = {
     is_admin: boolean | null;
@@ -179,6 +185,18 @@ export default function Dock() {
         setIsOpen(true);
     }, []);
 
+    const handlePressStart = useCallback(
+        (event: PointerEvent<HTMLButtonElement>) => {
+            if (
+                event.isPrimary &&
+                (event.pointerType === "touch" || event.pointerType === "pen")
+            ) {
+                setIsOpen(true);
+            }
+        },
+        [],
+    );
+
     const handleClose = useCallback(() => {
         setIsOpen(false);
         setSearchValue("");
@@ -218,6 +236,7 @@ export default function Dock() {
                         type="button"
                         className={classNames(styles.item, {}, [styles.search])}
                         aria-label="Search"
+                        onPointerDown={handlePressStart}
                         onClick={handleOpen}
                     >
                         <HugeiconsIcon
@@ -233,6 +252,7 @@ export default function Dock() {
             <Modal
                 isOpen={isOpen}
                 onClose={handleClose}
+                keepMounted
                 title="Site links"
                 description="Find the page you need and jump straight there."
                 contentClassName={styles.searchModalContent}

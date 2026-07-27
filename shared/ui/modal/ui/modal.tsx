@@ -7,6 +7,7 @@ import {
     useEffect,
     useId,
     useRef,
+    useState,
 } from "react";
 import { createPortal } from "react-dom";
 import { classNames } from "@/shared/lib";
@@ -33,6 +34,7 @@ type Props = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
     closeOnOverlay?: boolean;
     closeOnEscape?: boolean;
     hideCloseButton?: boolean;
+    keepMounted?: boolean;
     animation?: ModalAnimation;
 };
 
@@ -49,11 +51,25 @@ export function Modal({
     closeOnOverlay = true,
     closeOnEscape = true,
     hideCloseButton = false,
+    keepMounted = false,
     ...props
 }: Props) {
     const titleId = useId();
     const descriptionId = useId();
     const dialogRef = useRef<HTMLDivElement>(null);
+    const [isPrepared, setIsPrepared] = useState(false);
+
+    useEffect(() => {
+        if (!keepMounted) return;
+
+        const frameId = window.requestAnimationFrame(() => {
+            setIsPrepared(true);
+        });
+
+        return () => {
+            window.cancelAnimationFrame(frameId);
+        };
+    }, [keepMounted]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -81,12 +97,20 @@ export function Modal({
         event.stopPropagation();
     };
 
-    if (!isOpen) return null;
+    if (!isOpen && (!keepMounted || !isPrepared)) return null;
 
     return createPortal(
         <div
-            className={classNames(styles.overlay, {}, [])}
+            className={classNames(
+                styles.overlay,
+                {
+                    [styles.overlayHidden]: !isOpen,
+                },
+                [],
+            )}
             onClick={handleOverlayClick}
+            aria-hidden={!isOpen}
+            inert={!isOpen}
         >
             <div
                 className={classNames(styles.dialog, {}, [className || ""])}
