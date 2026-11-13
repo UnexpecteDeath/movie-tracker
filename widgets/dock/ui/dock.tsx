@@ -6,30 +6,19 @@ import { HugeiconsIcon } from "@hugeicons/react";
 
 import { classNames } from "@/shared/lib";
 import { usePathname } from "next/navigation";
-import { LiquidGlass } from "@/shared/ui/LiquidGlass";
+import { Card } from "@/shared/ui/card";
 import { ThemeSwitcher } from "@/shared/ui/themeSwitcher";
 import { supabase } from "@/shared/api/supabaseClient";
 import {
-    Bookmark03Icon,
-    CheckmarkBadge03Icon,
-    ComputerVideoIcon,
     FavouriteIcon,
     GiftIcon,
     LayoutGridIcon,
-    Notification01Icon,
-    PlaySquareIcon,
     Search01Icon,
     Settings01Icon,
     UserIcon,
 } from "@hugeicons/core-free-icons";
 import { Modal } from "@/shared";
-import {
-    type PointerEvent,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type AdminProfileRow = {
     is_admin: boolean | null;
@@ -108,40 +97,10 @@ export default function Dock() {
                 current: pathname === "/",
             },
             {
-                href: "/movies",
-                icon: ComputerVideoIcon,
-                label: "All movies",
-                current: pathname === "/movies",
-            },
-            {
-                href: "/watched",
-                icon: CheckmarkBadge03Icon,
-                label: "Watched",
-                current: pathname === "/watched",
-            },
-            {
-                href: "/watchlist",
-                icon: Bookmark03Icon,
-                label: "Watch later",
-                current: pathname === "/watchlist",
-            },
-            {
                 href: "/feed",
                 icon: LayoutGridIcon,
                 label: "Feed",
                 current: pathname === "/feed",
-            },
-            {
-                href: "/settings",
-                icon: Settings01Icon,
-                label: "Настройки",
-                current: pathname === "/settings",
-            },
-            {
-                href: "/movie-picker",
-                icon: PlaySquareIcon,
-                label: "movie picker",
-                current: pathname === "/movie-picker",
             },
             {
                 href: "/shop",
@@ -155,16 +114,22 @@ export default function Dock() {
                 label: "Profile",
                 current: pathname === "/profile",
             },
+            {
+                href: "/settings",
+                icon: Settings01Icon,
+                label: "Настройки",
+                current: pathname === "/settings",
+            },
         ];
 
-        if (isAdmin) {
-            nextItems.push({
-                href: "/send-notifications",
-                icon: Notification01Icon,
-                label: "Отправка уведомлений",
-                current: pathname === "/send-notifications",
-            });
-        }
+        // if (isAdmin) {
+        //     nextItems.push({
+        //         href: "/send-notifications",
+        //         icon: Notification01Icon,
+        //         label: "Отправка уведомлений",
+        //         current: pathname === "/send-notifications",
+        //     });
+        // }
 
         return nextItems;
     }, [isAdmin, pathname]);
@@ -181,21 +146,21 @@ export default function Dock() {
         });
     }, [items, searchValue]);
 
-    const handleOpen = useCallback(() => {
-        setIsOpen(true);
-    }, []);
-
-    const handlePressStart = useCallback(
-        (event: PointerEvent<HTMLButtonElement>) => {
-            if (
-                event.isPrimary &&
-                (event.pointerType === "touch" || event.pointerType === "pen")
-            ) {
-                setIsOpen(true);
-            }
-        },
-        [],
-    );
+    // const handleOpen = useCallback(() => {
+    //     setIsOpen(true);
+    // }, []);
+    //
+    // const handlePressStart = useCallback(
+    //     (event: PointerEvent<HTMLButtonElement>) => {
+    //         if (
+    //             event.isPrimary &&
+    //             (event.pointerType === "touch" || event.pointerType === "pen")
+    //         ) {
+    //             setIsOpen(true);
+    //         }
+    //     },
+    //     [],
+    // );
 
     const handleClose = useCallback(() => {
         setIsOpen(false);
@@ -204,13 +169,9 @@ export default function Dock() {
 
     return (
         <div className={styles.dockWrapper}>
-            <LiquidGlass
-                className={classNames(styles.dock, {}, [])}
-                radius="lg"
-                padding="md"
-            >
+            <Card className={classNames(styles.dock, {}, [])}>
                 <nav className={styles.nav} aria-label="Dock navigation">
-                    {items.slice(0, 5).map((item) => (
+                    {items.map((item) => (
                         <Link
                             key={item.href}
                             href={item.href}
@@ -232,23 +193,23 @@ export default function Dock() {
                         </Link>
                     ))}
 
-                    <button
-                        type="button"
-                        className={classNames(styles.item, {}, [styles.search])}
-                        aria-label="Search"
-                        onPointerDown={handlePressStart}
-                        onClick={handleOpen}
-                    >
-                        <HugeiconsIcon
-                            icon={Search01Icon}
-                            width={22}
-                            height={22}
-                        />
-                        <span className={styles.tooltip}>Search</span>
-                    </button>
+                    {/*<button*/}
+                    {/*    type="button"*/}
+                    {/*    className={classNames(styles.item, {}, [styles.search])}*/}
+                    {/*    aria-label="Search"*/}
+                    {/*    onPointerDown={handlePressStart}*/}
+                    {/*    onClick={handleOpen}*/}
+                    {/*>*/}
+                    {/*    <HugeiconsIcon*/}
+                    {/*        icon={Search01Icon}*/}
+                    {/*        width={22}*/}
+                    {/*        height={22}*/}
+                    {/*    />*/}
+                    {/*    <span className={styles.tooltip}>Search</span>*/}
+                    {/*</button>*/}
                     <ThemeSwitcher />
                 </nav>
-            </LiquidGlass>
+            </Card>
             <Modal
                 isOpen={isOpen}
                 onClose={handleClose}

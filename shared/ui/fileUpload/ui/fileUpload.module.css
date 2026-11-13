@@ -1,173 +1,162 @@
 .root {
     display: grid;
-    gap: 14px;
+    gap: 10px;
+    min-width: 0;
 }
 
 .dropzone {
     position: relative;
-    display: grid;
-    gap: 8px;
-    justify-items: start;
-    padding: 20px;
-    border: 1px dashed color-mix(in srgb, var(--glass-border) 100%, white 14%);
-    border-radius: 24px;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 96%, white 8%),
-            color-mix(in srgb, var(--glass-bg) 90%, transparent)
-        ),
-        var(--glass-bg);
-    transition:
-        border-color var(--ui-transition),
-        transform var(--ui-transition),
-        background var(--ui-transition);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px dashed color-mix(in srgb, var(--text) 38%, var(--glass-bg));
+    background: var(--bg-color);
+    cursor: pointer;
 }
 
+.dropzone:hover,
 .dropzoneActive {
-    transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--text) 14%, transparent);
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 98%, white 10%),
-            color-mix(in srgb, var(--glass-bg) 92%, transparent)
-        ),
-        var(--glass-bg);
+    border-color: var(--text);
+    background: color-mix(in srgb, var(--text) 7%, var(--glass-bg));
+}
+
+.dropzone:focus-within {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
 }
 
 .icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 16px;
     display: grid;
     place-items: center;
+    flex: 0 0 34px;
+    height: 34px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
     color: var(--text);
-    background: color-mix(in srgb, var(--glass-bg) 92%, var(--bg-color) 8%);
-    box-shadow:
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%),
-        0 10px 22px color-mix(in srgb, var(--shadow) 40%, transparent);
 }
 
 .icon svg {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
+}
+
+.copy {
+    display: grid;
+    gap: 2px;
+}
+
+.title,
+.hint {
+    line-height: 1.4;
 }
 
 .title {
-    margin: 0;
-    font-size: 15px;
-    line-height: 1.4;
+    font-size: 14px;
     font-weight: 700;
     color: var(--text);
 }
 
 .hint {
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.55;
-    color: var(--muted);
+    font-size: 12px;
+    color: color-mix(in srgb, var(--text) 66%, var(--glass-bg));
 }
 
 .input {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     opacity: 0;
     cursor: pointer;
 }
 
 .list {
     display: grid;
-    gap: 10px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 .item {
-    display: grid;
-    grid-template-columns: 88px minmax(0, 1fr) auto;
-    gap: 12px;
-    align-items: center;
-    padding: 10px;
-    border-radius: 22px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
-    background: color-mix(in srgb, var(--glass-bg) 94%, var(--bg-color) 6%);
+    position: relative;
+    min-width: 0;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
 }
 
 .preview {
     position: relative;
-    width: 88px;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    border-radius: 16px;
-    background: color-mix(in srgb, var(--glass-bg) 88%, var(--bg-color) 12%);
+    aspect-ratio: 4 / 3;
+    background: var(--bg-color);
 }
 
 .preview img {
-    width: 100%;
-    height: 100%;
     object-fit: cover;
-    display: block;
 }
 
 .meta {
-    min-width: 0;
+    padding: 6px 8px;
+}
+
+.name,
+.size {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.35;
 }
 
 .name {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.45;
-    font-weight: 600;
-    color: var(--text);
-    white-space: nowrap;
     overflow: hidden;
+    color: var(--text);
+    font-weight: 600;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .size {
-    margin: 4px 0 0;
-    font-size: 13px;
-    line-height: 1.4;
-    color: var(--muted);
+    color: color-mix(in srgb, var(--text) 66%, var(--glass-bg));
 }
 
 .removeButton {
-    min-height: 42px;
-    padding: 0 16px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--glass-bg) 92%, var(--bg-color) 8%);
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--glass-border);
+    border-radius: 0;
+    background: var(--glass-bg);
     color: var(--text);
     font: inherit;
-    font-weight: 700;
+    font-size: 20px;
+    line-height: 1;
     cursor: pointer;
-    transition:
-        transform var(--ui-transition),
-        opacity var(--ui-transition);
 }
 
 .removeButton:hover {
-    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--text) 10%, var(--glass-bg));
+}
+
+.removeButton:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 1px;
 }
 
 .error {
     margin: 0;
     font-size: 13px;
-    line-height: 1.5;
+    line-height: 1.45;
     color: #d84c6a;
 }
 
-@media (max-width: 560px) {
-    .item {
-        grid-template-columns: 1fr;
-        justify-items: start;
-    }
-
-    .preview {
-        width: 100%;
-        max-width: 180px;
-    }
-
-    .removeButton {
-        width: 100%;
+@media (max-width: 420px) {
+    .list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }

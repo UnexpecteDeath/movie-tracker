@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "./styles/page.module.css";
 
 const text =
-    "Здесь будут жить наши любимые фильмы, то, что мы давно хотим посмотреть, и маленькие воспоминания о вечерах, которые были вместе.";
+    "Здесь будет храниться наша история: особенные моменты, тёплые воспоминания, маленькие традиции и всё то, что делает нас нами.";
 
 export default function Home() {
     const [displayedText, setDisplayedText] = useState("");
@@ -30,14 +30,9 @@ export default function Home() {
             <div className={styles.glowSecondary} />
 
             <section className={styles.hero}>
-                <p className={styles.eyebrow}>Our little cinema corner</p>
+                <p className={styles.eyebrow}>Our little history corner</p>
 
-                <h1 className={styles.title}>
-                    Место для наших
-                    <br />
-                    фильмов, вечеров
-                    <br />и теплых моментов
-                </h1>
+                <h1 className={styles.title}>Наша история</h1>
 
                 <p className={styles.typing}>
                     {displayedText}

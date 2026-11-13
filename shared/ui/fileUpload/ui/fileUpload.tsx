@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
+import { useId, useState, type ChangeEvent, type DragEvent } from "react";
 import { classNames } from "@/shared/lib";
 import styles from "./fileUpload.module.css";
 
@@ -68,12 +68,15 @@ export function FileUpload({
     accept = "image/*",
     multiple = true,
     label = "Загрузить изображения",
-    hint = "Перетащи файлы сюда или нажми, чтобы выбрать изображения.",
+    hint = "Выбери или перетащи файлы",
     error,
 }: Props) {
-    const inputRef = useRef<HTMLInputElement>(null);
+    const labelId = useId();
+    const hintId = useId();
+    const errorId = useId();
     const [isDragging, setIsDragging] = useState(false);
     const [localError, setLocalError] = useState("");
+    const errorMessage = error || localError;
 
     const handleFiles = async (filesList: FileList | null) => {
         if (!filesList || filesList.length === 0) return;
@@ -130,7 +133,7 @@ export function FileUpload({
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
             >
-                <div className={styles.icon}>
+                <span className={styles.icon}>
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path
                             d="M12 16V5"
@@ -152,15 +155,26 @@ export function FileUpload({
                             strokeLinecap="round"
                         />
                     </svg>
-                </div>
-
-                <p className={styles.title}>{label}</p>
-                <p className={styles.hint}>{hint}</p>
+                </span>
+                <span className={styles.copy}>
+                    <span id={labelId} className={styles.title}>
+                        {label}
+                    </span>
+                    {hint && (
+                        <span id={hintId} className={styles.hint}>
+                            {hint}
+                        </span>
+                    )}
+                </span>
 
                 <input
-                    ref={inputRef}
                     className={styles.input}
                     type="file"
+                    aria-labelledby={labelId}
+                    aria-describedby={
+                        errorMessage ? errorId : hint ? hintId : undefined
+                    }
+                    aria-invalid={Boolean(errorMessage)}
                     accept={accept}
                     multiple={multiple}
                     onChange={handleInputChange}
@@ -168,21 +182,17 @@ export function FileUpload({
             </label>
 
             {value.length > 0 ? (
-                <div className={styles.list}>
+                <ul className={styles.list} aria-label="Выбранные изображения">
                     {value.map((file) => (
-                        <div key={file.id} className={styles.item}>
+                        <li key={file.id} className={styles.item}>
                             <div className={styles.preview}>
-                                <Image
-                                    src={file.src}
-                                    alt={file.name}
-                                    fill
-                                    unoptimized
-                                    sizes="(max-width: 560px) 180px, 88px"
-                                />
+                                <Image src={file.src} alt="" fill unoptimized />
                             </div>
 
                             <div className={styles.meta}>
-                                <p className={styles.name}>{file.name}</p>
+                                <p className={styles.name} title={file.name}>
+                                    {file.name}
+                                </p>
                                 <p className={styles.size}>
                                     {formatFileSize(file.size)}
                                 </p>
@@ -191,17 +201,20 @@ export function FileUpload({
                             <button
                                 type="button"
                                 className={styles.removeButton}
+                                aria-label={`Удалить ${file.name}`}
                                 onClick={() => handleRemove(file.id)}
                             >
-                                Удалить
+                                ×
                             </button>
-                        </div>
+                        </li>
                     ))}
-                </div>
+                </ul>
             ) : null}
 
-            {error || localError ? (
-                <p className={styles.error}>{error || localError}</p>
+            {errorMessage ? (
+                <p id={errorId} className={styles.error} role="alert">
+                    {errorMessage}
+                </p>
             ) : null}
         </div>
     );

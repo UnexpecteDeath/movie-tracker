@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./styles/not-found.module.css";
-import { LiquidGlass } from "@/shared/ui/LiquidGlass";
+import { Card } from "@/shared/ui/card";
 import { classNames } from "@/shared/lib";
 
 export default function NotFound() {
@@ -9,11 +9,7 @@ export default function NotFound() {
             <div className={styles.glowTop} />
             <div className={styles.glowBottom} />
 
-            <LiquidGlass
-                className={classNames(styles.card, {}, [])}
-                radius="xl"
-                padding="lg"
-            >
+            <Card className={classNames(styles.card, {}, [])}>
                 <div className={styles.content}>
                     <p className={styles.code}>404</p>
 
@@ -45,7 +41,7 @@ export default function NotFound() {
                         </Link>
                     </div>
                 </div>
-            </LiquidGlass>
+            </Card>
         </main>
     );
 }

@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./styles/globals.css";
 import { Dock } from "@/widgets/dock";
-import { StoreProvider } from "@/shared/ui/providers/StoreProvider";
 import { ThemeProvider } from "@/shared/ui/providers/ThemeProvider";
 import { AuthProvider } from "@/shared/ui/providers/AuthProvider";
+import { ReactQueryProvider } from "@/shared/ui/providers/ReactQueryProvider";
 import { Toaster } from "sonner";
 import { StreackProvider } from "@/shared/ui/providers/StreackProvider";
 
@@ -47,11 +47,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ru">
-            <StoreProvider>
-                <ThemeProvider>
-                    <body
-                        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-                    >
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            >
+                <ReactQueryProvider>
+                    <ThemeProvider>
                         <AuthProvider>
                             <StreackProvider>
                                 <main className="app-root">{children}</main>
@@ -63,9 +63,9 @@ export default function RootLayout({
                             position="top-right"
                             richColors
                         />
-                    </body>
-                </ThemeProvider>
-            </StoreProvider>
+                    </ThemeProvider>
+                </ReactQueryProvider>
+            </body>
         </html>
     );
 }

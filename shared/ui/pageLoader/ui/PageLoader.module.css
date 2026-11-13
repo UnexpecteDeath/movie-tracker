@@ -84,13 +84,6 @@
     justify-items: center;
     gap: 16px;
     text-align: center;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 88%, white 12%),
-            color-mix(in srgb, var(--glass-bg) 76%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 24%, transparent);
 }
 
 .orbit {

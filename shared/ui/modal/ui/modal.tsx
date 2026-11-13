@@ -11,7 +11,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { classNames } from "@/shared/lib";
-import { LiquidGlass } from "@/shared/ui/LiquidGlass";
+import { Card } from "@/shared/ui/card";
 import styles from "./modal.module.css";
 
 export type ModalAnimation =
@@ -116,11 +116,9 @@ export function Modal({
                 className={classNames(styles.dialog, {}, [className || ""])}
                 onClick={handleDialogClick}
             >
-                <LiquidGlass
+                <Card
                     ref={dialogRef}
                     className={styles.surface}
-                    radius="xl"
-                    padding="none"
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby={title ? titleId : undefined}
@@ -173,7 +171,7 @@ export function Modal({
                     {footer ? (
                         <div className={styles.footer}>{footer}</div>
                     ) : null}
-                </LiquidGlass>
+                </Card>
             </div>
         </div>,
         document.body,

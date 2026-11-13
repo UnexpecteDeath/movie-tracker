@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
 import { classNames } from "@/shared/lib";
-import { LiquidGlass } from "@/shared/ui/LiquidGlass";
+import { Card } from "@/shared/ui/card";
 import styles from "./PageLoader.module.css";
 
 type PageLoaderMode = "fullscreen" | "container";
@@ -41,7 +41,7 @@ export function PageLoader({
             <div className={styles.glowPrimary} />
             <div className={styles.glowSecondary} />
 
-            <LiquidGlass className={styles.card} radius="xl" padding="lg">
+            <Card className={styles.card}>
                 <div className={styles.orbit} aria-hidden="true">
                     <span className={styles.ring} />
                     <span className={styles.ring} />
@@ -52,7 +52,7 @@ export function PageLoader({
                     <p className={styles.label}>{label}</p>
                     <p className={styles.caption}>Подготавливаем ваше кино.</p>
                 </div>
-            </LiquidGlass>
+            </Card>
         </div>
     );
 }
