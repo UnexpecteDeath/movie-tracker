@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { LiquidGlass } from "@/shared/ui/LiquidGlass";
+import { Card } from "@/shared/ui/card";
 import { classNames } from "@/shared/lib";
 import {
     Gift,
@@ -9,7 +9,7 @@ import {
     getGifts,
     getWishes,
     type GiftItem,
-} from "@/entities/gift";
+} from "@/modules/gifts";
 import styles from "./page.module.css";
 
 const TAB_COPY = {
@@ -100,11 +100,7 @@ export default function ShopPage() {
             <div className={styles.glowSecondary} />
 
             <section className={styles.shell}>
-                <LiquidGlass
-                    className={styles.surface}
-                    radius="xl"
-                    padding="none"
-                >
+                <Card className={styles.surface}>
                     <div className={styles.surfaceInner}>
                         <div
                             className={styles.tabs}
@@ -180,11 +176,9 @@ export default function ShopPage() {
                             >
                                 {isLoading
                                     ? SKELETON_ITEMS.map((item) => (
-                                          <LiquidGlass
+                                          <Card
                                               key={item}
                                               className={styles.tileSkeleton}
-                                              radius="lg"
-                                              padding="none"
                                           >
                                               <span
                                                   className={
@@ -192,7 +186,7 @@ export default function ShopPage() {
                                                   }
                                                   aria-hidden="true"
                                               />
-                                          </LiquidGlass>
+                                          </Card>
                                       ))
                                     : activeItems.map((item) => (
                                           <Gift
@@ -204,7 +198,7 @@ export default function ShopPage() {
                             </div>
                         ) : null}
                     </div>
-                </LiquidGlass>
+                </Card>
             </section>
 
             <GiftDetailsModal

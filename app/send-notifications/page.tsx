@@ -9,7 +9,7 @@ import {
     SentIcon,
     UserIcon,
 } from "@hugeicons/core-free-icons";
-import { LiquidGlass } from "@/shared/ui/LiquidGlass";
+import { Card } from "@/shared/ui/card";
 import { supabase } from "@/shared/api/supabaseClient";
 import styles from "./page.module.css";
 
@@ -208,11 +208,7 @@ export default function SendNotificationsPage() {
                     </p>
                 </div>
 
-                <LiquidGlass
-                    className={styles.surface}
-                    radius="xl"
-                    padding="none"
-                >
+                <Card className={styles.surface}>
                     <div className={styles.formPanel}>
                         <label className={styles.field}>
                             <span className={styles.fieldLabel}>Title</span>
@@ -253,7 +249,7 @@ export default function SendNotificationsPage() {
                             {isSendingAll ? "Отправляем..." : "Отправить всем"}
                         </button>
                     </div>
-                </LiquidGlass>
+                </Card>
 
                 <section className={styles.usersSection}>
                     <div className={styles.sectionHeader}>
@@ -283,36 +279,24 @@ export default function SendNotificationsPage() {
                     </div>
 
                     {isLoadingUsers ? (
-                        <LiquidGlass
-                            className={styles.stateCard}
-                            radius="lg"
-                            padding="none"
-                        >
+                        <Card className={styles.stateCard}>
                             <p className={styles.stateText}>
                                 Загружаем подписчиков...
                             </p>
-                        </LiquidGlass>
+                        </Card>
                     ) : null}
 
                     {!isLoadingUsers && loadError ? (
-                        <LiquidGlass
-                            className={styles.stateCard}
-                            radius="lg"
-                            padding="none"
-                        >
+                        <Card className={styles.stateCard}>
                             <p className={styles.stateTitle}>
                                 Список недоступен
                             </p>
                             <p className={styles.stateText}>{loadError}</p>
-                        </LiquidGlass>
+                        </Card>
                     ) : null}
 
                     {!isLoadingUsers && !loadError && users.length === 0 ? (
-                        <LiquidGlass
-                            className={styles.stateCard}
-                            radius="lg"
-                            padding="none"
-                        >
+                        <Card className={styles.stateCard}>
                             <p className={styles.stateTitle}>
                                 Подписчиков пока нет
                             </p>
@@ -320,17 +304,15 @@ export default function SendNotificationsPage() {
                                 Когда пользователь включит уведомления, он
                                 появится в этом списке.
                             </p>
-                        </LiquidGlass>
+                        </Card>
                     ) : null}
 
                     {!isLoadingUsers && !loadError && users.length > 0 ? (
                         <div className={styles.usersList}>
                             {users.map((user) => (
-                                <LiquidGlass
+                                <Card
                                     key={user.userId}
                                     className={styles.userCard}
-                                    radius="lg"
-                                    padding="none"
                                 >
                                     <div className={styles.userAvatar}>
                                         {user.avatarUrl ? (
@@ -382,7 +364,7 @@ export default function SendNotificationsPage() {
                                             ? "Отправляем..."
                                             : "Отправить"}
                                     </button>
-                                </LiquidGlass>
+                                </Card>
                             ))}
                         </div>
                     ) : null}

@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { LiquidGlass } from "@/shared";
+import { Card } from "@/shared";
 import styles from "./page.module.css";
-import { useAuth } from "@/features/auth/useAuth";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 type SignInFormValues = {
     email: string;
@@ -66,7 +66,7 @@ export default function SignInPage() {
                     </p>
                 </div>
 
-                <LiquidGlass className={styles.card} radius="xl" padding="none">
+                <Card className={styles.card}>
                     <form
                         className={styles.form}
                         onSubmit={handleSubmit(onSubmit)}
@@ -132,7 +132,7 @@ export default function SignInPage() {
                             {isSubmitting ? "Входим..." : "Продолжить"}
                         </button>
                     </form>
-                </LiquidGlass>
+                </Card>
             </section>
         </div>
     );

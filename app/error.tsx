@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { LiquidGlass } from "@/shared/ui/LiquidGlass";
+import { Card } from "@/shared/ui/card";
 import { classNames } from "@/shared/lib";
 import styles from "./styles/error.module.css";
 
@@ -21,11 +21,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
             <div className={styles.glowTop} />
             <div className={styles.glowBottom} />
 
-            <LiquidGlass
-                className={classNames(styles.card, {}, [])}
-                radius="xl"
-                padding="lg"
-            >
+            <Card className={classNames(styles.card, {}, [])}>
                 <div className={styles.content}>
                     <p className={styles.code}>500</p>
 
@@ -57,7 +53,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
                         </Link>
                     </div>
                 </div>
-            </LiquidGlass>
+            </Card>
         </main>
     );
 }

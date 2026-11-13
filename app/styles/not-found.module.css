@@ -55,6 +55,7 @@
 .card {
     width: 100%;
     max-width: 720px;
+    padding: 16px;
 }
 
 .content {

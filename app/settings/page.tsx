@@ -4,7 +4,7 @@ import { useId } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Notification01Icon } from "@hugeicons/core-free-icons";
 import styles from "./page.module.css";
-import { useSettings } from "@/features/settings/useSettings";
+import { useSettings } from "@/modules/settings/useSettings";
 
 export default function SettingsPage() {
     const switchId = useId();

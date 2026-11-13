@@ -1,4 +1,4 @@
-import { ProfilePage } from "@/widgets/profile";
+import { ProfilePage } from "@/modules/profile";
 
 export default function Page() {
     return <ProfilePage />;

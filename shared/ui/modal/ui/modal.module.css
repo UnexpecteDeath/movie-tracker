@@ -50,7 +50,6 @@
     min-height: 0;
     max-height: inherit;
     height: 100%;
-    background: var(--bg);
 }
 
 .header {
@@ -166,11 +165,6 @@
         width: 100%;
         max-height: calc(100vh - 12px - max(12px, env(safe-area-inset-bottom)));
         transform-origin: center bottom;
-    }
-
-    .surface {
-        border-bottom-left-radius: 24px;
-        border-bottom-right-radius: 24px;
     }
 
     .header {
