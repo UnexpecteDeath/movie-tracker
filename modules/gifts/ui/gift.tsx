@@ -11,6 +11,7 @@ import { getGiftRarityClassName } from "./giftRarity";
 type Props = {
     gift: GiftItem;
     className?: string;
+    variant?: "default" | "compact";
     onClick?: (gift: GiftItem) => void;
 };
 
@@ -20,7 +21,8 @@ const getFallbackIcon = (type: GiftItem["type"]) =>
 const getGiftLabel = (type: GiftItem["type"]) =>
     type === "wish" ? "Желание" : "Подарок";
 
-export function Gift({ gift, className, onClick }: Props) {
+export function Gift({ gift, className, variant = "default", onClick }: Props) {
+    const isCompact = variant === "compact";
     const rarityClassName = styles[getGiftRarityClassName(gift.rarity)];
 
     const handleClick = () => {
@@ -51,8 +53,19 @@ export function Gift({ gift, className, onClick }: Props) {
             onClick={handleClick}
             aria-label={`${getGiftLabel(gift.type).toLowerCase()}: ${gift.name}`}
         >
-            <Card className={classNames(styles.tile, {}, [rarityClassName])}>
+            <Card
+                className={classNames(
+                    styles.tile,
+                    { [styles.compactTile]: isCompact },
+                    [rarityClassName],
+                )}
+            >
                 <div className={styles.tileInner}>{asset}</div>
+                {isCompact && (
+                    <span className={styles.tileName} title={gift.name}>
+                        {gift.name}
+                    </span>
+                )}
             </Card>
         </button>
     );

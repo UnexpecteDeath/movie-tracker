@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GiftIcon, SparklesIcon } from "@hugeicons/core-free-icons";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Modal } from "@/shared";
 import { classNames } from "@/shared/lib";
@@ -60,6 +60,22 @@ const formatDuration = (durationDays: number | null) => {
     return `${durationDays} дней`;
 };
 
+function RecipientIdentity({ recipient }: { recipient: GiftRecipient }) {
+    return (
+        <span className={styles.recipientIdentity}>
+            <span className={styles.recipientAvatar} aria-hidden="true">
+                {recipient.avatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={recipient.avatarUrl} alt="" />
+                ) : (
+                    recipient.nickname.charAt(0).toUpperCase() || "U"
+                )}
+            </span>
+            <span className={styles.recipientName}>{recipient.nickname}</span>
+        </span>
+    );
+}
+
 export function GiftDetailsModal({
     gift,
     isOpen,
@@ -67,6 +83,8 @@ export function GiftDetailsModal({
     showSendAction = true,
     extraMeta = [],
 }: Props) {
+    const titleId = useId();
+    const headingRef = useRef<HTMLHeadingElement>(null);
     const [step, setStep] = useState<ModalStep>("details");
     const [isRecipientsLoading, setIsRecipientsLoading] = useState(false);
     const [isSendingGift, setIsSendingGift] = useState(false);
@@ -85,6 +103,10 @@ export function GiftDetailsModal({
         setSelectedRecipient(null);
         setMessage(DEFAULT_MESSAGE);
     }, [gift?.id, isOpen]);
+
+    useEffect(() => {
+        if (isOpen) headingRef.current?.focus();
+    }, [isOpen, step]);
 
     if (!gift) {
         return null;
@@ -194,277 +216,168 @@ export function GiftDetailsModal({
     const rarityLabel = getGiftRarityLabel(gift.rarity);
     const rarityToneClassName = styles[getGiftRarityClassName(gift.rarity)];
 
-    const dialogEyebrow =
-        step === "details"
-            ? getTypeLabel(gift.type)
-            : step === "recipients"
-              ? "Отправка подарка"
-              : "Подтверждение";
     const dialogTitle =
         step === "details"
             ? gift.name
             : step === "recipients"
               ? "Выберите получателя"
-              : selectedRecipient?.nickname || "Получатель";
-    const dialogDescription =
-        step === "details"
-            ? gift.description
-            : step === "recipients"
-              ? "Показываем только доступных пользователей."
-              : "Проверьте подарок и отправьте сообщение.";
+              : "Подтверждение отправки";
+    const price = (
+        <span className={styles.priceValue}>
+            <Image src={popcornGif} alt="" width={22} height={22} unoptimized />
+            {gift.price}
+        </span>
+    );
     const detailsRows: GiftMetaItem[] = [
-        {
-            label: "Редкость",
-            value: (
-                <span
-                    className={classNames(styles.rarityBadge, {}, [
-                        styles.rarityBadgeInline,
-                        rarityToneClassName,
-                    ])}
-                >
-                    {rarityLabel}
-                </span>
-            ),
-        },
-        {
-            label: "Цена",
-            value: (
-                <span className={styles.priceValue}>
-                    <Image
-                        src={popcornGif}
-                        alt=""
-                        width={28}
-                        height={28}
-                        unoptimized
-                        className={styles.priceGif}
-                    />
-                    <span>{gift.price}</span>
-                </span>
-            ),
-        },
-        {
-            label: "Длительность",
-            value: formatDuration(gift.duration_days),
-        },
+        { label: "Тип", value: getTypeLabel(gift.type) },
+        { label: "Редкость", value: rarityLabel },
+        { label: "Цена", value: price },
+        { label: "Длительность", value: formatDuration(gift.duration_days) },
         ...extraMeta,
     ];
+
+    let actions: ReactNode;
+    if (step === "details" && showSendAction) {
+        actions = (
+            <button
+                type="button"
+                className={styles.giftButton}
+                onClick={() => void handleShowRecipients()}
+            >
+                Подарить
+            </button>
+        );
+    } else if (step === "recipients") {
+        actions = (
+            <button
+                type="button"
+                className={styles.secondaryButton}
+                onClick={handleBackToDetails}
+            >
+                Назад к подарку
+            </button>
+        );
+    } else if (step === "confirm" && selectedRecipient) {
+        actions = (
+            <>
+                <button
+                    type="button"
+                    className={styles.secondaryButton}
+                    onClick={handleBackToRecipients}
+                    disabled={isSendingGift}
+                >
+                    Сменить получателя
+                </button>
+                <button
+                    type="button"
+                    className={styles.giftButton}
+                    onClick={() => void handleSendGift()}
+                    disabled={isSendingGift}
+                >
+                    {isSendingGift ? "Отправляем…" : "Отправить"}
+                </button>
+            </>
+        );
+    }
 
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            eyebrow={dialogEyebrow}
-            title={dialogTitle}
-            description={dialogDescription}
+            aria-labelledby={titleId}
             className={styles.detailsDialog}
             contentClassName={styles.detailsDialogContent}
+            hideCloseButton
+            closeOnEscape={!isSendingGift}
+            closeOnOverlay={!isSendingGift}
         >
             <div className={styles.detailsContent}>
-                <div
-                    className={classNames(styles.scene, {}, [
-                        step === "details" ? styles.sceneVisible : "",
-                    ])}
-                >
-                    {step === "details" ? (
+                <header className={styles.detailsHeader}>
+                    <h2 id={titleId} ref={headingRef} tabIndex={-1}>
+                        {dialogTitle}
+                    </h2>
+                    <button
+                        type="button"
+                        className={styles.closeButton}
+                        aria-label="Закрыть модальное окно"
+                        onClick={onClose}
+                        disabled={isSendingGift}
+                    >
+                        ×
+                    </button>
+                </header>
+
+                <div className={styles.detailsBody} key={step}>
+                    {step === "details" && (
                         <>
                             <div
                                 className={classNames(styles.preview, {}, [
                                     rarityToneClassName,
                                 ])}
                             >
-                                <span
-                                    className={classNames(
-                                        styles.rarityBadge,
-                                        {},
-                                        [
-                                            styles.rarityBadgeOverlay,
-                                            rarityToneClassName,
-                                        ],
-                                    )}
-                                >
-                                    {rarityLabel}
-                                </span>
-                                <div className={styles.previewInner}>
-                                    {preview}
-                                </div>
+                                {preview}
                             </div>
-
-                            <div className={styles.metaGrid}>
-                                {detailsRows.map((row, index) => (
+                            {gift.description && (
+                                <p className={styles.giftDescription}>
+                                    {gift.description}
+                                </p>
+                            )}
+                            <dl className={styles.metaGrid}>
+                                {detailsRows.map(({ label, value }, index) => (
                                     <div
-                                        key={`${row.label}-${index}`}
+                                        key={`${label}-${index}`}
                                         className={styles.metaRow}
                                     >
-                                        <span className={styles.metaLabel}>
-                                            {row.label}
-                                        </span>
-                                        <span className={styles.metaValue}>
-                                            {row.value}
-                                        </span>
+                                        <dt>{label}</dt>
+                                        <dd>{value}</dd>
                                     </div>
                                 ))}
-                            </div>
-
-                            {showSendAction ? (
-                                <button
-                                    type="button"
-                                    className={styles.giftButton}
-                                    onClick={() => void handleShowRecipients()}
-                                >
-                                    Подарить
-                                </button>
-                            ) : null}
+                            </dl>
                         </>
-                    ) : null}
-                </div>
+                    )}
 
-                <div
-                    className={classNames(styles.scene, {}, [
-                        step === "recipients" ? styles.sceneVisible : "",
-                    ])}
-                >
-                    {step === "recipients" ? (
-                        <div className={styles.recipientsBlock}>
-                            <div className={styles.recipientsHeader}>
-                                <p className={styles.recipientsEyebrow}>
-                                    Доступные пользователи
-                                </p>
-                                <span className={styles.recipientsCount}>
-                                    {recipients.length}
-                                </span>
-                            </div>
-
-                            {isRecipientsLoading ? (
-                                <div className={styles.recipientsState}>
-                                    Загружаем список пользователей...
-                                </div>
-                            ) : recipientsError ? (
-                                <div
-                                    className={styles.recipientsState}
-                                    role="alert"
-                                >
-                                    {recipientsError}
-                                </div>
-                            ) : recipients.length > 0 ? (
-                                <div className={styles.recipientList}>
-                                    {recipients.map((recipient) => {
-                                        const avatar = recipient.avatarUrl ? (
-                                            // eslint-disable-next-line @next/next/no-img-element
-                                            <img
-                                                className={
-                                                    styles.recipientAvatarImage
-                                                }
-                                                src={recipient.avatarUrl}
-                                                alt=""
+                    {step === "recipients" &&
+                        (isRecipientsLoading ? (
+                            <p className={styles.recipientsState} role="status">
+                                Загружаем получателей…
+                            </p>
+                        ) : recipientsError ? (
+                            <p className={styles.recipientsState} role="alert">
+                                {recipientsError}
+                            </p>
+                        ) : recipients.length === 0 ? (
+                            <p className={styles.recipientsState}>
+                                Пока нет доступных получателей.
+                            </p>
+                        ) : (
+                            <ul className={styles.recipientList}>
+                                {recipients.map((recipient) => (
+                                    <li key={recipient.id}>
+                                        <button
+                                            type="button"
+                                            className={styles.recipientItem}
+                                            onClick={() =>
+                                                handleRecipientSelect(recipient)
+                                            }
+                                        >
+                                            <RecipientIdentity
+                                                recipient={recipient}
                                             />
-                                        ) : (
-                                            <span
-                                                className={
-                                                    styles.recipientAvatarFallback
-                                                }
-                                            >
-                                                {recipient.nickname
-                                                    .slice(0, 1)
-                                                    .toUpperCase() || "U"}
-                                            </span>
-                                        );
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        ))}
 
-                                        return (
-                                            <button
-                                                key={recipient.id}
-                                                type="button"
-                                                className={styles.recipientItem}
-                                                onClick={() =>
-                                                    handleRecipientSelect(
-                                                        recipient,
-                                                    )
-                                                }
-                                            >
-                                                <div
-                                                    className={
-                                                        styles.recipientAvatar
-                                                    }
-                                                >
-                                                    {avatar}
-                                                </div>
-                                                <div
-                                                    className={
-                                                        styles.recipientText
-                                                    }
-                                                >
-                                                    <span
-                                                        className={
-                                                            styles.recipientName
-                                                        }
-                                                    >
-                                                        {recipient.nickname}
-                                                    </span>
-                                                </div>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            ) : (
-                                <div className={styles.recipientsState}>
-                                    Нет доступных пользователей для подарка.
-                                </div>
-                            )}
-
-                            <button
-                                type="button"
-                                className={styles.secondaryButton}
-                                onClick={handleBackToDetails}
-                            >
-                                Назад к подарку
-                            </button>
-                        </div>
-                    ) : null}
-                </div>
-
-                <div
-                    className={classNames(styles.scene, {}, [
-                        step === "confirm" ? styles.sceneVisible : "",
-                    ])}
-                >
-                    {step === "confirm" && selectedRecipient ? (
-                        <div className={styles.confirmBlock}>
+                    {step === "confirm" && selectedRecipient && (
+                        <>
                             <div className={styles.selectedRecipientCard}>
-                                <span className={styles.selectedRecipientLabel}>
+                                <span className={styles.fieldLabel}>
                                     Получатель
                                 </span>
-                                <div
-                                    className={styles.selectedRecipientContent}
-                                >
-                                    <div className={styles.recipientAvatar}>
-                                        {selectedRecipient.avatarUrl ? (
-                                            // eslint-disable-next-line @next/next/no-img-element
-                                            <img
-                                                className={
-                                                    styles.recipientAvatarImage
-                                                }
-                                                src={
-                                                    selectedRecipient.avatarUrl
-                                                }
-                                                alt=""
-                                            />
-                                        ) : (
-                                            <span
-                                                className={
-                                                    styles.recipientAvatarFallback
-                                                }
-                                            >
-                                                {selectedRecipient.nickname
-                                                    .slice(0, 1)
-                                                    .toUpperCase() || "U"}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <strong
-                                        className={styles.selectedRecipientName}
-                                    >
-                                        {selectedRecipient.nickname}
-                                    </strong>
-                                </div>
+                                <RecipientIdentity
+                                    recipient={selectedRecipient}
+                                />
                             </div>
 
                             <div className={styles.confirmGiftCard}>
@@ -478,37 +391,16 @@ export function GiftDetailsModal({
                                     {preview}
                                 </div>
                                 <div className={styles.confirmGiftMeta}>
-                                    <strong className={styles.confirmGiftName}>
-                                        {gift.name}
-                                    </strong>
-                                    <span
-                                        className={classNames(
-                                            styles.rarityBadge,
-                                            {},
-                                            [
-                                                styles.rarityBadgeInline,
-                                                rarityToneClassName,
-                                            ],
-                                        )}
-                                    >
+                                    <strong>{gift.name}</strong>
+                                    <span className={styles.rarityText}>
                                         {rarityLabel}
                                     </span>
-                                    <span className={styles.confirmGiftPrice}>
-                                        <Image
-                                            src={popcornGif}
-                                            alt=""
-                                            width={24}
-                                            height={24}
-                                            unoptimized
-                                            className={styles.priceGif}
-                                        />
-                                        <span>{gift.price}</span>
-                                    </span>
                                 </div>
+                                {price}
                             </div>
 
                             <label className={styles.messageField}>
-                                <span className={styles.messageLabel}>
+                                <span className={styles.fieldLabel}>
                                     Сообщение
                                 </span>
                                 <textarea
@@ -520,32 +412,16 @@ export function GiftDetailsModal({
                                     rows={3}
                                     maxLength={180}
                                     placeholder="Добавьте короткое сообщение"
+                                    disabled={isSendingGift}
                                 />
                             </label>
-
-                            <div className={styles.confirmActions}>
-                                <button
-                                    type="button"
-                                    className={styles.secondaryButton}
-                                    onClick={handleBackToRecipients}
-                                    disabled={isSendingGift}
-                                >
-                                    Сменить получателя
-                                </button>
-                                <button
-                                    type="button"
-                                    className={styles.giftButton}
-                                    onClick={() => void handleSendGift()}
-                                    disabled={isSendingGift}
-                                >
-                                    {isSendingGift
-                                        ? "Отправляем..."
-                                        : "Отправить"}
-                                </button>
-                            </div>
-                        </div>
-                    ) : null}
+                        </>
+                    )}
                 </div>
+
+                {actions && (
+                    <footer className={styles.actions}>{actions}</footer>
+                )}
             </div>
         </Modal>
     );

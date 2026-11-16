@@ -18,49 +18,34 @@
 
 .tile,
 .preview,
-.confirmGiftPreview,
-.rarityBadge {
+.confirmGiftPreview {
     --rarity-core: #9bb0d5;
     --rarity-core-soft: #e9effb;
     --rarity-border: color-mix(in srgb, var(--glass-border) 100%, white 12%);
-    --rarity-shell-top: color-mix(in srgb, var(--glass-bg) 96%, white 8%);
-    --rarity-shell-bottom: color-mix(in srgb, var(--glass-bg) 84%, transparent);
-    --rarity-badge-text: var(--text);
 }
 
 .rarityCommon {
     --rarity-core: #78d9ff;
     --rarity-core-soft: #d9f7ff;
     --rarity-border: color-mix(in srgb, #89ddff 52%, var(--glass-border));
-    --rarity-shell-top: color-mix(in srgb, var(--glass-bg) 80%, #ddf8ff 20%);
-    --rarity-shell-bottom: color-mix(in srgb, var(--glass-bg) 78%, #4ca4d9 22%);
 }
 
 .rarityRare {
     --rarity-core: #3d72ff;
     --rarity-core-soft: #94bcff;
     --rarity-border: color-mix(in srgb, #4f80ff 60%, var(--glass-border));
-    --rarity-shell-top: color-mix(in srgb, var(--glass-bg) 76%, #dce7ff 24%);
-    --rarity-shell-bottom: color-mix(in srgb, var(--glass-bg) 72%, #0b2f9d 28%);
-    --rarity-badge-text: color-mix(in srgb, #e6edff 80%, var(--text));
 }
 
 .rarityEpic {
     --rarity-core: #bb68ff;
     --rarity-core-soft: #ff9ed9;
     --rarity-border: color-mix(in srgb, #cb77ff 58%, var(--glass-border));
-    --rarity-shell-top: color-mix(in srgb, var(--glass-bg) 76%, #ffe1f6 24%);
-    --rarity-shell-bottom: color-mix(in srgb, var(--glass-bg) 72%, #7628d1 28%);
-    --rarity-badge-text: color-mix(in srgb, #ffe9f7 72%, var(--text));
 }
 
 .rarityMystical {
     --rarity-core: #ff3b30;
     --rarity-core-soft: #ff9b96;
     --rarity-border: color-mix(in srgb, #a10d12 68%, var(--glass-border));
-    --rarity-shell-top: color-mix(in srgb, var(--glass-bg) 68%, #4c0609 32%);
-    --rarity-shell-bottom: color-mix(in srgb, var(--glass-bg) 60%, #180103 40%);
-    --rarity-badge-text: color-mix(in srgb, #ffe3e1 84%, var(--text));
 }
 
 .tile {
@@ -134,6 +119,44 @@
     transform: scale(0.98);
 }
 
+.tile.compactTile {
+    aspect-ratio: auto;
+    border-color: var(--glass-border);
+    box-shadow: none;
+}
+
+.compactTile::before,
+.compactTile::after {
+    content: none;
+}
+
+.compactTile .tileInner {
+    height: auto;
+    aspect-ratio: 4 / 3;
+    padding: 8px;
+    background: color-mix(in srgb, var(--rarity-core) 8%, var(--glass-bg));
+}
+
+.tileName {
+    display: block;
+    overflow: hidden;
+    padding: 7px 8px;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text);
+    font: 600 12px/1.35 var(--font-sans);
+    text-align: start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tileButton:hover .compactTile,
+.tileButton:focus-visible .compactTile,
+.tileButton:active .compactTile {
+    transform: none;
+    filter: none;
+    border-color: var(--rarity-border);
+}
+
 .assetImage,
 .assetFallback {
     width: 36px;
@@ -163,632 +186,306 @@
     );
 }
 
-.rarityBadge {
-    position: relative;
-    z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
-    max-width: 100%;
-    min-height: 24px;
-    padding: 0 10px;
-    border-radius: 999px;
-    border: 1px solid color-mix(in srgb, var(--rarity-border) 90%, white 10%);
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--rarity-shell-top) 96%, white 10%),
-            color-mix(in srgb, var(--rarity-shell-bottom) 92%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 18%, transparent);
-    box-shadow:
-        0 10px 18px color-mix(in srgb, var(--rarity-core) 18%, transparent),
-        inset 0 1px 0 rgba(255, 255, 255, 0.14);
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--rarity-badge-text);
-    white-space: nowrap;
+.detailsDialog.detailsDialog {
+    width: min(100%, 560px);
 }
 
-.rarityBadgeCompact {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    min-height: 20px;
-    padding: 0 7px;
-    font-size: 7px;
-    line-height: 1;
-}
-
-.rarityBadgeOverlay {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    min-height: 28px;
-    padding: 0 12px;
-    font-size: 10px;
-    line-height: 1;
-}
-
-.rarityBadgeInline {
-    min-height: 28px;
-    padding: 0 12px;
-    font-size: 10px;
-    line-height: 1;
+.detailsDialogContent.detailsDialogContent {
+    padding: 0;
+    overflow: hidden;
 }
 
 .detailsContent {
-    flex: 1 1 auto;
-    min-height: 0;
-    position: relative;
-}
-
-.detailsDialog {
-    width: min(100%, 520px);
-    height: min(720px, calc(100dvh - 48px));
-}
-
-.detailsDialogContent {
     display: flex;
-    min-height: 0;
-}
-
-.scene {
-    display: none;
-    flex: 1 1 auto;
-    min-height: 0;
     flex-direction: column;
-    gap: 18px;
+    max-height: calc(100dvh - 50px);
+    color: var(--text);
 }
 
-.sceneVisible {
+.detailsHeader,
+.actions {
     display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--glass-bg);
+}
+
+.detailsHeader {
+    justify-content: space-between;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.detailsHeader h2 {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+    font-size: clamp(18px, 4vw, 26px);
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+}
+
+.detailsHeader h2:focus {
+    outline: none;
+}
+
+.detailsBody {
+    display: grid;
+    gap: 12px;
+    min-height: 0;
+    padding: 16px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.preview,
+.confirmGiftPreview {
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--glass-border);
+    background: color-mix(in srgb, var(--rarity-core) 8%, var(--glass-bg));
 }
 
 .preview {
-    position: relative;
-    overflow: hidden;
-    min-height: 180px;
-    border-radius: 24px;
-    border: 1px solid var(--rarity-border);
-    background:
-        radial-gradient(
-            circle at 18% 18%,
-            color-mix(in srgb, var(--rarity-core-soft) 20%, transparent),
-            transparent 42%
-        ),
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--rarity-shell-top) 98%, white 10%),
-            color-mix(in srgb, var(--rarity-shell-bottom) 94%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 20%, transparent);
-    box-shadow:
-        0 20px 40px color-mix(in srgb, var(--shadow) 42%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 18%),
-        inset 0 0 0 1px color-mix(in srgb, var(--rarity-core) 10%, transparent);
-}
-
-.preview::before {
-    content: "";
-    position: absolute;
-    inset: auto -8% -12% auto;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: var(--rarity-core);
-    opacity: 0.28;
-    filter: blur(26px);
-    pointer-events: none;
-    animation: rarityPulse 7.2s ease-in-out infinite;
-}
-
-.previewInner {
-    position: relative;
-    z-index: 1;
-    min-height: 180px;
-    display: grid;
-    place-items: center;
-    padding: 24px;
+    min-height: 144px;
 }
 
 .previewImage,
 .previewFallback {
+    display: block;
     width: 84px;
     height: 84px;
-    display: block;
-}
-
-.previewImage {
     object-fit: contain;
 }
 
-.previewFallback {
-    color: var(--text);
-    opacity: 0.94;
+.giftDescription,
+.recipientsState {
+    margin: 0;
+    color: color-mix(in srgb, var(--text) 78%, var(--glass-bg));
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
 }
 
-.metaGrid {
-    display: grid;
-    gap: 10px;
+.metaGrid,
+.recipientList {
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--glass-border);
 }
 
 .metaRow {
     display: grid;
-    grid-template-columns: 130px minmax(0, 1fr);
-    gap: 14px;
-    align-items: start;
-    padding: 14px 16px;
-    border-radius: 16px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 92%, white 8%),
-            color-mix(in srgb, var(--glass-bg) 84%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 16%, transparent);
-    box-shadow:
-        0 12px 24px color-mix(in srgb, var(--shadow) 28%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%);
+    grid-template-columns: minmax(0, 112px) minmax(0, 1fr);
+    align-items: baseline;
+    gap: 4px 12px;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.4;
 }
 
-.metaLabel {
-    font-size: 12px;
-    line-height: 1.2;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--text) 54%, transparent);
+.metaRow + .metaRow,
+.recipientList li + li {
+    border-top: 1px solid var(--glass-border);
 }
 
-.metaValue {
-    min-width: 0;
-    font-size: 15px;
-    line-height: 1.55;
-    color: var(--text);
+.metaRow dt,
+.rarityText {
+    color: color-mix(in srgb, var(--text) 66%, var(--glass-bg));
+}
+
+.metaRow dd {
+    margin: 0;
     overflow-wrap: anywhere;
+    white-space: pre-wrap;
 }
 
 .priceValue {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-weight: 800;
-    font-size: 18px;
+    gap: 4px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.priceValue img {
+    display: block;
+}
+
+.closeButton,
+.giftButton,
+.secondaryButton,
+.recipientItem {
+    border: 1px solid var(--glass-border);
+    border-radius: 0;
+    background: var(--glass-bg);
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.closeButton {
+    display: grid;
+    place-items: center;
+    flex: 0 0 36px;
+    height: 36px;
+    padding: 0;
+    font-size: 22px;
     line-height: 1;
 }
 
-.priceGif {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-    flex: 0 0 auto;
+.giftButton,
+.secondaryButton {
+    min-height: 42px;
+    padding: 8px 14px;
+    font-size: 14px;
+    line-height: 1.3;
+    font-weight: 700;
 }
 
 .giftButton {
-    width: 100%;
-    min-height: 52px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 14%);
-    border-radius: 18px;
-    background: var(--accent);
-    color: color-mix(in srgb, var(--bg-color) 6%, white 94%);
-    font: inherit;
-    font-size: 15px;
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow:
-        0 18px 34px color-mix(in srgb, var(--shadow) 44%, transparent),
-        inset 0 1px 0 rgba(255, 255, 255, 0.16);
-    -webkit-tap-highlight-color: transparent;
-    transition:
-        transform 180ms ease,
-        box-shadow 180ms ease,
-        opacity 180ms ease;
+    border-image: var(--accent) 1;
 }
 
-.giftButton:hover {
-    transform: translateY(-1px);
-    box-shadow:
-        0 22px 40px color-mix(in srgb, var(--shadow) 52%, transparent),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+.closeButton:hover:not(:disabled),
+.giftButton:hover:not(:disabled),
+.secondaryButton:hover:not(:disabled),
+.recipientItem:hover {
+    background: color-mix(in srgb, var(--text) 7%, var(--glass-bg));
 }
 
-.giftButton:active {
-    transform: scale(0.99);
+.closeButton:focus-visible,
+.giftButton:focus-visible,
+.secondaryButton:focus-visible,
+.recipientItem:focus-visible,
+.messageInput:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: -2px;
 }
 
-.giftButton:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
-    outline-offset: 3px;
-}
-
+.closeButton:disabled,
 .giftButton:disabled,
 .secondaryButton:disabled {
     opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.secondaryButton {
-    width: 100%;
-    min-height: 48px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
-    border-radius: 16px;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 92%, white 8%),
-            color-mix(in srgb, var(--glass-bg) 84%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 16%, transparent);
-    color: var(--text);
-    font: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition:
-        transform 180ms ease,
-        border-color 180ms ease,
-        background 180ms ease;
-}
-
-.secondaryButton:hover {
-    transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--glass-border) 100%, white 18%);
-}
-
-.secondaryButton:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
-    outline-offset: 3px;
-}
-
-.recipientsBlock {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    flex: 1 1 auto;
-    min-height: 0;
-}
-
-.recipientsHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.recipientsEyebrow {
-    margin: 0;
-    font-size: 11px;
-    line-height: 1;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--text) 52%, transparent);
-}
-
-.recipientsCount {
-    min-width: 38px;
-    height: 38px;
-    padding: 0 12px;
-    border-radius: 999px;
-    display: grid;
-    place-items: center;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
-    background: color-mix(in srgb, var(--glass-bg) 86%, transparent);
-    font-size: 14px;
-    line-height: 1;
-    font-weight: 800;
-    color: var(--text);
-}
-
-.recipientsState {
-    padding: 16px;
-    border-radius: 18px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 92%, white 8%),
-            color-mix(in srgb, var(--glass-bg) 84%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 16%, transparent);
-    font-size: 14px;
-    line-height: 1.55;
-    color: color-mix(in srgb, var(--text) 72%, transparent);
+    cursor: default;
 }
 
 .recipientList {
-    display: grid;
-    gap: 10px;
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    padding-right: 4px;
+    list-style: none;
 }
 
 .recipientItem {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border: 0;
+    text-align: start;
+}
+
+.recipientIdentity {
     display: flex;
     align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 12px 14px;
-    font: inherit;
-    text-align: left;
-    border-radius: 18px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 92%, white 8%),
-            color-mix(in srgb, var(--glass-bg) 84%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 16%, transparent);
-    box-shadow:
-        0 12px 24px color-mix(in srgb, var(--shadow) 24%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%);
-    cursor: pointer;
-    transition:
-        transform 180ms ease,
-        border-color 180ms ease,
-        box-shadow 180ms ease;
-}
-
-.recipientItem:hover {
-    transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--glass-border) 100%, white 18%);
-    box-shadow:
-        0 16px 28px color-mix(in srgb, var(--shadow) 28%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%);
-}
-
-.recipientItem:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
-    outline-offset: 3px;
+    gap: 10px;
+    min-width: 0;
 }
 
 .recipientAvatar {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 auto;
-    border-radius: 50%;
-    overflow: hidden;
     display: grid;
     place-items: center;
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--text) 14%, transparent),
-            color-mix(in srgb, var(--glass-bg) 80%, white 8%)
-        ),
-        color-mix(in srgb, var(--bg-color) 18%, transparent);
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+    background: color-mix(in srgb, var(--text) 8%, var(--glass-bg));
+    font-weight: 700;
 }
 
-.recipientAvatarImage,
-.recipientAvatarFallback {
+.recipientAvatar img {
     width: 100%;
     height: 100%;
-    display: grid;
-    place-items: center;
-}
-
-.recipientAvatarImage {
     object-fit: cover;
 }
 
-.recipientAvatarFallback {
-    font-size: 16px;
-    font-weight: 800;
-    color: white;
-    background: var(--accent);
-}
-
-.recipientText {
+.recipientName,
+.confirmGiftMeta {
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-.recipientName {
-    font-size: 15px;
-    line-height: 1.3;
-    font-weight: 700;
-    color: var(--text);
     overflow-wrap: anywhere;
-}
-
-.confirmBlock {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    flex: 1 1 auto;
-    min-height: 0;
+    font-size: 14px;
+    line-height: 1.4;
 }
 
 .selectedRecipientCard,
 .confirmGiftCard {
-    border-radius: 20px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 94%, white 8%),
-            color-mix(in srgb, var(--glass-bg) 84%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 16%, transparent);
-    box-shadow:
-        0 14px 26px color-mix(in srgb, var(--shadow) 24%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%);
+    border: 1px solid var(--glass-border);
 }
 
 .selectedRecipientCard {
-    padding: 14px 16px;
-}
-
-.selectedRecipientLabel,
-.messageLabel {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 11px;
-    line-height: 1;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--text) 52%, transparent);
-}
-
-.selectedRecipientContent {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.selectedRecipientName {
-    font-size: 16px;
-    line-height: 1.2;
-    color: var(--text);
+    display: grid;
+    gap: 8px;
+    padding: 10px 12px;
 }
 
 .confirmGiftCard {
-    display: flex;
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr) auto;
     align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
+    gap: 8px;
+    padding: 8px;
 }
 
 .confirmGiftPreview {
-    position: relative;
-    overflow: hidden;
-    width: 82px;
-    height: 82px;
-    flex: 0 0 auto;
-    display: grid;
-    place-items: center;
-    border-radius: 18px;
-    border: 1px solid var(--rarity-border);
-    background:
-        radial-gradient(
-            circle at 80% 18%,
-            color-mix(in srgb, var(--rarity-core-soft) 22%, transparent),
-            transparent 44%
-        ),
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--rarity-shell-top) 98%, white 10%),
-            color-mix(in srgb, var(--rarity-shell-bottom) 92%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 18%, transparent);
-    box-shadow:
-        0 12px 24px color-mix(in srgb, var(--rarity-core) 16%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%);
-}
-
-.confirmGiftPreview::before {
-    content: "";
-    position: absolute;
-    inset: auto -16% -24% auto;
-    width: 62px;
-    height: 62px;
-    border-radius: 50%;
-    background: var(--rarity-core);
-    opacity: 0.24;
-    filter: blur(18px);
-    pointer-events: none;
+    aspect-ratio: 1;
 }
 
 .confirmGiftPreview > * {
-    position: relative;
-    z-index: 1;
+    width: 32px;
+    height: 32px;
 }
 
 .confirmGiftMeta {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    gap: 3px;
 }
 
-.confirmGiftName {
-    font-size: 16px;
-    line-height: 1.25;
-    color: var(--text);
-    overflow-wrap: anywhere;
+.rarityText,
+.fieldLabel {
+    font-size: 13px;
+    line-height: 1.3;
 }
 
-.confirmGiftPrice {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    line-height: 1;
-    font-weight: 800;
-    color: var(--text);
+.fieldLabel {
+    font-weight: 700;
 }
 
 .messageField {
-    display: block;
+    display: grid;
+    gap: 6px;
 }
 
 .messageInput {
     width: 100%;
-    min-height: 104px;
-    resize: none;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 10%);
-    border-radius: 18px;
-    padding: 14px 16px;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 92%, white 8%),
-            color-mix(in srgb, var(--glass-bg) 84%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 16%, transparent);
-    color: var(--text);
+    min-height: 80px;
+    padding: 10px 12px;
+    border: 1px solid color-mix(in srgb, var(--text) 20%, var(--glass-bg));
+    border-radius: 0;
+    background: var(--bg-color);
+    color: inherit;
     font: inherit;
-    font-size: 14px;
-    line-height: 1.5;
-    box-shadow:
-        0 12px 24px color-mix(in srgb, var(--shadow) 20%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 12%);
+    font-size: 16px;
+    resize: vertical;
 }
 
 .messageInput::placeholder {
-    color: color-mix(in srgb, var(--text) 42%, transparent);
+    color: color-mix(in srgb, var(--text) 60%, var(--glass-bg));
 }
 
-.messageInput:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--text) 22%, transparent);
-    outline-offset: 3px;
-}
-
-.confirmActions {
-    margin-top: auto;
-    display: grid;
-    gap: 10px;
-}
-
-.recipientId {
-    font-size: 12px;
-    line-height: 1.35;
-    color: color-mix(in srgb, var(--text) 56%, transparent);
-    overflow-wrap: anywhere;
-}
-
-.statusActive,
-.statusInactive {
-    font-weight: 700;
-}
-
-.statusActive {
-    color: color-mix(in srgb, #24c97a 82%, var(--text));
-}
-
-.statusInactive {
-    color: color-mix(in srgb, #ff7368 82%, var(--text));
+.actions {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--glass-border);
 }
 
 @keyframes rarityPulse {
@@ -819,14 +516,22 @@
 }
 
 @media (max-width: 640px) {
-    .detailsDialog {
-        width: 100%;
-        height: calc(100dvh - 12px - max(12px, env(safe-area-inset-bottom)));
+    .detailsContent {
+        max-height: calc(
+            100dvh - 14px - max(12px, env(safe-area-inset-bottom))
+        );
+    }
+}
+
+@media (max-width: 420px) {
+    .detailsHeader,
+    .detailsBody,
+    .actions {
+        padding-inline: 12px;
     }
 
-    .preview,
-    .previewInner {
-        min-height: 160px;
+    .preview {
+        min-height: 112px;
     }
 
     .previewImage,
@@ -835,51 +540,20 @@
         height: 72px;
     }
 
-    .rarityBadgeOverlay {
-        top: 12px;
-        right: 12px;
-        min-height: 24px;
-        padding: 0 10px;
-        font-size: 9px;
-    }
-
     .metaRow {
-        grid-template-columns: 1fr;
-        gap: 8px;
-        padding: 12px 14px;
+        grid-template-columns: minmax(0, 90px) minmax(0, 1fr);
+        gap: 4px 8px;
+        padding-inline: 8px;
     }
 
-    .giftButton {
-        min-height: 50px;
-        border-radius: 16px;
-    }
-
-    .secondaryButton {
-        min-height: 46px;
-    }
-
-    .recipientItem {
-        padding: 11px 12px;
-    }
-
-    .confirmGiftCard {
-        align-items: flex-start;
-    }
-
-    .confirmGiftPreview {
-        width: 72px;
-        height: 72px;
-    }
-
-    .messageInput {
-        min-height: 96px;
+    .actions > button {
+        flex: 1 1 auto;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .tile::before,
-    .tile::after,
-    .preview::before {
+    .tile::after {
         animation: none;
     }
 

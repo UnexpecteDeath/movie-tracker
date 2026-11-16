@@ -1,124 +1,46 @@
-.avatarWrapLoading,
-.giftTileButton {
-    pointer-events: none;
-}
-
-.avatarWrapLoading {
-    cursor: default;
-}
-
-.inlineSkeleton {
-    display: inline-block;
-    vertical-align: top;
-}
-
-.skeleton {
-    position: relative;
+.placeholder {
     display: block;
-    overflow: hidden;
-    border-radius: 999px;
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--glass-bg) 72%, white 4%) 0%,
-        color-mix(in srgb, white 28%, var(--glass-bg)) 48%,
-        color-mix(in srgb, var(--glass-bg) 70%, transparent) 100%
-    );
-    background-size: 220% 100%;
-    animation: skeletonShift 1.8s ease-in-out infinite;
+    width: min(144px, 100%);
+    height: 12px;
+    background: color-mix(in srgb, var(--text) 12%, var(--glass-bg));
+    animation: pulse 1.4s ease-in-out infinite alternate;
 }
 
-.skeleton::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    border: 1px solid color-mix(in srgb, white 16%, transparent);
+.avatar {
+    width: 64px;
+    height: 64px;
 }
 
-.skeletonAvatar {
+.name {
+    width: min(120px, 100%);
+    height: 22px;
+}
+
+.stat {
     width: 100%;
-    height: 100%;
-    border-radius: 50%;
+    height: 65px;
+    background: color-mix(in srgb, var(--text) 6%, var(--glass-bg));
 }
 
-.skeletonName {
-    width: min(6.6em, 100%);
-    height: 1em;
+.action {
+    width: min(220px, 100%);
+    height: 42px;
 }
 
-.skeletonEmail {
-    width: min(16em, 100%);
-    height: 1em;
+.gift {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
 }
 
-.skeletonMetaLabel {
-    width: 8.8em;
-    height: 1em;
-}
-
-.skeletonMetaValue {
-    width: 7.2em;
-    max-width: 100%;
-    height: 1em;
-}
-
-.skeletonStatIcon {
-    width: 35px;
-    height: 35px;
-    border-radius: 10px;
-}
-
-.skeletonStatValue {
-    width: 4.2em;
-    height: 1.3em;
-    border-radius: 14px;
-}
-
-.skeletonButtonLabel {
-    width: min(11.5em, 100%);
-    height: 1em;
-}
-
-.skeletonButtonHint {
-    width: min(10.5em, 100%);
-    height: 0.9em;
-}
-
-.skeletonSignOutLabel {
-    width: 4.4em;
-    height: 1em;
-}
-
-.skeletonGiftEyebrow {
-    width: 5.4em;
-    height: 0.9em;
-}
-
-.skeletonGiftTitle {
-    width: 7.2em;
-    height: 1em;
-    border-radius: 12px;
-}
-
-.skeletonGiftAsset {
-    width: 36px;
-    height: 36px;
-    border-radius: 12px;
-}
-
-@keyframes skeletonShift {
-    0% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
+@keyframes pulse {
+    to {
+        opacity: 0.48;
     }
 }
 
-@media (max-width: 520px) {
-    .skeletonStatIcon {
-        width: 32px;
-        height: 32px;
+@media (prefers-reduced-motion: reduce) {
+    .placeholder {
+        animation: none;
     }
 }
