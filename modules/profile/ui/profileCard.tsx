@@ -1,14 +1,14 @@
 "use client";
 
-import type { ChangeEvent } from "react";
-import { Card } from "@/shared";
+import Image from "next/image";
+import type { ChangeEvent, ReactNode } from "react";
+import { Card } from "@/shared/ui/card";
 import type { ReceivedGift } from "@/modules/gifts";
 import type { ProfileViewData } from "../model/types";
-import Image from "next/image";
-import popcorn from "../assets/popcorn.gif";
 import fire from "../assets/fire.gif";
-import styles from "./profileCard.module.css";
+import popcorn from "../assets/popcorn.gif";
 import { ProfileGiftsShowcase } from "./profileGiftsShowcase";
+import styles from "./profileCard.module.css";
 
 type Props = {
     profile: ProfileViewData;
@@ -22,25 +22,23 @@ type Props = {
     onClaimDailyBonus: () => Promise<void>;
 };
 
-type ProfileStatCardProps = {
-    icon: React.ReactNode;
+function ProfileStat({
+    icon,
+    label,
+    value,
+}: {
+    icon: ReactNode;
+    label: string;
     value: number;
-    toneClassName: string;
-};
-
-const getInitial = (nickname: string) =>
-    nickname.slice(0, 1).toUpperCase() || "M";
-
-function ProfileStatCard({ icon, value, toneClassName }: ProfileStatCardProps) {
+}) {
     return (
-        <Card className={`${styles.statCard} ${toneClassName}`}>
-            <div className={styles.statCardBody}>
-                <span className={styles.statIcon} aria-hidden="true">
-                    {icon}
-                </span>
-                <span className={styles.statValue}>{value}</span>
-            </div>
-        </Card>
+        <div className={styles.stat}>
+            <span className={styles.statIcon} aria-hidden="true">
+                {icon}
+            </span>
+            <span className={styles.statLabel}>{label}</span>
+            <strong className={styles.statValue}>{value}</strong>
+        </div>
     );
 }
 
@@ -55,130 +53,106 @@ export function ProfileCard({
     onAvatarChange,
     onClaimDailyBonus,
 }: Props) {
+    const name = profile.nickname || "Киноман";
     const avatar = profile.avatarUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img className={styles.avatar} src={profile.avatarUrl} alt="" />
     ) : (
-        <span className={styles.avatarFallback}>
-            {getInitial(profile.nickname)}
+        <span className={styles.avatarFallback} aria-hidden="true">
+            {name.charAt(0).toUpperCase()}
         </span>
     );
 
     return (
-        <Card className={styles.card}>
-            <div className={`${styles.content} ${styles.cardPanel}`}>
-                <div className={styles.profileMain}>
-                    <div className={styles.identityBlock}>
-                        {profile.isOwner ? (
-                            <label
-                                className={styles.avatarWrap}
-                                aria-label="Изменить аватарку"
-                            >
-                                <input
-                                    className={styles.avatarInput}
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(event) =>
-                                        void onAvatarChange(event)
-                                    }
-                                    disabled={isAvatarUploading}
-                                />
-                                {avatar}
-                                <span className={styles.avatarOverlay}>
-                                    {isAvatarUploading ? "..." : "+"}
-                                </span>
-                            </label>
-                        ) : (
-                            <div
-                                className={`${styles.avatarWrap} ${styles.avatarWrapStatic}`}
-                            >
-                                {avatar}
-                            </div>
-                        )}
-
-                        <div className={styles.profileInfo}>
-                            <h2 className={styles.name}>
-                                {profile.nickname || "Киноман"}
-                            </h2>
-                            {profile.isOwner && profile.email ? (
-                                <p className={styles.email}>{profile.email}</p>
-                            ) : null}
-                        </div>
-                    </div>
-
-                    <div className={styles.detailsStack}>
-                        <div className={styles.meta}>
-                            <span className={styles.metaLabel}>
-                                Аккаунт создан
-                            </span>
-                            <span className={styles.metaValue}>
-                                {profile.createdAt}
-                            </span>
-                        </div>
-
-                        <div className={styles.statsGrid}>
-                            <ProfileStatCard
-                                icon={
-                                    <Image
-                                        src={fire}
-                                        alt="Серия"
-                                        width={50}
-                                        height={50}
-                                    />
-                                }
-                                value={profile.streakCount}
-                                toneClassName={styles.statCardStreak}
-                            />
-                            <ProfileStatCard
-                                icon={
-                                    <Image
-                                        src={popcorn}
-                                        alt="Баланс"
-                                        width={50}
-                                        height={50}
-                                    />
-                                }
-                                value={profile.balance}
-                                toneClassName={styles.statCardBalance}
-                            />
-                        </div>
-                    </div>
-
+        <div className={styles.layout}>
+            <Card>
+                <header className={styles.identity}>
                     {profile.isOwner ? (
-                        <div className={styles.actions}>
-                            <button
-                                className={styles.dailyBonusButton}
-                                type="button"
-                                onClick={() => void onClaimDailyBonus()}
-                                disabled={isClaimingDailyBonus}
+                        <label className={styles.avatarControl}>
+                            <input
+                                className={styles.avatarInput}
+                                type="file"
+                                accept="image/*"
+                                aria-label="Изменить аватарку"
+                                onChange={(event) => void onAvatarChange(event)}
+                                disabled={isAvatarUploading}
+                            />
+                            {avatar}
+                            <span
+                                className={styles.avatarBadge}
+                                aria-hidden="true"
                             >
-                                <span className={styles.dailyBonusLabel}>
-                                    {isClaimingDailyBonus
-                                        ? "Начисляем ежедневный бонус..."
-                                        : "Получить ежедневный бонус"}
-                                </span>
-                                <span className={styles.dailyBonusHint}>
-                                    Доступно один раз в 24 часа
-                                </span>
-                            </button>
+                                {isAvatarUploading ? "…" : "+"}
+                            </span>
+                        </label>
+                    ) : (
+                        <div className={styles.avatarControl}>{avatar}</div>
+                    )}
 
-                            <button
-                                className={styles.signOutButton}
-                                type="button"
-                                onClick={() => void onSignOut()}
-                                disabled={isSigningOut}
-                            >
-                                {isSigningOut ? "Выход..." : "Выйти"}
-                            </button>
-                        </div>
-                    ) : null}
+                    <div className={styles.profileInfo}>
+                        <h2 className={styles.name}>{name}</h2>
+                        {profile.isOwner && profile.email && (
+                            <p className={styles.secondary}>{profile.email}</p>
+                        )}
+                        <p className={styles.secondary}>
+                            Аккаунт создан {profile.createdAt}
+                        </p>
+                    </div>
+                </header>
+
+                <div className={styles.stats}>
+                    <ProfileStat
+                        icon={
+                            <Image src={fire} alt="" width={28} height={28} />
+                        }
+                        label="Серия"
+                        value={profile.streakCount}
+                    />
+                    <ProfileStat
+                        icon={
+                            <Image
+                                src={popcorn}
+                                alt=""
+                                width={28}
+                                height={28}
+                            />
+                        }
+                        label="Баланс"
+                        value={profile.balance}
+                    />
                 </div>
 
-                <ProfileGiftsShowcase
-                    gifts={receivedGifts}
-                    giftsError={giftsError}
-                />
-            </div>
-        </Card>
+                {profile.isOwner && (
+                    <footer className={styles.actions}>
+                        <button
+                            className={styles.bonusButton}
+                            type="button"
+                            onClick={() => void onClaimDailyBonus()}
+                            disabled={isClaimingDailyBonus}
+                        >
+                            {isClaimingDailyBonus
+                                ? "Начисляем бонус…"
+                                : "Получить ежедневный бонус"}
+                        </button>
+                        <button
+                            className={styles.actionButton}
+                            type="button"
+                            onClick={() => void onSignOut()}
+                            disabled={isSigningOut}
+                        >
+                            {isSigningOut ? "Выходим…" : "Выйти"}
+                        </button>
+                        <p className={styles.actionHint}>
+                            Бонус доступен один раз в 24 часа.
+                        </p>
+                    </footer>
+                )}
+            </Card>
+
+            <ProfileGiftsShowcase
+                gifts={receivedGifts}
+                giftsError={giftsError}
+            />
+        </div>
     );
 }

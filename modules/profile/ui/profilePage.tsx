@@ -26,9 +26,12 @@ export function ProfilePage({ profileId }: Props) {
     } = useProfilePage({ profileId });
 
     return (
-        <main className={styles.page}>
-            <div className={styles.glow} />
-            <div className={styles.glowSecondary} />
+        <div className={`container ${styles.page}`}>
+            <header className={styles.header}>
+                <h1 id="profile-title" className={styles.title}>
+                    Профиль
+                </h1>
+            </header>
 
             <section
                 className={styles.shell}
@@ -50,21 +53,11 @@ export function ProfilePage({ profileId }: Props) {
                         onClaimDailyBonus={handleClaimDailyBonus}
                     />
                 ) : (
-                    <Card className={styles.statusCard}>
-                        <div className={styles.statusContent}>
-                            <p className={styles.statusEyebrow}>
-                                Profile error
-                            </p>
-                            <h2 className={styles.statusTitle}>
-                                Профиль недоступен
-                            </h2>
-                            <p className={styles.statusText}>
-                                {error || "Не удалось получить данные профиля."}
-                            </p>
-                        </div>
+                    <Card className={styles.statusCard} role="alert">
+                        {error || "Не удалось получить данные профиля."}
                     </Card>
                 )}
             </section>
-        </main>
+        </div>
     );
 }

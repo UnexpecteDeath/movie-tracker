@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { Card } from "@/shared";
+import { Card } from "@/shared/ui/card";
 import styles from "./page.module.css";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 
@@ -14,15 +13,13 @@ type SignInFormValues = {
 
 export default function SignInPage() {
     const router = useRouter();
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const { signIn } = useAuth();
 
     const {
         register,
         handleSubmit,
         setError,
-        clearErrors,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<SignInFormValues>({
         defaultValues: {
             email: "",
@@ -31,16 +28,17 @@ export default function SignInPage() {
     });
 
     const onSubmit = async ({ email, password }: SignInFormValues) => {
-        clearErrors("root");
-        setIsSubmitting(true);
-
-        const error = await signIn({ email, password });
-
-        setIsSubmitting(false);
-
-        if (error) {
+        try {
+            const error = await signIn({ email, password });
+            if (error) {
+                setError("root", {
+                    message: error.message,
+                });
+                return;
+            }
+        } catch {
             setError("root", {
-                message: error.message,
+                message: "Не удалось войти. Попробуйте ещё раз.",
             });
             return;
         }
@@ -51,86 +49,107 @@ export default function SignInPage() {
 
     return (
         <div className={styles.page}>
-            <div className={styles.glow} />
-            <div className={styles.glowSecondary} />
-
             <section className={styles.shell} aria-labelledby="sign-in-title">
-                <div className={styles.copy}>
-                    <p className={styles.eyebrow}>С возвращением</p>
+                <header className={styles.header}>
                     <h1 id="sign-in-title" className={styles.title}>
-                        Войдите в своё кинопространство
+                        Вход
                     </h1>
-                    <p className={styles.description}>
-                        Храните просмотренные фильмы, список на потом и уютные
-                        подборки рядом.
-                    </p>
-                </div>
+                    <span className={styles.brand}>Our History</span>
+                </header>
 
-                <Card className={styles.card}>
-                    <form
-                        className={styles.form}
-                        onSubmit={handleSubmit(onSubmit)}
-                    >
-                        <div className={styles.formHeader}>
-                            <h2 className={styles.formTitle}>Вход</h2>
-                            <p className={styles.formText}>
-                                Введите почту и пароль, чтобы продолжить.
-                            </p>
+                <Card>
+                    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                        <div className={styles.fields}>
+                            <div className={styles.field}>
+                                <label
+                                    className={styles.label}
+                                    htmlFor="sign-in-email"
+                                >
+                                    Почта
+                                </label>
+                                <input
+                                    id="sign-in-email"
+                                    className={styles.input}
+                                    type="email"
+                                    placeholder="name@example.com"
+                                    autoComplete="username"
+                                    required
+                                    aria-invalid={Boolean(errors.email)}
+                                    aria-describedby={
+                                        errors.email
+                                            ? "sign-in-email-error"
+                                            : undefined
+                                    }
+                                    {...register("email", {
+                                        required: "Введите почту.",
+                                        pattern: {
+                                            value: /^\S+@\S+\.\S+$/,
+                                            message:
+                                                "Введите корректную почту.",
+                                        },
+                                    })}
+                                />
+                                {errors.email ? (
+                                    <p
+                                        id="sign-in-email-error"
+                                        className={styles.error}
+                                        role="alert"
+                                    >
+                                        {errors.email.message}
+                                    </p>
+                                ) : null}
+                            </div>
+
+                            <div className={styles.field}>
+                                <label
+                                    className={styles.label}
+                                    htmlFor="sign-in-password"
+                                >
+                                    Пароль
+                                </label>
+                                <input
+                                    id="sign-in-password"
+                                    className={styles.input}
+                                    type="password"
+                                    autoComplete="current-password"
+                                    required
+                                    aria-invalid={Boolean(errors.password)}
+                                    aria-describedby={
+                                        errors.password
+                                            ? "sign-in-password-error"
+                                            : undefined
+                                    }
+                                    {...register("password", {
+                                        required: "Введите пароль.",
+                                    })}
+                                />
+                                {errors.password ? (
+                                    <p
+                                        id="sign-in-password-error"
+                                        className={styles.error}
+                                        role="alert"
+                                    >
+                                        {errors.password.message}
+                                    </p>
+                                ) : null}
+                            </div>
+
+                            {errors.root?.message ? (
+                                <p className={styles.formError} role="alert">
+                                    {errors.root.message}
+                                </p>
+                            ) : null}
                         </div>
 
-                        <label className={styles.field}>
-                            <span className={styles.label}>Почта</span>
-                            <input
-                                className={styles.input}
-                                type="email"
-                                placeholder="you@example.com"
-                                autoComplete="email"
-                                {...register("email", {
-                                    required: "Введите почту.",
-                                    pattern: {
-                                        value: /^\S+@\S+\.\S+$/,
-                                        message: "Введите корректную почту.",
-                                    },
-                                })}
-                            />
-                            {errors.email ? (
-                                <p className={styles.error}>
-                                    {errors.email.message}
-                                </p>
-                            ) : null}
-                        </label>
-
-                        <label className={styles.field}>
-                            <span className={styles.label}>Пароль</span>
-                            <input
-                                className={styles.input}
-                                type="password"
-                                placeholder="Ваш пароль"
-                                autoComplete="current-password"
-                                {...register("password", {
-                                    required: "Введите пароль.",
-                                })}
-                            />
-                            {errors.password ? (
-                                <p className={styles.error}>
-                                    {errors.password.message}
-                                </p>
-                            ) : null}
-                        </label>
-
-                        {errors.root?.message ? (
-                            <p className={styles.error}>
-                                {errors.root.message}
-                            </p>
-                        ) : null}
-
-                        <button
-                            className={styles.button}
-                            type="submit"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? "Входим..." : "Продолжить"}
-                        </button>
+                        <footer className={styles.actions}>
+                            <button
+                                className={styles.button}
+                                type="submit"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? "Входим…" : "Войти"}
+                            </button>
+                        </footer>
                     </form>
                 </Card>
             </section>

@@ -1,132 +1,50 @@
-.giftsColumn {
-    min-width: 0;
-    min-height: 0;
-}
-
-.giftsPanel {
-    height: 100%;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
-    border-radius: 22px;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--glass-bg) 94%, white 10%),
-            color-mix(in srgb, var(--glass-bg) 84%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-color) 22%, transparent);
-    box-shadow:
-        inset 0 1px 0 color-mix(in srgb, var(--glass-emboss) 100%, white 14%),
-        0 18px 40px color-mix(in srgb, var(--shadow) 46%, transparent);
-}
-
 .giftsHeader {
     display: flex;
-    align-items: flex-start;
+    align-items: baseline;
     justify-content: space-between;
-    gap: 12px;
-}
-
-.giftsHeading {
-    min-width: 0;
-}
-
-.giftsEyebrow {
-    margin: 0 0 8px;
-    font-size: 11px;
-    line-height: 1;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--text) 54%, transparent);
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--glass-border);
 }
 
 .giftsTitle {
     margin: 0;
-    font-size: 22px;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--text);
+    font-size: 20px;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+}
+
+.giftsCount,
+.giftsState {
+    color: color-mix(in srgb, var(--text) 66%, var(--glass-bg));
+    font-size: 14px;
+    line-height: 1.4;
 }
 
 .giftsCount {
-    min-width: 38px;
-    height: 38px;
-    padding: 0 12px;
-    display: grid;
-    place-items: center;
-    border-radius: 999px;
-    border: 1px solid color-mix(in srgb, var(--glass-border) 100%, white 12%);
-    background: color-mix(in srgb, var(--glass-bg) 84%, transparent);
-    font-size: 14px;
-    line-height: 1;
-    font-weight: 800;
-    color: var(--text);
-}
-
-.giftsScroll {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: auto;
-    padding-right: 4px;
-    scrollbar-width: none;
-}
-
-.giftsScroll::-webkit-scrollbar {
-    display: none;
+    font-variant-numeric: tabular-nums;
 }
 
 .giftsGrid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
     gap: 10px;
-    align-content: start;
-}
-
-.giftTile {
-    display: block;
+    padding: 14px;
 }
 
 .giftsState {
-    flex: 1 1 auto;
-    min-height: 0;
-    display: grid;
-    place-items: center;
-    text-align: center;
-    padding: 18px;
-    border-radius: 18px;
-    font-size: 14px;
-    line-height: 1.55;
-    color: color-mix(in srgb, var(--text) 72%, transparent);
-}
-
-@media (max-width: 900px) {
-    .giftsPanel {
-        height: auto;
-        min-height: 220px;
-    }
-
-    .giftsScroll {
-        overflow: visible;
-        padding-right: 0;
-    }
+    padding: 16px;
 }
 
 @media (max-width: 520px) {
-    .giftsPanel {
-        padding: 14px;
-        border-radius: 20px;
-    }
-
     .giftsGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 8px;
+        padding: 8px;
     }
 
-    .giftsTitle {
-        font-size: 20px;
+    .giftsHeader,
+    .giftsState {
+        padding-inline: 12px;
     }
 }

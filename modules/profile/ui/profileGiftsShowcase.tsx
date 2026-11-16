@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Gift, GiftDetailsModal, type ReceivedGift } from "@/modules/gifts";
+import { Card } from "@/shared/ui/card";
 import styles from "./profileGiftsShowcase.module.css";
 
 type Props = {
@@ -24,38 +25,38 @@ export function ProfileGiftsShowcase({ gifts, giftsError }: Props) {
     );
 
     return (
-        <aside className={styles.giftsColumn} aria-label="Подарки профиля">
-            <div className={styles.giftsPanel}>
-                <div className={styles.giftsHeader}>
-                    <div className={styles.giftsHeading}>
-                        <p className={styles.giftsEyebrow}>Подарки</p>
-                        <h3 className={styles.giftsTitle}>Витрина профиля</h3>
-                    </div>
-                </div>
+        <aside aria-label="Подарки профиля">
+            <Card>
+                <header className={styles.giftsHeader}>
+                    <h2 className={styles.giftsTitle}>Подарки</h2>
+                    {!giftsError && (
+                        <span className={styles.giftsCount}>
+                            {gifts.length}
+                        </span>
+                    )}
+                </header>
 
                 {giftsError ? (
                     <div className={styles.giftsState} role="alert">
                         {giftsError}
                     </div>
                 ) : gifts.length > 0 ? (
-                    <div className={styles.giftsScroll}>
-                        <div className={styles.giftsGrid}>
-                            {gifts.map((gift) => (
-                                <Gift
-                                    key={gift.id}
-                                    gift={gift.gift}
-                                    className={styles.giftTile}
-                                    onClick={() => setSelectedGiftId(gift.id)}
-                                />
-                            ))}
-                        </div>
+                    <div className={styles.giftsGrid}>
+                        {gifts.map((gift) => (
+                            <Gift
+                                key={gift.id}
+                                gift={gift.gift}
+                                variant="compact"
+                                onClick={() => setSelectedGiftId(gift.id)}
+                            />
+                        ))}
                     </div>
                 ) : (
                     <div className={styles.giftsState}>
                         Пока здесь нет подарков.
                     </div>
                 )}
-            </div>
+            </Card>
 
             <GiftDetailsModal
                 gift={selectedGiftEntry?.gift ?? null}
